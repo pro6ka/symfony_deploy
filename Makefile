@@ -1,5 +1,5 @@
-init: docker-down-clear docker-pull docker-build
-#composer-install
+init: docker-down-clear docker-pull docker-build docker-up composer-install
+
 
 up: docker-up
 down: docker-down
