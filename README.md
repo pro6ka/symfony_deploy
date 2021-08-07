@@ -6,3 +6,5 @@ docker-compose run --rm php-cli php -v
 
 docker-compose run --rm php-cli composer install
 
+docker-compose run --rm php-cli bin/console make:entity 
+
