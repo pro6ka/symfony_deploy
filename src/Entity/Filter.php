@@ -12,30 +12,42 @@ class Filter
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\FilterType", inversedBy="filters")
+     * @ORM\JoinColumn(name="filter_type_id", referencedColumnName="id")
      */
     private $filterType;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=4000)
+     * @ORM\Column(type="string", length=4000, nullable=false)
      */
     private $value;
 
     /**
-     * @ORM\Column(type="string", length=4000)
+     * @ORM\Column(type="string", length=4000, nullable=false)
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Quota", inversedBy="filters")
+     * @ORM\JoinTable(
+     *     name="QuotaHasFilter",
+     *     joinColumns={@ORM\JoinColumn(name="filter_id", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="quota_id", referencedColumnName="id", nullable=false)}
+     * )
+     */
+    private $quotas;
 
     public function getId(): ?int
     {

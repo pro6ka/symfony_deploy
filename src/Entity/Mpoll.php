@@ -13,18 +13,18 @@ class Mpoll
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $mstatus;
 
@@ -39,7 +39,7 @@ class Mpoll
     private $endedAt;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="decimal", nullable=false, precision=10, scale=2)
      */
     private $price;
 
@@ -59,12 +59,12 @@ class Mpoll
     private $repeatable;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
      */
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, nullable=false)
      */
     private $lenght;
 
@@ -79,7 +79,7 @@ class Mpoll
     private $prescreener;
 
     /**
-     * @ORM\Column(type="string", length=1024)
+     * @ORM\Column(type="string", length=1024, nullable=false)
      */
     private $link;
 
@@ -124,9 +124,17 @@ class Mpoll
     private $checkGeo;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $vendor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Mpoll", mappedBy="id")
+     */
+    private $parentMpoll;
+
+
+
 
     public function getId(): ?int
     {
