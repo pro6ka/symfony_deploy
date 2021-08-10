@@ -4,11 +4,12 @@
 namespace App\Manager;
 
 
-use App\Entity\Mpoll;
+use App\Entity\Filter;
 use Doctrine\ORM\EntityManagerInterface;
 
-class MpollManager
+class FilterManager
 {
+
     private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -19,12 +20,15 @@ class MpollManager
 
     public function create(array $data)
     {
-        /*$mpoll = new Mpoll();
-        $mpoll->setName($data['name'])
-            ->setDescription($data['description'])
-            ->setMstatus($data['mstatus'])
-            ->setPrice($data['price']);*/
+        $filter = new Filter();
+        $filter->setName($data['name'])
+        ->setDescription($data['description'])
+        ->setValue($data['value']);
 
+        $this->entityManager->persist($filter);
+        $this->entityManager->flush();
+
+        return $filter;
     }
 
 }

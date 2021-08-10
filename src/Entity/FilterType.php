@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FilterTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +14,7 @@ class FilterType
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -34,14 +36,6 @@ class FilterType
     }
 
     /**
-     * @param mixed $filters
-     */
-    public function setFilters($filters): void
-    {
-        $this->filters = $filters;
-    }
-
-    /**
      * @ORM\Column(type="string", length=50, nullable=false)
      */
     private $name;
@@ -51,10 +45,13 @@ class FilterType
      */
     private $description;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Filter", mappedBy="filterType")
-     */
-    private $filters;
+
+    public function __construct()
+    {
+        $this->filters = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -83,5 +80,14 @@ class FilterType
         $this->description = $description;
 
         return $this;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description
+        ];
     }
 }

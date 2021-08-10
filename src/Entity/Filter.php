@@ -18,7 +18,6 @@ class Filter
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
      * @ORM\ManyToOne(targetEntity="App\Entity\FilterType", inversedBy="filters")
      * @ORM\JoinColumn(name="filter_type_id", referencedColumnName="id")
      */
@@ -48,6 +47,7 @@ class Filter
      * )
      */
     private $quotas;
+
 
     public function getId(): ?int
     {
@@ -101,4 +101,15 @@ class Filter
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'value' => $this->value,
+        ];
+    }
+
 }

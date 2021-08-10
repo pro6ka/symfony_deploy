@@ -66,7 +66,7 @@ class Mpoll
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $repeatable;
+    private $repeatable = false;
 
     /**
      * @ORM\Column(type="integer", nullable=false)
@@ -131,12 +131,9 @@ class Mpoll
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $checkGeo;
+    private $checkGeo = true;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    private $vendor;
+
 
 
 
