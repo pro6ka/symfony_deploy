@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MpollRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,6 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Mpoll
 {
+
+    /**
+     * @ORM\OneToMany(targetEntity="QuotaDetail", mappedBy="quota")
+     */
+    private Collection $quotadetailQuota;
+
+
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -128,10 +138,7 @@ class Mpoll
      */
     private $vendor;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Mpoll", mappedBy="id")
-     */
-    private $parentMpoll;
+
 
 
 

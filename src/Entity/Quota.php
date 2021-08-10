@@ -10,6 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Quota
 {
+
+    /**
+     * @ORM\OneToMany(targetEntity="QuotaDetail", mappedBy="mpoll")
+     */
+    private QuotaDetail $quotadetailMpoll;
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

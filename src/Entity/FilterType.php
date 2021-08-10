@@ -17,6 +17,30 @@ class FilterType
      */
     private $id;
 
+
+    public function setId($id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @param mixed $filters
+     */
+    public function setFilters($filters): void
+    {
+        $this->filters = $filters;
+    }
+
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      */
