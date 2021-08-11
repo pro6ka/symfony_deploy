@@ -18,8 +18,7 @@ class Filter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\FilterType", inversedBy="filters")
-     * @ORM\JoinColumn(name="filter_type_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FilterType")
      */
     private $filterType;
 
@@ -54,12 +53,12 @@ class Filter
         return $this->id;
     }
 
-    public function getFilterType(): ?string
+    public function getFilterType(): ?FilterType
     {
         return $this->filterType;
     }
 
-    public function setFilterType(string $filterType): self
+    public function setFilterType(?FilterType $filterType): self
     {
         $this->filterType = $filterType;
 
@@ -109,6 +108,8 @@ class Filter
             'name' => $this->name,
             'description' => $this->description,
             'value' => $this->value,
+            'filterType' => $this->filterType
+
         ];
     }
 

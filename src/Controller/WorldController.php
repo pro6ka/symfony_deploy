@@ -4,12 +4,15 @@
 namespace App\Controller;
 
 
+use App\Entity\Filter;
 use App\Manager\FilterManager;
 use App\Manager\FilterTypeManager;
 use App\Manager\MpollManager;
+use App\Repository\FilterRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function dump;
 use function rand;
 
 class WorldController extends AbstractController
@@ -50,7 +53,8 @@ class WorldController extends AbstractController
         $filterData = [
             'name' => 'FilterType' . rand(1, 100),
             'description' => 'Description' . rand(1, 100),
-            'id' => rand(1, 100),
+//            'id' => 1,
+            'id' => rand(2, 100),
 
         ];
 
@@ -62,17 +66,36 @@ class WorldController extends AbstractController
     /**
      * @Route("/world/filter")
      */
-    public function filter(): Response
+    public function filter(FilterRepository $reFilter): Response
     {
+
+        $filterData = [
+            'name' => 'FilterType' . rand(1, 100),
+            'description' => 'Description' . rand(1, 100),
+//            'id' => 1,
+            'id' => rand(2, 100),
+
+        ];
+        $filterType= $this->filterTypeManager->create($filterData);
+
         $data = [
             'name' => 'Filter' . rand(1, 100),
             'description' => 'Description' . rand(1, 100),
             'value' => rand(100, 1000),
+            'filterType' => 1
         ];
 
-        $filter = $this->filterManager->create($data);
+        $filter = $this->filterManager->create($data, $filterType);
+
+        $filters = $reFilter->findBy(['filterType' => $filterType]);
+        dump($filter);
+
         return $this->json($filter->toArray());
+//        return $this->json(array_map(static fn(Filter $filter) => $filter->toArray(), $filter));
     }
+
+
+
 
 
 

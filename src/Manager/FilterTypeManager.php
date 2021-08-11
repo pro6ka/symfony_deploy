@@ -24,7 +24,10 @@ class FilterTypeManager
 
         $filterType->setName($data['name'])
             ->setDescription($data['description'])
-            ->setId($data['id']);
+            ->setId($data['id'])
+        ->setCreatedAt(new \DateTime())
+            ->setUpdatedAt(new \DateTime())
+        ;
 
 
         $this->entityManager->persist($filterType);

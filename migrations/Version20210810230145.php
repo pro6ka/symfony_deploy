@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210810150935 extends AbstractMigration
+final class Version20210810230145 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -29,7 +29,7 @@ final class Version20210810150935 extends AbstractMigration
         $this->addSql('CREATE TABLE QuotaHasFilter (filter_id INT NOT NULL, quota_id INT NOT NULL, PRIMARY KEY(filter_id, quota_id))');
         $this->addSql('CREATE INDEX IDX_8B5D11F9D395B25E ON QuotaHasFilter (filter_id)');
         $this->addSql('CREATE INDEX IDX_8B5D11F954E2C62F ON QuotaHasFilter (quota_id)');
-        $this->addSql('CREATE TABLE filter_type (id INT NOT NULL, name VARCHAR(50) NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE filter_type (id INT NOT NULL, name VARCHAR(50) NOT NULL, description VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE mpolls (id INT NOT NULL, name VARCHAR(50) NOT NULL, mstatus VARCHAR(255) NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, ended_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, price NUMERIC(10, 2) NOT NULL, description VARCHAR(255) DEFAULT NULL, clicks INT DEFAULT NULL, repeatable BOOLEAN DEFAULT NULL, country INT NOT NULL, lenght VARCHAR(10) NOT NULL, surv_limit INT DEFAULT NULL, prescreener VARCHAR(2048) DEFAULT NULL, link VARCHAR(1024) NOT NULL, filename VARCHAR(50) DEFAULT NULL, in_cabinet BOOLEAN DEFAULT NULL, cab_link VARCHAR(255) DEFAULT NULL, complites INT DEFAULT NULL, overquotas INT DEFAULT NULL, screenouts INT DEFAULT NULL, mail VARCHAR(255) DEFAULT NULL, check_geo BOOLEAN DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN mpolls.started_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN mpolls.ended_at IS \'(DC2Type:datetime_immutable)\'');
