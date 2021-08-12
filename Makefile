@@ -7,6 +7,9 @@ down: docker-down
 restart: down up
 db-renew: doctrine_renew-migration doctrine-migrate
 
+seed: doctrine-fixtures-load
+
+
 docker-up:
 	docker-compose up -d
 
@@ -35,3 +38,6 @@ doctrine_renew-migration:
 	docker-compose run --rm php-cli bin/console doctrine:database:drop --force
 	docker-compose run --rm php-cli bin/console doctrine:database:create --env=dev
 	docker-compose run --rm php-cli bin/console make:migration -n
+
+doctrine-fixtures-load:
+	docker-compose run --rm php-cli bin/console doctrine:fixtures:load -n

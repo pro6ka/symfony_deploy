@@ -11,8 +11,6 @@ class FilterFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        // $product = new Product();
-        // $manager->persist($product);
 
         for ($i = 0; $i < 20; $i++){
             $filterType = $this->getReference(FilterTypeFixtures::getReferenceKey($i % 3));
@@ -29,12 +27,6 @@ class FilterFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $manager->flush();
-       /* $data = [
-            'name' => 'Filter' . rand(1, 100),
-            'description' => 'Description' . rand(1, 100),
-            'value' => rand(100, 1000),
-            'filterType' => 1
-        ];*/
     }
 
     public function getDependencies()

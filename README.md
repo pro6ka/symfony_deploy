@@ -10,3 +10,7 @@ docker-compose run --rm php-cli bin/console make:entity
 
 composer require zenstruck/foundry --dev
 symfony console make:factory NAME
+
+
+docker-compose run --rm php-cli bin/console doctrine:fixtures:load -n
+docker-compose run --rm php-cli bin/console doctrine:query:sql "SELECT * FROM filter;"

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\QuotaDetailRepository;
+use App\Repository\MpollDetailRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=QuotaDetailRepository::class)
+ * @ORM\Entity(repositoryClass=MpollDetailRepository::class)
  */
-class QuotaDetail
+class MpollDetail
 {
     /**
      * @ORM\Id
@@ -17,28 +17,17 @@ class QuotaDetail
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Mpoll::class, inversedBy="mpollDetails")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $mpolls;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Mpoll", inversedBy="quotadetailMpoll")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="mpoll_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity=Quota::class, inversedBy="mpollDetails")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private Mpoll $mpoll;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Quota", inversedBy="quotadetailQuta")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="quota_id", referencedColumnName="id")
-     * })
-     */
-    private Quota $quota;
-
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $completes;
+    private $quotas;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -56,9 +45,14 @@ class QuotaDetail
     private $sending;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $sendOrder;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $clicks;
 
     /**
      * @ORM\Column(type="string", length=2048, nullable=true)
@@ -78,21 +72,33 @@ class QuotaDetail
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $complete;
+    private $completes;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCompletes(): ?int
+    public function getMpolls(): ?Mpoll
     {
-        return $this->completes;
+        return $this->mpolls;
     }
 
-    public function setCompletes(?int $completes): self
+    public function setMpolls(?Mpoll $mpolls): self
     {
-        $this->completes = $completes;
+        $this->mpolls = $mpolls;
+
+        return $this;
+    }
+
+    public function getQuotas(): ?Quota
+    {
+        return $this->quotas;
+    }
+
+    public function setQuotas(?Quota $quotas): self
+    {
+        $this->quotas = $quotas;
 
         return $this;
     }
@@ -138,9 +144,21 @@ class QuotaDetail
         return $this->sendOrder;
     }
 
-    public function setSendOrder(string $sendOrder): self
+    public function setSendOrder(?string $sendOrder): self
     {
         $this->sendOrder = $sendOrder;
+
+        return $this;
+    }
+
+    public function getClicks(): ?int
+    {
+        return $this->clicks;
+    }
+
+    public function setClicks(?int $clicks): self
+    {
+        $this->clicks = $clicks;
 
         return $this;
     }
@@ -150,7 +168,7 @@ class QuotaDetail
         return $this->prescreener;
     }
 
-    public function setPrescreener(?string $prescreener): self
+    public function setPrescreener(string $prescreener): self
     {
         $this->prescreener = $prescreener;
 
@@ -181,14 +199,14 @@ class QuotaDetail
         return $this;
     }
 
-    public function getComplete(): ?int
+    public function getCompletes(): ?int
     {
-        return $this->complete;
+        return $this->completes;
     }
 
-    public function setComplete(?int $complete): self
+    public function setCompletes(?int $completes): self
     {
-        $this->complete = $complete;
+        $this->completes = $completes;
 
         return $this;
     }

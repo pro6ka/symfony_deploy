@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MpollRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,13 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Mpoll
 {
-
-    /**
-     * @ORM\OneToMany(targetEntity="QuotaDetail", mappedBy="quota")
-     */
-    private Collection $quotadetailQuota;
-
-
 
 
     /**
@@ -67,11 +61,6 @@ class Mpoll
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $repeatable = false;
-
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $country;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=false)
@@ -124,14 +113,19 @@ class Mpoll
     private $screenouts;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $mail;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $checkGeo = true;
+
+    /**
+     * @ORM\OneToMany(targetEntity=MpollDetail::class, mappedBy="mpolls")
+     */
+    private $mpollDetails;
+
+    public function __construct()
+    {
+        $this->mpollDetails = new ArrayCollection();
+    }
 
 
 
@@ -237,18 +231,6 @@ class Mpoll
     public function setRepeatable(?bool $repeatable): self
     {
         $this->repeatable = $repeatable;
-
-        return $this;
-    }
-
-    public function getCountry(): ?int
-    {
-        return $this->country;
-    }
-
-    public function setCountry(int $country): self
-    {
-        $this->country = $country;
 
         return $this;
     }
@@ -373,18 +355,6 @@ class Mpoll
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(?string $mail): self
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
     public function getCheckGeo(): ?bool
     {
         return $this->checkGeo;
@@ -397,15 +367,34 @@ class Mpoll
         return $this;
     }
 
-    public function getVendor(): ?string
+    /**
+     * @return Collection|MpollDetail[]
+     */
+    public function getMpollDetails(): Collection
     {
-        return $this->vendor;
+        return $this->mpollDetails;
     }
 
-    public function setVendor(string $vendor): self
+    public function addMpollDetail(MpollDetail $mpollDetail): self
     {
-        $this->vendor = $vendor;
+        if (!$this->mpollDetails->contains($mpollDetail)) {
+            $this->mpollDetails[] = $mpollDetail;
+            $mpollDetail->setMpolls($this);
+        }
 
         return $this;
     }
+
+    public function removeMpollDetail(MpollDetail $mpollDetail): self
+    {
+        if ($this->mpollDetails->removeElement($mpollDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($mpollDetail->getMpolls() === $this) {
+                $mpollDetail->setMpolls(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

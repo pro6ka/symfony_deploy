@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FilterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,14 +40,16 @@ class Filter
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Quota", inversedBy="filters")
-     * @ORM\JoinTable(
-     *     name="QuotaHasFilter",
-     *     joinColumns={@ORM\JoinColumn(name="filter_id", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="quota_id", referencedColumnName="id", nullable=false)}
-     * )
+     * @ORM\ManyToMany(targetEntity=Quota::class, mappedBy="filters")
      */
     private $quotas;
+
+    public function __construct()
+    {
+        $this->quotas = new ArrayCollection();
+    }
+
+
 
 
     public function getId(): ?int
@@ -111,6 +115,33 @@ class Filter
             'filterType' => $this->filterType
 
         ];
+    }
+
+    /**
+     * @return Collection|Quota[]
+     */
+    public function getQuotas(): Collection
+    {
+        return $this->quotas;
+    }
+
+    public function addQuota(Quota $quota): self
+    {
+        if (!$this->quotas->contains($quota)) {
+            $this->quotas[] = $quota;
+            $quota->addFilter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuota(Quota $quota): self
+    {
+        if ($this->quotas->removeElement($quota)) {
+            $quota->removeFilter($this);
+        }
+
+        return $this;
     }
 
 }
