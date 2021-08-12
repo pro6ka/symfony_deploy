@@ -6,6 +6,7 @@ use App\Repository\QuotaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=QuotaRepository::class)
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Quota
 {
+
+    use TimestampableEntity;
 
     public function __construct()
     {

@@ -30,8 +30,8 @@ class QuotaFixtures extends Fixture implements DependentFixtureInterface
             $quota
                 ->setName('Quota' . rand(1, 5))
                 ->setDescription('Description' . rand(1, 100))
-//                ->setCreatedAt(new \DateTime())
-//                ->setUpdatedAt(new \DateTime())
+                ->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
+                ->setUpdatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'))
             ->addFilter($filter)
             ->addFilter($filter1)
             ;

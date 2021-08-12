@@ -9,11 +9,7 @@ use function sprintf;
 
 class FilterTypeFixtures extends Fixture
 {
-    public static function getReferenceKey($i) :string
-    {
-        return sprintf('filterType_%s', $i);
-    }
-    
+
     public function load(ObjectManager $manager)
     {
         // $product = new Product();
@@ -32,7 +28,11 @@ class FilterTypeFixtures extends Fixture
             $this->addReference(self::getReferenceKey($i), $filterType);
         }
 
-
         $manager->flush();
+    }
+
+    public static function getReferenceKey($i) :string
+    {
+        return sprintf('filterType_%s', $i);
     }
 }

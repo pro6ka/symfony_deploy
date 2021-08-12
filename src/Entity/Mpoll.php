@@ -14,6 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Mpoll
 {
 
+    public function __construct()
+    {
+        $this->mpollDetails = new ArrayCollection();
+    }
 
     /**
      * @ORM\Id
@@ -28,9 +32,9 @@ class Mpoll
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $mstatus;
+    private $mstatus = 0;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -63,9 +67,9 @@ class Mpoll
     private $repeatable = false;
 
     /**
-     * @ORM\Column(type="string", length=10, nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
-    private $lenght;
+    private $lenght = 40;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -121,17 +125,6 @@ class Mpoll
      * @ORM\OneToMany(targetEntity=MpollDetail::class, mappedBy="mpolls")
      */
     private $mpollDetails;
-
-    public function __construct()
-    {
-        $this->mpollDetails = new ArrayCollection();
-    }
-
-
-
-
-
-
 
 
     public function getId(): ?int
