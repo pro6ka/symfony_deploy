@@ -24,6 +24,7 @@ class FilterFixtures extends Fixture implements DependentFixtureInterface
             ;
 
             $manager->persist($filter);
+            $this->addReference(self::getReferenceKey($i), $filter);
         }
 
         $manager->flush();
@@ -34,5 +35,10 @@ class FilterFixtures extends Fixture implements DependentFixtureInterface
         return [
             FilterTypeFixtures::class
         ];
+    }
+
+    public static function getReferenceKey($i) :string
+    {
+        return sprintf('filter_%s', $i);
     }
 }
