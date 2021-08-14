@@ -10,6 +10,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=FilterTypeRepository::class)
+ * @ORM\Table(name="filter_types",
+
+ * )
  */
 class FilterType
 {

@@ -21,8 +21,8 @@ class FilterTypeFixtures extends Fixture
                 ->setId($i)
                 ->setName('FilterType' . rand(1, 100))
                 ->setDescription('Description' . rand(1, 100))
-                ->setCreatedAt(new \DateTime())
-                ->setUpdatedAt(new \DateTime())
+//                ->setCreatedAt(new \DateTime())
+//                ->setUpdatedAt(new \DateTime())
                 ;
             $manager->persist($filterType);
             $this->addReference(self::getReferenceKey($i), $filterType);

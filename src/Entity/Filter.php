@@ -9,6 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=FilterRepository::class)
+ * @ORM\Table(
+ *      name="filters",
+ *      indexes={
+ * @ORM\Index(name="filters__filter_type_id__idx", columns={"filter_type_id"} )
+ *     }
+ * )
+ * )
  */
 class Filter
 {
@@ -20,7 +27,8 @@ class Filter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\FilterType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FilterType" , inversedBy="id")
+
      */
     private $filterType;
 
@@ -41,6 +49,7 @@ class Filter
 
     /**
      * @ORM\ManyToMany(targetEntity=Quota::class, mappedBy="filters")
+     *  @ORM\JoinTable(name="filters_quotas")
      */
     private $quotas;
 

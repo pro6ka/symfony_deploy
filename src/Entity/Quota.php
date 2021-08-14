@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\QuotaRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=QuotaRepository::class)
@@ -14,8 +15,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Quota
 {
-
-    use TimestampableEntity;
 
     public function __construct()
     {
@@ -47,8 +46,31 @@ class Quota
 
     /**
      * @ORM\OneToMany(targetEntity=MpollDetail::class, mappedBy="quotas")
+     * @ORM\JoinTable(name="filters_quotas")
      */
     private $mpollDetails;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @Gedmo\Timestampable(on="create")
+     */
+    private DateTime $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     * @Gedmo\Timestampable(on="update")
+     */
+    private DateTime $updatedAt;
+
+    /*public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }*/
+
+   /* public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }*/
 
 
     public function getId(): ?int

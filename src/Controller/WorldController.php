@@ -5,10 +5,12 @@ namespace App\Controller;
 
 
 use App\Entity\Filter;
+use App\Entity\Mpoll;
 use App\Manager\FilterManager;
 use App\Manager\FilterTypeManager;
 use App\Manager\MpollManager;
 use App\Repository\FilterRepository;
+use App\Repository\MpollRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,16 +41,15 @@ class WorldController extends AbstractController
     {
 
 
-
 //        return new Response('<html><body><h1><b>Hello,</b> <i>world</i>!</h1></body></html>');
 //        return new Response();
 
-     /* $mpoll = [
-          'name' => 'Test' ,
-          'description' => 'description' ,
-          'mstatus' => rand(1,5) ,
-          'name' =>  ,
-      ];*/
+        /* $mpoll = [
+             'name' => 'Test' ,
+             'description' => 'description' ,
+             'mstatus' => rand(1,5) ,
+             'name' =>  ,
+         ];*/
 
         $filterData = [
             'name' => 'FilterType' . rand(1, 100),
@@ -59,7 +60,7 @@ class WorldController extends AbstractController
         ];
 
 //        $filterType = $this->mpollManager->create($filterData);
-        $filterType= $this->filterTypeManager->create($filterData);
+        $filterType = $this->filterTypeManager->create($filterData);
         return $this->json($filterType->toArray());
     }
 
@@ -76,7 +77,7 @@ class WorldController extends AbstractController
             'id' => rand(2, 100),
 
         ];
-        $filterType= $this->filterTypeManager->create($filterData);
+        $filterType = $this->filterTypeManager->create($filterData);
 
         $data = [
             'name' => 'Filter' . rand(1, 100),
@@ -94,9 +95,23 @@ class WorldController extends AbstractController
 //        return $this->json(array_map(static fn(Filter $filter) => $filter->toArray(), $filter));
     }
 
+    /**
+     * @Route ("/mpolls/show/{id}")
+     */
+    public function search(Mpoll $mpoll): Response
+    {
+
+//        $mpoll = $this->mpollManager->findMpollById($id);
+        $mpoll = $this->mpollManager->findByStatus(0);
 
 
 
+        dump($mpoll);
+
+//        return $this->render('',$mpoll);
+
+        return $this->render('test.html.twig', ['mpoll' => $mpoll]);
+    }
 
 
 

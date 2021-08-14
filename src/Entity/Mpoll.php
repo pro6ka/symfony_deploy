@@ -123,6 +123,7 @@ class Mpoll
 
     /**
      * @ORM\OneToMany(targetEntity=MpollDetail::class, mappedBy="mpolls")
+     * @ORM\JoinTable(name="filters_quotas")
      */
     private $mpollDetails;
 

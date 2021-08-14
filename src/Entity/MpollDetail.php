@@ -7,6 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=MpollDetailRepository::class)
+ * @ORM\Table(name="mpolls_quotas",
+ *     indexes={
+@ORM\Index(name="mpolls_quotas__mpoll_id__idx", columns={"mpoll_id"}),
+@ORM\Index(name="mpolls_quotas__quota_id__idx", columns={"quota_id"})
+ *     }
+ *     )
  */
 class MpollDetail
 {
@@ -18,14 +24,18 @@ class MpollDetail
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Mpoll::class, inversedBy="mpollDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Mpoll::class, inversedBy="id")
+     * @ORM\JoinColumns({
+     *  @ORM\JoinColumn(name="mpoll_id", referencedColumnName="id")
+     *     })
      */
     private $mpolls;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Quota::class, inversedBy="mpollDetails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Quota::class, inversedBy="id")
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="quota_id", referencedColumnName="id")
+     *     })
      */
     private $quotas;
 
