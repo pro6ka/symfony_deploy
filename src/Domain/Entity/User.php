@@ -2,15 +2,16 @@
 
 namespace App\Domain\Entity;
 
-
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
 #[ORM\Index(name: 'user__email_unique', columns: ['email'])]
 #[ORM\Index(name: 'user__login_unique', columns: ['login'])]
-class User implements EntityInterface
+class User implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -31,6 +32,12 @@ class User implements EntityInterface
 
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
     private string $email;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    private DateTime $createdAt;
+
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
+    private DateTime $updatedAt;
 
     /**
      * @return int
@@ -140,7 +147,42 @@ class User implements EntityInterface
         $this->email = $email;
     }
 
-    public function toArray()
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return void
+     */
+    public function setCreatedAt(): void
+    {
+        $this->createdAt = new DateTime();
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt(): DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return void
+     */
+    public function setUpdatedAt(): void
+    {
+        $this->updatedAt = new DateTime();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

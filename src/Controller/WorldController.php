@@ -33,7 +33,7 @@ class WorldController extends AbstractController
      */
     public function create(): Response
     {
-        $user = $this->userService->create('third user');
+        $user = $this->userService->create('fourth user');
 
         return $this->json($user);
     }
