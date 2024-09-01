@@ -21,7 +21,11 @@ class WorldController extends AbstractController
      */
     public function hello(): Response
     {
-        return $this->json(['hello' => 'world']);
+        return $this->json([
+            $this->userService->findUserByLogin('second user'),
+            $this->userService->findUserById(4),
+            $this->userService->findUserByEmail('second.user@email.dvl.to'),
+        ]);
     }
 
     /**

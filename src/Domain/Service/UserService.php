@@ -30,4 +30,34 @@ class UserService
 
         return $user->toArray();
     }
+
+    /**
+     * @param string $login
+     *
+     * @return array
+     */
+    public function findUserByLogin(string $login): array
+    {
+        return $this->userRepository->findByLogin($login)?->toArray() ?? [];
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function findUserById(int $id): array
+    {
+        return $this->userRepository->findById($id)?->toArray() ?? [];
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return array
+     */
+    public function findUserByEmail(string $email): array
+    {
+        return $this->userRepository->findByEmail($email);
+    }
 }
