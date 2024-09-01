@@ -6,7 +6,7 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table(name: 'user')]
+#[ORM\Table(name: '`user`')]
 #[ORM\Entity]
 #[ORM\Index(name: 'user__email_unique', columns: ['email'])]
 #[ORM\Index(name: 'user__login_unique', columns: ['login'])]
@@ -26,7 +26,7 @@ class User implements EntityInterface
     #[ORM\Column(type: 'string', length: 32, nullable: false)]
     private string $lastName;
 
-    #[ORM\Column(type: 'string', length: 32, nullable: false)]
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private string $middleName;
 
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
@@ -109,7 +109,7 @@ class User implements EntityInterface
      */
     public function getMiddleName(): string
     {
-        return $this->middleName;
+        return $this->middleName ?? '';
     }
 
     /**
@@ -138,5 +138,17 @@ class User implements EntityInterface
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'login' => $this->login,
+            'email' => $this->email,
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'middleName' => $this->getMiddleName(),
+        ];
     }
 }
