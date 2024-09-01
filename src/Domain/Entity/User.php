@@ -5,7 +5,10 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Group;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
@@ -38,6 +41,14 @@ class User implements EntityInterface, HasMetaTimeStampInterface
 
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     private DateTime $updatedAt;
+
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'participants')]
+    private Collection $groups;
+
+    public function __construct()
+    {
+        $this->groups = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -177,6 +188,17 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new DateTime();
+    }
+
+    /**
+     * @param Group $group
+     * @return void
+     */
+    public function addGroup(Group $group): void
+    {
+        if (! $this->groups->contains($group)) {
+            $this->groups->add($group);
+        }
     }
 
     /**
