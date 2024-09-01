@@ -11,6 +11,7 @@
 
 .idea/*
 .env
+docker/data
 
 
 ###> squizlabs/php_codesniffer ###
