@@ -31,8 +31,8 @@ services:
       POSTGRES_USER: 'user'
       POSTGRES_PASSWORD: 'password'
     volumes:
-      - dump:/app/dump
-      - postgresql:/var/lib/postgresql/data
+      - ./docker/data/dump:/app/dump
+      - ./docker/data/postgresql:/var/lib/postgresql/data
 
 volumes:
   dump:
