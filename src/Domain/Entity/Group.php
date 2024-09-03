@@ -12,7 +12,7 @@ use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 
 #[ORM\Table(name: 'group')]
 #[ORM\Entity]
-#[ORM\Index(name: 'group__name_unique', columns: ['name'])]
+#[ORM\UniqueConstraint(name: 'group__name_unique', columns: ['name'])]
 class Group implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
