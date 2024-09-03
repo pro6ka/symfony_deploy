@@ -12,8 +12,8 @@ use Group;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
-#[ORM\Index(name: 'user__email_unique', columns: ['email'])]
-#[ORM\Index(name: 'user__login_unique', columns: ['login'])]
+#[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
+#[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
 class User implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
