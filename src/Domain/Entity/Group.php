@@ -180,4 +180,12 @@ class Group implements EntityInterface, HasMetaTimeStampInterface
             $this->participants->add($participant);
         }
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name
+        ];
+    }
 }
