@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,8 @@ class WorldController extends AbstractController
      * @param UserService $userService
      */
     public function __construct(
-        private readonly UserService $userService
+        private readonly UserService $userService,
+        private readonly GroupService $groupService
     ) {
     }
 
@@ -33,8 +35,12 @@ class WorldController extends AbstractController
      */
     public function create(): Response
     {
-        $user = $this->userService->create('fourth user');
+//        $userResult = $this->userService->create('fifth user');
+        $groupResult = $this->groupService->create('zero group');
 
-        return $this->json($user);
+        return $this->json([
+//            'user' => $userResult,
+            'group' => $groupResult,
+        ]);
     }
 }

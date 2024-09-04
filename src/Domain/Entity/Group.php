@@ -3,6 +3,7 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
 use App\Domain\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,10 +11,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 
-#[ORM\Table(name: 'group')]
+#[ORM\Table(name: '`group`')]
 #[ORM\Entity]
 #[ORM\UniqueConstraint(name: 'group__name_unique', columns: ['name'])]
-class Group implements EntityInterface, HasMetaTimeStampInterface
+class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActiveInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -23,13 +24,13 @@ class Group implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
     private string $name;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isActive;
 
-    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private DateTime $workingFrom;
 
-    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private DateTime $workingTo;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
@@ -95,7 +96,7 @@ class Group implements EntityInterface, HasMetaTimeStampInterface
      *
      * @return void
      */
-    public function setIsActive(bool $isActive): void
+    public function setIsActive(bool $isActive = false): void
     {
         $this->isActive = $isActive;
     }
@@ -179,5 +180,13 @@ class Group implements EntityInterface, HasMetaTimeStampInterface
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name
+        ];
     }
 }
