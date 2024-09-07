@@ -36,12 +36,10 @@ class WorldController extends AbstractController
      */
     public function create(): Response
     {
-//        $userResult = $this->userService->create('fifth user');
-        $groupResult = $this->groupService->create('zero group');
+        $userResult = $this->userService->create('fifth user');
 
         return $this->json([
-//            'user' => $userResult,
-            'group' => $groupResult,
+            'user' => $userResult,
         ]);
     }
 }
