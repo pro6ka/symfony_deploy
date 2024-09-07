@@ -11,6 +11,7 @@ class WorldController extends AbstractController
 {
     /**
      * @param UserService $userService
+     * @param GroupService $groupService
      */
     public function __construct(
         private readonly UserService $userService,
