@@ -25,4 +25,25 @@ class GroupRepository extends AbstractRepository
     {
         return $this->entityManager->getRepository(Group::class)->findOneBy(['name' => $name]);
     }
+
+    /**
+     * @param int $groupId
+     *
+     * @return null|Group
+     */
+    public function find(int $groupId): ?Group
+    {
+        return $this->entityManager->getRepository(Group::class)->find($groupId);
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return void
+     */
+    public function activate(Group $group): void
+    {
+        $group->setIsActive(true);
+        $this->flush();
+    }
 }

@@ -27,4 +27,22 @@ readonly class GroupService
 
         return $group->toArray();
     }
+
+    /**
+     * @param int $groupId
+     *
+     * @return null|Group
+     */
+    public function activate(int $groupId): ?Group
+    {
+        $group = $this->groupRepository->find($groupId);
+
+        if (! $group instanceof Group) {
+            return null;
+        }
+
+        $this->groupRepository->activate($group);
+
+        return $group;
+    }
 }

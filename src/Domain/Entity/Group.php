@@ -186,7 +186,8 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'name' => $this->name,
+            'isActive' => $this->isActive
         ];
     }
 }
