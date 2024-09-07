@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
+use App\Domain\Entity\User;
 
 class GroupRepository extends AbstractRepository
 {
@@ -45,5 +46,19 @@ class GroupRepository extends AbstractRepository
     {
         $group->setIsActive(true);
         $this->flush();
+    }
+
+    /**
+     * @param Group $group
+     * @param User $user
+     *
+     * @return array
+     */
+    public function addParticipant(Group $group, User $user): array
+    {
+        $group->addParticipant($user);
+        $this->flush();
+
+        return $group->toArray();
     }
 }

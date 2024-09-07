@@ -2,8 +2,10 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Exception\ORMException;
 
 class UserRepository extends AbstractRepository
 {
@@ -55,5 +57,29 @@ class UserRepository extends AbstractRepository
             ->setParameter('email', $email);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return null|User
+     */
+    public function find(int $id): ?User
+    {
+        return $this->entityManager->getRepository(User::class)->find($id);
+    }
+
+    /**
+     * @param User $user
+     * @param Group $group
+     *
+     * @return void
+     * @throws ORMException
+     */
+    public function addGroup(User $user, Group $group): void
+    {
+        $user->addGroup($group);
+        $group->addParticipant($user);
+        $this->flush();
     }
 }

@@ -182,12 +182,19 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
         }
     }
 
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'isActive' => $this->isActive
+            'isActive' => $this->isActive,
+            'participants' => array_map(
+                fn (User $participant) => $participant->toArray(),
+                $this->participants->toArray()
+            )
         ];
     }
 }
