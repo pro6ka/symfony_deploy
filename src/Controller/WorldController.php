@@ -11,6 +11,7 @@ class WorldController extends AbstractController
 {
     /**
      * @param UserService $userService
+     * @param GroupService $groupService
      */
     public function __construct(
         private readonly UserService $userService,
@@ -35,9 +36,10 @@ class WorldController extends AbstractController
      */
     public function create(): Response
     {
-        // $result = $this->userService->create('sixth user');
-        $result = $this->groupService->create('first group');
+        $userResult = $this->userService->create('fifth user');
 
-        return $this->json($result);
+        return $this->json([
+            'user' => $userResult,
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Infrastructure\Repository\UserRepository;
 
@@ -59,5 +60,15 @@ class UserService
     public function findUserByEmail(string $email): array
     {
         return $this->userRepository->findByEmail($email);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return null|User
+     */
+    public function find(int $id): ?User
+    {
+        return $this->userRepository->find($id);
     }
 }

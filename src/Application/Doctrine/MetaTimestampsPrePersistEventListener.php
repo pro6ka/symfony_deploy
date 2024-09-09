@@ -10,6 +10,11 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 #[AsDoctrineListener(event: Events::prePersist, connection: 'default')]
 class MetaTimestampsPrePersistEventListener
 {
+    /**
+     * @param LifecycleEventArgs $event
+     *
+     * @return void
+     */
     public function prePersist(LifecycleEventArgs $event): void
     {
         $entity = $event->getObject();
