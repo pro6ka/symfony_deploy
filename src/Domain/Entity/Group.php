@@ -4,7 +4,6 @@ namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
-use App\Domain\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
