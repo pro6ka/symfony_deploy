@@ -2,8 +2,10 @@
 
 namespace App\Domain\Service;
 
+use App\Controller\Web\CreateUser\v1\Output\CreatedUserDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\CreateUserModel;
 use App\Infrastructure\Repository\UserRepository;
 
 class UserService
@@ -16,20 +18,21 @@ class UserService
     }
 
     /**
-     * @param string $login
+     * @param CreateUserModel $userModel
      *
-     * @return array
+     * @return User
      */
-    public function create(string $login): array
+    public function create(CreateUserModel $userModel): User
     {
         $user = new User();
-        $user->setLogin($login);
-        $user->setEmail(preg_replace('~\s~', '.', $login) . '@email.dvl.to');
-        $user->setFirstName($login . 's First Name');
-        $user->setLastName($login . 's Last Name');
+        $user->setLogin($userModel->login);
+        $user->setFirstName($userModel->firstName);
+        $user->setLastName($userModel->lastName);
+        $user->setMiddleName($userModel->middleName);
+        $user->setEmail($userModel->email);
         $this->userRepository->create($user);
 
-        return $user->toArray();
+        return $user;
     }
 
     /**
