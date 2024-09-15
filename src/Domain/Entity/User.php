@@ -45,10 +45,10 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     private Collection $groups;
 
     /**
-     * @var ArrayCollection|Collection
+     * @var ArrayCollection
      */
     #[ORM\OneToMany(targetEntity: WorkShop::class, mappedBy: 'author')]
-    private Collection|ArrayCollection $workShops;
+    private ArrayCollection $workShops;
 
     public function __construct()
     {
@@ -231,11 +231,11 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     }
 
     /**
-     * @param Collection $workShops
+     * @param ArrayCollection $workShops
      *
      * @return void
      */
-    public function setWorkShops(Collection $workShops): void
+    public function setWorkShops(ArrayCollection $workShops): void
     {
         $this->workShops = $workShops;
     }
