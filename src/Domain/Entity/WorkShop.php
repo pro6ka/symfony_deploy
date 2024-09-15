@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -32,6 +33,14 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'workShops')]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id')]
     private User $author;
+
+    #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
+    private ArrayCollection $exercises;
+
+    public function __construct()
+    {
+        $this->exercises = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -125,5 +134,35 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     public function setAuthor(User $user): void
     {
         $this->author = $user;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getExercises(): ArrayCollection
+    {
+        return $this->exercises;
+    }
+
+    /**
+     * @param ArrayCollection $exercises
+     *
+     * @return void
+     */
+    public function setExercises(ArrayCollection $exercises): void
+    {
+        $this->exercises = $exercises;
+    }
+
+    /**
+     * @param Exercise $exercise
+     *
+     * @return void
+     */
+    public function addExercise(Exercise $exercise): void
+    {
+        if (! $this->exercises->contains($exercise)) {
+            $this->exercises->add($exercise);
+        }
     }
 }
