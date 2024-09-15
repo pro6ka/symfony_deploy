@@ -44,9 +44,16 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'participants')]
     private Collection $groups;
 
+    /**
+     * @var ArrayCollection|Collection
+     */
+    #[ORM\OneToMany(targetEntity: WorkShop::class, mappedBy: 'author')]
+    private Collection|ArrayCollection $workShops;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->workShops = new ArrayCollection();
     }
 
     /**
@@ -213,5 +220,35 @@ class User implements EntityInterface, HasMetaTimeStampInterface
             'lastName' => $this->lastName,
             'middleName' => $this->getMiddleName(),
         ];
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getWorkShops(): Collection
+    {
+        return $this->workShops;
+    }
+
+    /**
+     * @param Collection $workShops
+     *
+     * @return void
+     */
+    public function setWorkShops(Collection $workShops): void
+    {
+        $this->workShops = $workShops;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     */
+    public function addWorkSHop(WorkShop $workShop): void
+    {
+        if (! $this->workShops->contains($workShop)) {
+            $this->workShops->add($workShop);
+        }
     }
 }
