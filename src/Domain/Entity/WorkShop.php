@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'work_shop')]
-#[ORM\Index(name: 'work_shop__author_idx', fields: ['author'])]
+#[ORM\Index(name: 'work_shop__author_id_idx', fields: ['author'])]
 class WorkShop implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
