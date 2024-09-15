@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -32,6 +33,14 @@ class Exercise implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToOne(targetEntity: WorkShop::class, inversedBy: 'exercises')]
     #[ORM\JoinColumn(name: 'workshop_id', referencedColumnName: 'id')]
     private WorkShop $workShop;
+
+    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'exercise')]
+    private ArrayCollection $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
 
     /**
      * @inheritDoc
@@ -135,5 +144,35 @@ class Exercise implements EntityInterface, HasMetaTimeStampInterface
     public function setWorkShop(WorkShop $workShop): void
     {
         $this->workShop = $workShop;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestions(): ArrayCollection
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param ArrayCollection $questions
+     *
+     * @return void
+     */
+    public function setQuestions(ArrayCollection $questions): void
+    {
+        $this->questions = $questions;
+    }
+
+    /**
+     * @param Question $question
+     *
+     * @return void
+     */
+    public function addQuestion(Question $question): void
+    {
+        if (! $this->questions->contains($question)) {
+            $this->questions->add($question);
+        }
     }
 }
