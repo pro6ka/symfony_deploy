@@ -5,15 +5,14 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'question')]
-#[ORM\Index(name: 'question__exercise_id__idx', columns: ['exercise_id'])]
-class Question implements EntityInterface, HasMetaTimeStampInterface
+#[ORM\Table(name: 'answer')]
+#[ORM\Index(name: 'answer__question_id__idx', columns: ['question_id'])]
+class Answer implements EntityInterface, HasMetaTimeStampInterface
 {
-    #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
+    #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id;
@@ -30,17 +29,9 @@ class Question implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(name: 'description', type: 'string', length: 100)]
     private string $description;
 
-    #[ORM\ManyToOne(targetEntity: Exercise::class, inversedBy: 'questions')]
-    #[ORM\JoinColumn(name: 'exercise_id', referencedColumnName: 'id')]
-    private Exercise $exercise;
-
-    #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
-    private ArrayCollection $answers;
-
-    public function __construct()
-    {
-        $this->answers = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id')]
+    private Question $question;
 
     /**
      * @inheritDoc
@@ -129,45 +120,20 @@ class Question implements EntityInterface, HasMetaTimeStampInterface
     }
 
     /**
-     * @return Exercise
+     * @return Question
      */
-    public function getExercise(): Exercise
+    public function getQuestion(): Question
     {
-        return $this->exercise;
+        return $this->question;
     }
 
     /**
-     * @param Exercise $exercise
+     * @param Question $question
      *
      * @return void
      */
-    public function setExercise(Exercise $exercise): void
+    public function setQuestion(Question $question): void
     {
-        $this->exercise = $exercise;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getAnswers(): ArrayCollection
-    {
-        return $this->answers;
-    }
-
-    /**
-     * @param ArrayCollection $answers
-     *
-     * @return void
-     */
-    public function setAnswers(ArrayCollection $answers): void
-    {
-        $this->answers = $answers;
-    }
-
-    public function addAnswer(Answer $answer): void
-    {
-        if (! $this->answers->contains($answer)) {
-            $this->answers->add($answer);
-        }
+        $this->question = $question;
     }
 }
