@@ -48,12 +48,16 @@ class User implements EntityInterface, HasMetaTimeStampInterface
      * @var ArrayCollection
      */
     #[ORM\OneToMany(targetEntity: WorkShop::class, mappedBy: 'author')]
-    private ArrayCollection $workShops;
+    private ArrayCollection $createdWorkShops;
+
+    #[ORM\ManyToMany(targetEntity: WorkShop::class, mappedBy: 'students')]
+    private ArrayCollection $participatedWorkShops;
 
     public function __construct()
     {
         $this->groups = new ArrayCollection();
-        $this->workShops = new ArrayCollection();
+        $this->createdWorkShops = new ArrayCollection();
+        $this->participatedWorkShops = new ArrayCollection();
     }
 
     /**
@@ -225,9 +229,9 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     /**
      * @return Collection
      */
-    public function getWorkShops(): Collection
+    public function getCreatedWorkShops(): Collection
     {
-        return $this->workShops;
+        return $this->createdWorkShops;
     }
 
     /**
@@ -237,7 +241,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface
      */
     public function setWorkShops(ArrayCollection $workShops): void
     {
-        $this->workShops = $workShops;
+        $this->createdWorkShops = $workShops;
     }
 
     /**
@@ -245,10 +249,40 @@ class User implements EntityInterface, HasMetaTimeStampInterface
      *
      * @return void
      */
-    public function addWorkSHop(WorkShop $workShop): void
+    public function addCreatedWorkSHop(WorkShop $workShop): void
     {
-        if (! $this->workShops->contains($workShop)) {
-            $this->workShops->add($workShop);
+        if (! $this->createdWorkShops->contains($workShop)) {
+            $this->createdWorkShops->add($workShop);
+        }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getParticipatedWorkShops(): ArrayCollection
+    {
+        return $this->participatedWorkShops;
+    }
+
+    /**
+     * @param ArrayCollection $participatedWorkShops
+     *
+     * @return void
+     */
+    public function setParticipatedWorkShops(ArrayCollection $participatedWorkShops): void
+    {
+        $this->participatedWorkShops = $participatedWorkShops;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     */
+    public function addParticipatedWorkShop(WorkShop $workShop): void
+    {
+        if (! $this->participatedWorkShops->contains($workShop)) {
+            $this->participatedWorkShops->add($workShop);
         }
     }
 }

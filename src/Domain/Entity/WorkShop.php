@@ -37,6 +37,9 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
     private ArrayCollection $exercises;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
+    private ArrayCollection $participants;
+
     public function __construct()
     {
         $this->exercises = new ArrayCollection();
