@@ -40,9 +40,13 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
     private ArrayCollection $participants;
 
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'workshops')]
+    private ArrayCollection $groupsParticipants;
+
     public function __construct()
     {
         $this->exercises = new ArrayCollection();
+        $this->groupsParticipants = new ArrayCollection();
     }
 
     /**
@@ -166,6 +170,31 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     {
         if (! $this->exercises->contains($exercise)) {
             $this->exercises->add($exercise);
+        }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getGroupsParticipants(): ArrayCollection
+    {
+        return $this->groupsParticipants;
+    }
+
+    /**
+     * @param ArrayCollection $groupsParticipants
+     *
+     * @return void
+     */
+    public function setGroupsParticipants(ArrayCollection $groupsParticipants): void
+    {
+        $this->groupsParticipants = $groupsParticipants;
+    }
+
+    public function addGroupParticipant(Group $group): void
+    {
+        if (! $this->groupsParticipants->contains($group)) {
+            $this->groupsParticipants->add($group);
         }
     }
 }

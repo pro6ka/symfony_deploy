@@ -42,9 +42,13 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
     private Collection $participants;
 
+    #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
+    private $workshops;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->workshops = new ArrayCollection();
     }
 
     /**
@@ -196,5 +200,28 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
                 $this->participants->toArray()
             )
         ];
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getWorkshops(): ArrayCollection
+    {
+        return $this->workshops;
+    }
+
+    /**
+     * @param ArrayCollection $workshops
+     */
+    public function setWorkshops(ArrayCollection $workshops): void
+    {
+        $this->workshops = $workshops;
+    }
+
+    public function addWorkShop(WorkShop $workShop): void
+    {
+        if (! $this->workshops->contains($workShop)) {
+            $this->workshops->add($workShop);
+        }
     }
 }
