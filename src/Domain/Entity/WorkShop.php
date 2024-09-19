@@ -30,7 +30,7 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'workShops')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'createdWorkShops')]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id')]
     private User $author;
 
@@ -38,7 +38,7 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
     private ArrayCollection $exercises;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
-    private ArrayCollection $participants;
+    private ArrayCollection $students;
 
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'workshops')]
     private ArrayCollection $groupsParticipants;
@@ -191,10 +191,45 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
         $this->groupsParticipants = $groupsParticipants;
     }
 
+    /**
+     * @param Group $group
+     *
+     * @return void
+     */
     public function addGroupParticipant(Group $group): void
     {
         if (! $this->groupsParticipants->contains($group)) {
             $this->groupsParticipants->add($group);
+        }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getStudents(): ArrayCollection
+    {
+        return $this->students;
+    }
+
+    /**
+     * @param ArrayCollection $students
+     *
+     * @return void
+     */
+    public function setStudents(ArrayCollection $students): void
+    {
+        $this->students = $students;
+    }
+
+    /**
+     * @param User $student
+     *
+     * @return void
+     */
+    public function addStudent(User $student): void
+    {
+        if (! $this->students->contains($student)) {
+            $this->students->add($student);
         }
     }
 }
