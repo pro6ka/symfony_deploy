@@ -4,6 +4,7 @@ namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'work_shop')]
 #[ORM\Index(name: 'work_shop__author_id_idx', fields: ['author'])]
-class WorkShop implements EntityInterface, HasMetaTimeStampInterface
+class WorkShop implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -231,5 +232,13 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface
         if (! $this->students->contains($student)) {
             $this->students->add($student);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function revisionableFields(): array
+    {
+        return ['title', 'description',];
     }
 }

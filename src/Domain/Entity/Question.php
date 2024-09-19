@@ -4,6 +4,7 @@ namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'question')]
 #[ORM\Index(name: 'question__exercise_id__idx', columns: ['exercise_id'])]
-class Question implements EntityInterface, HasMetaTimeStampInterface
+class Question implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -169,5 +170,13 @@ class Question implements EntityInterface, HasMetaTimeStampInterface
         if (! $this->answers->contains($answer)) {
             $this->answers->add($answer);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function revisionableFields(): array
+    {
+        return ['title', 'description',];
     }
 }

@@ -2,15 +2,15 @@
 
 namespace App\Domain\Service;
 
-class GroupBuildService
+readonly class GroupBuildService
 {
     /**
      * @param GroupService $groupService
      * @param UserService $userService
      */
     public function __construct(
-        private readonly GroupService $groupService,
-        private readonly UserService $userService
+        private GroupService $groupService,
+        private UserService $userService
     ) {
     }
 
