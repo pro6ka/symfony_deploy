@@ -43,7 +43,7 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     private Collection $participants;
 
     #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
-    private $workshops;
+    private ArrayCollection $workshops;
 
     public function __construct()
     {
@@ -187,22 +187,6 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     }
 
     /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'isActive' => $this->isActive,
-            'participants' => array_map(
-                fn (User $participant) => $participant->toArray(),
-                $this->participants->toArray()
-            )
-        ];
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getWorkshops(): ArrayCollection
@@ -218,10 +202,31 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
         $this->workshops = $workshops;
     }
 
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     */
     public function addWorkShop(WorkShop $workShop): void
     {
         if (! $this->workshops->contains($workShop)) {
             $this->workshops->add($workShop);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'isActive' => $this->isActive,
+            'participants' => array_map(
+                fn (User $participant) => $participant->toArray(),
+                $this->participants->toArray()
+            )
+        ];
     }
 }
