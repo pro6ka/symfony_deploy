@@ -18,6 +18,7 @@ readonly class RevisionablePostPersistEventListener
         private RevisionService $revisionService
     ) {
     }
+
     /**
      * @param LifecycleEventArgs $event
      *
@@ -29,11 +30,11 @@ readonly class RevisionablePostPersistEventListener
 
         if ($entity instanceof RevisionableInterface) {
             foreach ($entity->revisionableFields() as $field) {
-                $getter = 'get' . $field;
+                $entityFieldGetter = 'get' . $field;
                 $this->revisionService->create(
-                    $entity,
-                    $field,
-                    $entity->$getter(),
+                    entity: $entity,
+                    columnName: $field,
+                    contentAfter: $entity->$entityFieldGetter(),
                 );
             }
         }
