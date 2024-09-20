@@ -4,6 +4,9 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use RuntimeException;
 
 class GroupRepository extends AbstractRepository
 {
@@ -21,6 +24,7 @@ class GroupRepository extends AbstractRepository
      * @param string $name
      *
      * @return Group|null
+     * @throws RuntimeException
      */
     public function findByName(string $name): ?Group
     {
@@ -31,6 +35,8 @@ class GroupRepository extends AbstractRepository
      * @param int $groupId
      *
      * @return null|Group
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function find(int $groupId): ?Group
     {
