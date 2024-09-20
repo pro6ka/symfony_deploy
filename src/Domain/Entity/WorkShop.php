@@ -38,9 +38,6 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
     private ArrayCollection $exercises;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
-    private ArrayCollection $students;
-
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'workshops')]
     private ArrayCollection $groupsParticipants;
 
@@ -201,36 +198,6 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     {
         if (! $this->groupsParticipants->contains($group)) {
             $this->groupsParticipants->add($group);
-        }
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getStudents(): ArrayCollection
-    {
-        return $this->students;
-    }
-
-    /**
-     * @param ArrayCollection $students
-     *
-     * @return void
-     */
-    public function setStudents(ArrayCollection $students): void
-    {
-        $this->students = $students;
-    }
-
-    /**
-     * @param User $student
-     *
-     * @return void
-     */
-    public function addStudent(User $student): void
-    {
-        if (! $this->students->contains($student)) {
-            $this->students->add($student);
         }
     }
 
