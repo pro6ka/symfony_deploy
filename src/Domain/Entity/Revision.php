@@ -3,7 +3,6 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
-use App\Domain\Entity\Contracts\HasMetaHasCreatedAtTimestampInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
