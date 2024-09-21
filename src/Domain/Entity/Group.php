@@ -3,7 +3,9 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +16,12 @@ use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 #[ORM\Table(name: '`group`')]
 #[ORM\Entity]
 #[ORM\UniqueConstraint(name: 'group__name_unique', columns: ['name'])]
-class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActiveInterface
+class Group implements
+    EntityInterface,
+    HasMetaTimeStampInterface,
+    HasMetaIsActiveInterface,
+    HasRevisionsInterface,
+    HasFixationsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]

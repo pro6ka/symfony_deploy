@@ -2,17 +2,18 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
 use App\Infrastructure\Repository\RevisionRepository;
 
-class RevisionService
+readonly class RevisionService
 {
     /**
      * @param RevisionRepository $revisionRepository
      */
     public function __construct(
-        private readonly RevisionRepository $revisionRepository
+        private RevisionRepository $revisionRepository
     ) {
     }
 
@@ -40,5 +41,15 @@ class RevisionService
         $this->revisionRepository->create($revision);
 
         return $revision->toArray();
+    }
+
+    /**
+     * @param HasRevisionsInterface $entity
+     *
+     * @return void
+     */
+    public function removeByOwner(HasRevisionsInterface $entity): void
+    {
+        $this->revisionRepository->removeByEntity($entity);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
-use App\Infrastructure\Repository\AbstractRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class RevisionRepository extends AbstractRepository
@@ -42,7 +41,7 @@ class RevisionRepository extends AbstractRepository
      *
      * @return null|Revision
      * @throws NonUniqueResultException
-*/
+     */
     public function findLastForEntity(RevisionableInterface $entity): ?Revision
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
@@ -56,5 +55,22 @@ class RevisionRepository extends AbstractRepository
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param RevisionableInterface $entity
+     *
+     * @return void
+     */
+    public function removeByEntity(RevisionableInterface $entity): void
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->delete(Revision::class, 'r')
+            ->andWhere($queryBuilder->expr()->eq('r.entityId', ':entityId'))
+            ->andWhere($queryBuilder->expr()->eq('r.entityType', ':entityType'))
+            ->setParameter('entityId', $entity->getId())
+            ->setParameter('entityType', $entity::class)
+            ;
+        $queryBuilder->getQuery()->execute();
     }
 }

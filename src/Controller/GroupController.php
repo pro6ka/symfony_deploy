@@ -3,8 +3,17 @@
 namespace App\Controller;
 
 use App\Domain\Entity\Group;
+use App\Domain\Service\FixationService;
 use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
+use App\Domain\Service\RevisionService;
+use App\Domain\Service\UserService;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use JetBrains\PhpStorm\NoReturn;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,15 +22,24 @@ class GroupController extends AbstractController
 {
     /**
      * @param GroupService $groupService
+     * @param GroupBuildService $groupBuildService
+     * @param RevisionService $revisionService
+     * @param UserService $userService
+     * @param FixationService $fixationService
      */
     public function __construct(
         private readonly GroupService $groupService,
-        private readonly GroupBuildService $groupBuildService
+        private readonly GroupBuildService $groupBuildService,
+        private readonly RevisionService $revisionService,
+        private readonly UserService $userService,
+        private readonly FixationService $fixationService
     ) {
     }
 
     /**
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[Route('/group/create')]
     public function create(): JsonResponse
@@ -35,6 +53,10 @@ class GroupController extends AbstractController
      * @param int $id
      *
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     #[Route('/group/activate/{id}')]
     public function activate(int $id): JsonResponse
@@ -47,10 +69,26 @@ class GroupController extends AbstractController
      * @param int $userId
      *
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     #[Route('/group/add-participant/{groupId}/{userId}')]
     public function addParticipant(int $groupId, int $userId): JsonResponse
     {
         return $this->json($this->groupBuildService->addParticipant($groupId, $userId));
+    }
+
+    /**
+     * @return void
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    #[NoReturn] #[Route('/group/rbowner')]
+    public function removeByOwner(): void
+    {
+        $user = $this->userService->find(2);
+        $this->fixationService->removeByOwner($user);
     }
 }

@@ -3,8 +3,12 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasFixationsInterface;
+use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 class FixationRepository extends AbstractRepository
 {
@@ -41,5 +45,51 @@ class FixationRepository extends AbstractRepository
             ->setParameter('entityId', $entity->getId())
             ->setParameter('entityType', $entity::class)
         ;
+    }
+
+    /**
+     * @param RevisionableInterface $entity
+     *
+     * @return void
+     */
+    public function removeByEntity(RevisionableInterface $entity): void
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->delete(Fixation::class, 'f')
+            ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
+            ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
+            ->setParameter('entityId', $entity->getId())
+            ->setParameter('entityType', $entity::class)
+            ;
+        $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * @param HasFixationsInterface $owner
+     *
+     * @return void
+     */
+    public function removeByOwner(HasFixationsInterface $owner): void
+    {
+        $tableName = $this->entityManager->getClassMetadata($owner::class)->getTableName();
+        $sql = <<<SQL
+select f.id
+from public.fixation f
+    right join public.fixation_{$tableName} fu on fu.fixation_id=f.id
+    left join public.$tableName u on fu.{$tableName}_id=u.id
+where fu.{$tableName}_id=:{$tableName}Id
+SQL;
+        $mappingBuilder = new ResultSetMappingBuilder($this->entityManager);
+        $mappingBuilder->addRootEntityFromClassMetadata(Fixation::class, 'f');
+        $query = $this->entityManager->createNativeQuery($sql, $mappingBuilder);
+        $query->setParameter($tableName . 'Id', $owner->getId());
+        $ownersFixations = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->delete(Fixation::class, 'f')
+            ->andWhere('id in (:ids)')
+            ->setParameter('ids', array_column($ownersFixations, 'id'))
+        ;
+        $queryBuilder->getQuery()->execute();
     }
 }
