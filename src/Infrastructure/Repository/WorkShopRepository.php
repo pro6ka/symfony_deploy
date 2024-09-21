@@ -21,4 +21,14 @@ class WorkShopRepository extends AbstractRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return int
+     */
+    public function create(WorkShop $workShop): int
+    {
+        return $this->store($workShop);
+    }
 }
