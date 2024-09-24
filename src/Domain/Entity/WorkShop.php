@@ -7,6 +7,7 @@ use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -32,14 +33,16 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     private DateTime $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'createdWorkShops')]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id')]
     private User $author;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
+    private Collection $students;
+
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
-    private ArrayCollection $exercises;
+    private Collection $exercises;
 
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'workshops')]
-    private ArrayCollection $groupsParticipants;
+    private Collection $groupsParticipants;
 
     public function __construct()
     {

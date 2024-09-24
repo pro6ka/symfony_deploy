@@ -54,7 +54,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private PersistentCollection $createdWorkShops;
 
     #[ORM\ManyToMany(targetEntity: WorkShop::class, mappedBy: 'students')]
-    private PersistentCollection $participatedWorkShops;
+    private Collection $participatedWorkShops;
 
     public function __construct()
     {
@@ -289,5 +289,23 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
         if (! $this->participatedWorkShops->contains($workShop)) {
             $this->participatedWorkShops->add($workShop);
         }
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param Collection $groups
+     *
+     * @return void
+     */
+    public function setGroups(Collection $groups): void
+    {
+        $this->groups = $groups;
     }
 }

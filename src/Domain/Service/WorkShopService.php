@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Domain\Service;
+
+use App\Domain\Entity\Fixation;
+use App\Domain\Entity\Revision;
+use App\Domain\Entity\User;
+use App\Domain\Entity\WorkShop;
+use App\Infrastructure\Repository\WorkShopRepository;
+
+readonly class WorkShopService
+{
+    /**
+     * @param FixationService $fixationService
+     * @param WorkShopRepository $workShopRepository
+     */
+    public function __construct(
+        private FixationService $fixationService,
+        private WorkShopRepository $workShopRepository
+    ) {
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     */
+    public function listForUser(User $user): array
+    {
+        $workShopList = $this->workShopRepository->findForUser($user);
+        $fixations = $this->fixationService->findForUser($user, WorkShop::class);
+        $revisions = array_reduce(
+            $fixations->toArray(),
+            function ($carry, Fixation $fixation) {
+                $carry[$fixation->getRevision()->getEntityId()] = $fixation->getRevision();
+                return $carry;
+            },
+        );
+
+        foreach ($workShopList as $workShop) {
+            /** @var Revision $revision */
+            if (isset($revisions[$workShop->getId()]) && $revisions[$workShop->getId()]) {
+                $revision = $revisions[$workShop->getId()];
+                $setter = 'set' . ucfirst($revision->getColumnName());
+                $workShop->$setter($revision->getContentAfter());
+            }
+        }
+
+        return $workShopList;
+    }
+}

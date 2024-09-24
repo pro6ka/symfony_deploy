@@ -7,7 +7,10 @@ use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
+use App\Domain\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 class FixationRepository extends AbstractRepository
@@ -25,6 +28,30 @@ class FixationRepository extends AbstractRepository
         if ($isImmediately) {
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @param User $user
+     * @param string $entityType
+     *
+     * @return ArrayCollection
+     */
+    public function findForUser(User $user, string $entityType): ArrayCollection
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select(['f', 'u'])
+            ->from(Fixation::class, 'f')
+            ->join(
+                'f.user',
+                'u',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('u.id', ':userId')
+            )
+            ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
+            ->setParameter('userId', $user->getId())
+            ->setParameter('entityType', $entityType)
+            ;
+        return new ArrayCollection($queryBuilder->getQuery()->getResult());
     }
 
     /**

@@ -2,22 +2,35 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Entity\Group;
+use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use Doctrine\ORM\Query\Expr;
 
 class WorkShopRepository extends AbstractRepository
 {
     /**
-     * @param int[]|array $userGroupsList
+     * @param User $user
      *
      * @return WorkShop[]|array
      */
-    public function findForUserGroups(array $userGroupsList): array
+    public function findForUser(User $user): array
     {
+        $userGroupsList = array_map(
+            fn (Group $group) => $group->getId(),
+            $user->getGroups()->toArray()
+        );
         $queryBuilder = $this->entityManager->createQueryBuilder();
-        $queryBuilder->select('w')
+        $queryBuilder->select(['w', 'g'])
             ->from(WorkShop::class, 'w')
-            ->andWhere($queryBuilder->expr()->in('w.groupsParticipants', ':userGroupList'))
-            ->setParameter('userGroupList', $userGroupsList);
+            ->join(
+                'w.groupsParticipants',
+                'g',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->in('g.id', ':groupList')
+            )
+            ->setParameter('groupList', $userGroupsList)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

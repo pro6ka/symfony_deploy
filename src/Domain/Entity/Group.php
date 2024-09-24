@@ -6,12 +6,13 @@ use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
-use App\Domain\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use Doctrine\ORM\PersistentCollection;
+use UnexpectedValueException;
 
 #[ORM\Table(name: '`group`')]
 #[ORM\Entity]
@@ -50,12 +51,12 @@ class Group implements
     private Collection $participants;
 
     #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
-    private ArrayCollection $workshops;
+    private PersistentCollection $workshops;
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->workshops = new ArrayCollection();
+        $this->workshops = new PersistentCollection();
     }
 
     /**
@@ -194,17 +195,17 @@ class Group implements
     }
 
     /**
-     * @return ArrayCollection
+     * @return PersistentCollection
      */
-    public function getWorkshops(): ArrayCollection
+    public function getWorkshops(): PersistentCollection
     {
         return $this->workshops;
     }
 
     /**
-     * @param ArrayCollection $workshops
+     * @param PersistentCollection $workshops
      */
-    public function setWorkshops(ArrayCollection $workshops): void
+    public function setWorkshops(PersistentCollection $workshops): void
     {
         $this->workshops = $workshops;
     }
@@ -213,6 +214,7 @@ class Group implements
      * @param WorkShop $workShop
      *
      * @return void
+     * @throws UnexpectedValueException
      */
     public function addWorkShop(WorkShop $workShop): void
     {

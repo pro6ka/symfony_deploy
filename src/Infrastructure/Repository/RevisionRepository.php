@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
 use Doctrine\ORM\NonUniqueResultException;
@@ -58,11 +59,11 @@ class RevisionRepository extends AbstractRepository
     }
 
     /**
-     * @param RevisionableInterface $entity
+     * @param HasRevisionsInterface $entity
      *
      * @return void
      */
-    public function removeByEntity(RevisionableInterface $entity): void
+    public function removeByEntity(HasRevisionsInterface $entity): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->delete(Revision::class, 'r')

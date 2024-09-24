@@ -8,6 +8,7 @@ use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\RevisionService;
 use App\Domain\Service\UserService;
+use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use JetBrains\PhpStorm\NoReturn;
@@ -30,9 +31,9 @@ class GroupController extends AbstractController
     public function __construct(
         private readonly GroupService $groupService,
         private readonly GroupBuildService $groupBuildService,
-        private readonly RevisionService $revisionService,
         private readonly UserService $userService,
-        private readonly FixationService $fixationService
+        private readonly FixationService $fixationService,
+        private readonly WorkShopService $workShopService
     ) {
     }
 
@@ -89,6 +90,6 @@ class GroupController extends AbstractController
     public function removeByOwner(): void
     {
         $user = $this->userService->find(2);
-        $this->fixationService->removeByOwner($user);
+        $this->workShopService->listForUser($user);
     }
 }
