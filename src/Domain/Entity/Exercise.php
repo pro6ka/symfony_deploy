@@ -3,6 +3,7 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'exercise')]
 #[ORM\Index(name: 'exercise__workshop_id_idx', columns: ['workshop_id'])]
-class Exercise implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface
+class Exercise implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]

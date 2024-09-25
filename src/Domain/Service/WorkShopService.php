@@ -7,6 +7,9 @@ use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Infrastructure\Repository\WorkShopRepository;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 
 readonly class WorkShopService
 {
@@ -47,5 +50,17 @@ readonly class WorkShopService
         }
 
         return $workShopList;
+    }
+
+    /**
+     * @param int $id
+     * @param User $user
+     *
+     * @return null|WorkShop
+     * @throws NonUniqueResultException
+     */
+    public function findForUserById(int $id, User $user): ?WorkShop
+    {
+        return $this->workShopRepository->findForUserById($id, $user);
     }
 }

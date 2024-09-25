@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'fixation')]
 #[ORM\UniqueConstraint(name: 'fixation__revision_id__unique', columns: ['revision_id'])]
+#[ORM\UniqueConstraint(name: 'fixation_group_id_unique', columns: ['group_id'])]
+#[ORM\UniqueConstraint(name: 'fixation_user_id_unique', columns: ['user_id'])]
 class Fixation implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
@@ -25,11 +27,11 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'id') ]
-    private Collection $user;
+    #[ORM\ManyToOne(targetEntity: User::class) ]
+    private User $user;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'id')]
-    private Collection $group;
+    #[ORM\OneToOne(targetEntity: Group::class)]
+    private Group $group;
 
     #[ORM\Column(name: 'entity_id', type: 'string')]
     private int $entityId;
@@ -42,12 +44,6 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
 
     #[ORM\Column(name: 'is_done', type: 'boolean', options: ['default' => false])]
     private bool $isDone = false;
-
-    public function __construct()
-    {
-        $this->group = new ArrayCollection();
-        $this->user = new ArrayCollection();
-    }
 
     /**
      * @return int
@@ -100,37 +96,37 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     }
 
     /**
-     * @return Collection
+     * @return User
      */
-    public function getUser(): Collection
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * @param Collection $user
+     * @param User $user
      *
      * @return void
      */
-    public function setUser(Collection $user): void
+    public function setUser(User $user): void
     {
         $this->user = $user;
     }
 
     /**
-     * @return Collection
+     * @return Group
      */
-    public function getGroup(): Collection
+    public function getGroup(): Group
     {
         return $this->group;
     }
 
     /**
-     * @param Collection $group
+     * @param Group $group
      *
      * @return void
      */
-    public function setGroup(Collection $group): void
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }

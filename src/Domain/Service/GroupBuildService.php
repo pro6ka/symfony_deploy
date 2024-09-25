@@ -2,6 +2,9 @@
 
 namespace App\Domain\Service;
 
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+
 readonly class GroupBuildService
 {
     /**
@@ -19,6 +22,8 @@ readonly class GroupBuildService
      * @param int $userId
      *
      * @return null|array
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addParticipant(int $groupId, int $userId): ?array
     {
