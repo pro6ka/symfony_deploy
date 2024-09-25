@@ -51,12 +51,16 @@ class Group implements
     private Collection $participants;
 
     #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
-    private PersistentCollection $workshops;
+    private Collection $workshops;
+
+    #[ORM\ManyToOne(targetEntity: Fixation::class, inversedBy: 'group_id')]
+    private Collection $fixations;
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->workshops = new PersistentCollection();
+        $this->workshops = new ArrayCollection();
+        $this->fixations = new ArrayCollection();
     }
 
     /**

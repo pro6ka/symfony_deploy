@@ -28,8 +28,11 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'id') ]
     private Collection $user;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'id')]
-    private Collection $group;
+    #[ORM\JoinTable(name: 'group_fixation')]
+    #[ORM\JoinColumn(name: 'fixation_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\InverseJoinColumn(name: 'group_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Group::class)]
+    private Group $group;
 
     #[ORM\Column(name: 'entity_id', type: 'string')]
     private int $entityId;
@@ -45,7 +48,6 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
 
     public function __construct()
     {
-        $this->group = new ArrayCollection();
         $this->user = new ArrayCollection();
     }
 
@@ -118,19 +120,19 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     }
 
     /**
-     * @return Collection
+     * @return Group
      */
-    public function getGroup(): Collection
+    public function getGroup(): Group
     {
         return $this->group;
     }
 
     /**
-     * @param Collection $group
+     * @param Group $group
      *
      * @return void
      */
-    public function setGroup(Collection $group): void
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }

@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Fixation;
@@ -10,6 +11,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
@@ -56,22 +58,31 @@ class FixationRepository extends AbstractRepository
 
     /**
      * @param Group $group
-     * @param EntityInterface $entity
+     * @param FixableInterface $entity
      *
-     * @return void
+     * @return Fixation|null
+     * @throws NonUniqueResultException
      */
-    public function hasGroupFixation(Group $group, EntityInterface $entity): void
+    public function hasGroupFixation(Group $group, FixableInterface $entity): ?Fixation
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
-        $queryBuilder->select('f')
+        $queryBuilder->select(['f', 'g'])
+//        $queryBuilder->select(['f'])
             ->from(Fixation::class, 'f')
-            ->andWhere($queryBuilder->expr()->eq('f.group', ':groupId'))
+            ->innerJoin(
+                'f.group',
+                'g',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('g.id', ':groupId')
+            )
             ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
             ->setParameter('groupId', $group->getId())
             ->setParameter('entityId', $entity->getId())
             ->setParameter('entityType', $entity::class)
         ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

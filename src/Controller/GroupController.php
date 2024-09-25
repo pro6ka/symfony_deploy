@@ -8,6 +8,7 @@ use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\RevisionService;
 use App\Domain\Service\UserService;
+use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -24,16 +25,16 @@ class GroupController extends AbstractController
     /**
      * @param GroupService $groupService
      * @param GroupBuildService $groupBuildService
-     * @param RevisionService $revisionService
      * @param UserService $userService
-     * @param FixationService $fixationService
+     * @param WorkShopService $workShopService
+     * @param WorkshopBuildService $workshopBuildService
      */
     public function __construct(
         private readonly GroupService $groupService,
         private readonly GroupBuildService $groupBuildService,
         private readonly UserService $userService,
-        private readonly FixationService $fixationService,
-        private readonly WorkShopService $workShopService
+        private readonly WorkShopService $workShopService,
+        private readonly WorkshopBuildService $workshopBuildService
     ) {
     }
 
@@ -90,6 +91,11 @@ class GroupController extends AbstractController
     public function removeByOwner(): void
     {
         $user = $this->userService->find(2);
+        $group = $this->groupService->find(2);
+        $workshop = $this->workShopService->findForUserById(2, $user);
+        $workshopResult = $this->workshopBuildService->start($workshop, $user, $group);
+        dump($workshopResult);
+        die;
         $this->workShopService->listForUser($user);
     }
 }
