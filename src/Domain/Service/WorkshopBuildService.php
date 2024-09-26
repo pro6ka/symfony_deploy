@@ -14,11 +14,10 @@ readonly class WorkshopBuildService
 {
     /**
      * @param FixationService $fixationService
-     * @param RevisionService $revisionService
+     * @param RevisionBuildService $revisionBuildService
      */
     public function __construct(
         private FixationService $fixationService,
-        private RevisionService $revisionService,
         private RevisionBuildService $revisionBuildService
     ) {
     }
