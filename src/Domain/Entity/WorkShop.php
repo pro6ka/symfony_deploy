@@ -146,19 +146,19 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getExercises(): ArrayCollection
+    public function getExercises(): Collection
     {
         return $this->exercises;
     }
 
     /**
-     * @param ArrayCollection $exercises
+     * @param Collection $exercises
      *
      * @return void
      */
-    public function setExercises(ArrayCollection $exercises): void
+    public function setExercises(Collection $exercises): void
     {
         $this->exercises = $exercises;
     }
@@ -211,5 +211,16 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     public function revisionableFields(): array
     {
         return ['title', 'description',];
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'author' => $this->getAuthor()->toArray(),
+            'exercises' => $this->getExercises()->toArray(),
+        ];
     }
 }

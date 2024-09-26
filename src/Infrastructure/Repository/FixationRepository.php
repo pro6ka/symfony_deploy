@@ -19,15 +19,15 @@ class FixationRepository extends AbstractRepository
 {
     /**
      * @param Fixation $fixation
-     * @param bool $isImmediately
+     * @param bool $doFlush
      *
      * @return void
      */
-    public function create(Fixation $fixation, bool $isImmediately = false): void
+    public function create(Fixation $fixation, bool $doFlush = true): void
     {
         $this->entityManager->persist($fixation);
 
-        if ($isImmediately) {
+        if ($doFlush) {
             $this->entityManager->flush();
         }
     }

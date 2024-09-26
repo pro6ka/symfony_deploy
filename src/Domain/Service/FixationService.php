@@ -63,7 +63,7 @@ readonly class FixationService
      *
      * @return Fixation
      */
-    public function createNoFlush(
+    public function build(
         FixableInterface $entity,
         User $user,
         Revision $revision,
@@ -76,7 +76,7 @@ readonly class FixationService
         $fixation->setGroup($group);
         $fixation->setUser($user);
 
-        $this->fixationRepository->create($fixation);
+        $this->fixationRepository->create($fixation, false);
 
         return $fixation;
     }

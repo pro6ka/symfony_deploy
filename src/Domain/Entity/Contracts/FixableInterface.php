@@ -2,7 +2,7 @@
 
 namespace App\Domain\Entity\Contracts;
 
-interface FixableInterface
+interface FixableInterface extends RevisionableInterface
 {
     /**
      * @return int

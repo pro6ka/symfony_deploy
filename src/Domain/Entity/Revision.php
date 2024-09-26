@@ -28,7 +28,7 @@ class Revision implements EntityInterface
     #[ORM\Column(name: 'column_name', type: 'string')]
     private string $columnName;
 
-    #[ORM\Column(name: 'content_before', type: 'string')]
+    #[ORM\Column(name: 'content_before', type: 'string', nullable: true)]
     private string $contentBefore;
 
     #[ORM\Column(name: 'content_after', type: 'string')]

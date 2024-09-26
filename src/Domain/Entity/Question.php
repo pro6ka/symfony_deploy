@@ -8,6 +8,7 @@ use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -37,7 +38,7 @@ class Question implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     private Exercise $exercise;
 
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
-    private ArrayCollection $answers;
+    private Collection $answers;
 
     public function __construct()
     {
@@ -149,19 +150,19 @@ class Question implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getAnswers(): ArrayCollection
+    public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
     /**
-     * @param ArrayCollection $answers
+     * @param Collection $answers
      *
      * @return void
      */
-    public function setAnswers(ArrayCollection $answers): void
+    public function setAnswers(Collection $answers): void
     {
         $this->answers = $answers;
     }
