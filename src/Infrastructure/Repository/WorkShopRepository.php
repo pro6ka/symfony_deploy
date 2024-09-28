@@ -6,9 +6,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query\Expr;
 
 class WorkShopRepository extends AbstractRepository
@@ -77,10 +75,5 @@ class WorkShopRepository extends AbstractRepository
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
-    }
-
-    public function start(WorkShop $workShop, User $user)
-    {
-
     }
 }

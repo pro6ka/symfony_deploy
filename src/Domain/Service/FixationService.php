@@ -5,12 +5,15 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Fixation;
+use App\Domain\Entity\FixationGroup;
+use App\Domain\Entity\FixationUser;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Infrastructure\Repository\FixationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
+use RuntimeException;
 
 readonly class FixationService
 {
@@ -57,17 +60,104 @@ readonly class FixationService
 
     /**
      * @param FixableInterface $entity
+     * @param FixationUser $fixationUser
+     * @param Revision $revision
+     * @param FixationGroup $fixationGroup
+     *
+     * @return Fixation
+     * @throws RuntimeException
+     */
+    public function build(
+        FixableInterface $entity,
+        FixationUser $fixationUser,
+        Revision $revision,
+        FixationGroup $fixationGroup
+    ): Fixation {
+        if (
+            $fixation = $this->findByFullCriteria(
+                $entity,
+                $fixationUser->getUser(),
+                $revision,
+                $fixationGroup->getGroup()
+            )
+        ) {
+            return $fixation;
+        }
+
+        $fixation = $this->make($entity, $fixationUser, $revision, $fixationGroup);
+        $this->fixationRepository->create($fixation, false);
+
+        return $fixation;
+    }
+
+    /**
+     * @param FixableInterface $entity
      * @param User $user
      * @param Revision $revision
      * @param Group $group
      *
-     * @return Fixation
+     * @return null|Fixation
+     * @throws RuntimeException
      */
-    public function build(
+    public function findByFullCriteria(
         FixableInterface $entity,
         User $user,
         Revision $revision,
         Group $group
+    ): ?Fixation {
+        return $this->fixationRepository->findByFullCriteria(
+            $entity,
+            $user,
+            $revision,
+            $group
+        );
+    }
+
+    /**
+     * @param FixableInterface $entity
+     * @param FixationUser $fixationUser
+     * @param Revision $revision
+     * @param FixationGroup $fixationGroup
+     *
+     * @return Fixation
+     * @throws RuntimeException
+     */
+    public function create(
+        FixableInterface $entity,
+        FixationUser $fixationUser,
+        Revision $revision,
+        FixationGroup $fixationGroup
+    ): Fixation {
+        if (
+            $fixation = $this->findByFullCriteria(
+                $entity,
+                $fixationUser->getUser(),
+                $revision,
+                $fixationGroup->getGroup()
+            )
+        ) {
+            return $fixation;
+        }
+
+        $fixation = $this->build($entity, $fixationUser, $revision, $fixationGroup);
+        $this->fixationRepository->create($fixation);
+
+        return $fixation;
+    }
+
+    /**
+     * @param FixableInterface $entity
+     * @param FixationUser $user
+     * @param Revision $revision
+     * @param FixationGroup $group
+     *
+     * @return Fixation
+     */
+    protected function make(
+        FixableInterface $entity,
+        FixationUser $user,
+        Revision $revision,
+        FixationGroup $group
     ): Fixation {
         $fixation = new Fixation();
         $fixation->setEntityId($entity->getId());
@@ -75,8 +165,6 @@ readonly class FixationService
         $fixation->setRevision($revision);
         $fixation->setGroup($group);
         $fixation->setUser($user);
-
-        $this->fixationRepository->create($fixation, false);
 
         return $fixation;
     }

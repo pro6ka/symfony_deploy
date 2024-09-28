@@ -53,9 +53,6 @@ class Group implements
     #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
     private Collection $workshops;
 
-    #[ORM\ManyToOne(targetEntity: Fixation::class, inversedBy: 'group_id')]
-    private Collection $fixations;
-
     public function __construct()
     {
         $this->participants = new ArrayCollection();

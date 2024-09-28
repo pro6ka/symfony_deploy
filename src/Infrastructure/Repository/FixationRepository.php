@@ -8,12 +8,15 @@ use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
+use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use RuntimeException;
 
 class FixationRepository extends AbstractRepository
 {
@@ -21,15 +24,17 @@ class FixationRepository extends AbstractRepository
      * @param Fixation $fixation
      * @param bool $doFlush
      *
-     * @return void
+     * @return Fixation
      */
-    public function create(Fixation $fixation, bool $doFlush = true): void
+    public function create(Fixation $fixation, bool $doFlush = true): Fixation
     {
         $this->entityManager->persist($fixation);
 
         if ($doFlush) {
-            $this->entityManager->flush();
+            $this->flush();
         }
+
+        return $fixation;
     }
 
     /**
@@ -51,8 +56,7 @@ class FixationRepository extends AbstractRepository
             )
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
             ->setParameter('userId', $user->getId())
-            ->setParameter('entityType', $entityType)
-            ;
+            ->setParameter('entityType', $entityType);
         return new ArrayCollection($queryBuilder->getQuery()->getResult());
     }
 
@@ -67,7 +71,6 @@ class FixationRepository extends AbstractRepository
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['f', 'g'])
-//        $queryBuilder->select(['f'])
             ->from(Fixation::class, 'f')
             ->innerJoin(
                 'f.group',
@@ -79,8 +82,7 @@ class FixationRepository extends AbstractRepository
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
             ->setParameter('groupId', $group->getId())
             ->setParameter('entityId', $entity->getId())
-            ->setParameter('entityType', $entity::class)
-        ;
+            ->setParameter('entityType', $entity::class);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
@@ -97,8 +99,7 @@ class FixationRepository extends AbstractRepository
             ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
             ->setParameter('entityId', $entity->getId())
-            ->setParameter('entityType', $entity::class)
-            ;
+            ->setParameter('entityType', $entity::class);
         $queryBuilder->getQuery()->execute();
     }
 
@@ -126,8 +127,58 @@ SQL;
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->delete(Fixation::class, 'f')
             ->andWhere('id in (:ids)')
-            ->setParameter('ids', array_column($ownersFixations, 'id'))
-        ;
+            ->setParameter('ids', array_column($ownersFixations, 'id'));
         $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * @param FixableInterface $entity
+     * @param User $user
+     * @param Revision $revision
+     * @param Group $group
+     *
+     * @return null|Fixation
+     * @throws RuntimeException
+     */
+    public function findByFullCriteria(
+        FixableInterface $entity,
+        User $user,
+        Revision $revision,
+        Group $group
+    ): ?Fixation {
+        if (!$entity->getId()) {
+            dump($entity);
+            die;
+        }
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select(['f', 'u', 'r'])
+            ->from(Fixation::class, 'f')
+            ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
+            ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
+            ->leftJoin(
+                'f.revision',
+                'r',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('r.id', ':revisionId')
+            )
+            ->innerJoin(
+                'f.user',
+                'u',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('u.id', ':userId')
+            )
+            ->innerJoin(
+                'f.group',
+                'g',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('g.id', ':groupId')
+            )
+            ->setParameter('entityId', $entity->getId())
+            ->setParameter('entityType', $entity::class)
+            ->setParameter('revisionId', $revision->getId())
+            ->setParameter('userId', $user->getId())
+            ->setParameter('groupId', $group->getId());
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

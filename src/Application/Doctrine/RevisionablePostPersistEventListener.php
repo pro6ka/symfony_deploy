@@ -24,7 +24,7 @@ readonly class RevisionablePostPersistEventListener
      *
      * @return void
      */
-    public function prePersist(LifecycleEventArgs $event): void
+    public function postPersist(LifecycleEventArgs $event): void
     {
         $entity = $event->getObject();
 

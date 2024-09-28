@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Domain\Entity\Group;
+use App\Domain\Entity\User;
 use App\Domain\Service\FixationService;
 use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
@@ -11,6 +12,7 @@ use App\Domain\Service\UserService;
 use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Container\ContainerExceptionInterface;
@@ -83,19 +85,19 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @return void
+     * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws NotFoundExceptionInterface
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    #[NoReturn] #[Route('/group/rbowner')]
-    public function removeByOwner(): void
+    #[Route('/group/rbowner')]
+    public function removeByOwner(): JsonResponse
     {
         $user = $this->userService->find(2);
         $group = $this->groupService->find(2);
         $workshop = $this->workShopService->findForUserById(2, $user);
-        $workshopResult = $this->workshopBuildService->start($workshop, $user, $group);
-        dump($workshopResult);
-        die;
-        $this->workShopService->listForUser($user);
+        return $this->json($this->workshopBuildService->start($workshop, $user, $group));
     }
 }

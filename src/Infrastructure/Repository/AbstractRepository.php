@@ -40,7 +40,7 @@ class AbstractRepository
      * @return void
      * @throws ORMException
      */
-    protected function refresh(EntityInterface $entity): void
+    public function refresh(EntityInterface $entity): void
     {
         $this->entityManager->refresh($entity);
     }

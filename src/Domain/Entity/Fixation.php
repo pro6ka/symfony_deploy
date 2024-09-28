@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'fixation')]
 #[ORM\UniqueConstraint(name: 'fixation__revision_id__unique', columns: ['revision_id'])]
-#[ORM\UniqueConstraint(name: 'fixation_group_id_unique', columns: ['group_id'])]
-#[ORM\UniqueConstraint(name: 'fixation_user_id_unique', columns: ['user_id'])]
 class Fixation implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
@@ -27,12 +25,6 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class) ]
-    private User $user;
-
-    #[ORM\OneToOne(targetEntity: Group::class)]
-    private Group $group;
-
     #[ORM\Column(name: 'entity_id', type: 'string')]
     private int $entityId;
 
@@ -44,6 +36,18 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
 
     #[ORM\Column(name: 'is_done', type: 'boolean', options: ['default' => false])]
     private bool $isDone = false;
+
+    #[ORM\OneToMany(targetEntity: FixationUser::class, mappedBy: 'fixation')]
+    private Collection $user;
+
+    #[ORM\OneToMany(targetEntity: FixationGroup::class, mappedBy: 'fixation')]
+    private Collection $group;
+
+    public function __construct()
+    {
+        $this->user = new ArrayCollection();
+        $this->group = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -93,42 +97,6 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return void
-     */
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return Group
-     */
-    public function getGroup(): Group
-    {
-        return $this->group;
-    }
-
-    /**
-     * @param Group $group
-     *
-     * @return void
-     */
-    public function setGroup(Group $group): void
-    {
-        $this->group = $group;
     }
 
     /**
@@ -201,5 +169,49 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     public function setIsDone(bool $isDone): void
     {
         $this->isDone = $isDone;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user->first();
+    }
+
+    /**
+     * @param FixationUser $fixationUser
+     *
+     * @return void
+     */
+    public function setUser(FixationUser $fixationUser): void
+    {
+        if (! $this->user->contains($fixationUser)) {
+            $this->user->clear();
+            $this->user->add($fixationUser);
+            $fixationUser->setFixation($this);
+        }
+    }
+
+    /**
+     * @return Group
+     */
+    public function getGroup(): Group
+    {
+        return $this->group->first();
+    }
+
+    /**
+     * @param FixationGroup $fixationGroup
+     *
+     * @return void
+     */
+    public function setGroup(FixationGroup $fixationGroup): void
+    {
+        if (! $this->group->contains($fixationGroup)) {
+            $this->group->clear();
+            $this->group->add($fixationGroup);
+            $fixationGroup->setFixation($this);
+        }
     }
 }

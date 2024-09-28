@@ -2,40 +2,32 @@
 
 namespace App\Domain\Entity;
 
-use App\Domain\Entity\Contracts\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'user_fixation')]
-class UserFixation implements EntityInterface
+#[ORM\Table(name: 'fixation_user')]
+#[ORM\UniqueConstraint(name: 'fixation_user__user_id__fixation_id_unique', columns: ['fixation_id', 'user_id'])]
+class FixationUser
 {
-    #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userFixations')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    #[ORM\ManyToOne(targetEntity: Fixation::class, inversedBy: 'fixationUsers')]
-    private Fixation $fixation;
+    #[ORM\ManyToOne(targetEntity: Fixation::class, inversedBy: 'user')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Fixation $fixation;
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return void
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -65,11 +57,11 @@ class UserFixation implements EntityInterface
     }
 
     /**
-     * @param Fixation $fixation
+     * @param Fixation|null $fixation
      *
      * @return void
      */
-    public function setFixation(Fixation $fixation): void
+    public function setFixation(?Fixation $fixation): void
     {
         $this->fixation = $fixation;
     }

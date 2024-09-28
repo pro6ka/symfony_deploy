@@ -8,17 +8,26 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use App\Infrastructure\Repository\WorkShopRepository;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
+use RuntimeException;
 
 readonly class WorkshopBuildService
 {
     /**
      * @param FixationService $fixationService
      * @param RevisionBuildService $revisionBuildService
+     * @param FixationUserService $fixationUserService
+     * @param FixationGroupService $fixationGroupService
+     * @param WorkShopRepository $workShopRepository
      */
     public function __construct(
         private FixationService $fixationService,
-        private RevisionBuildService $revisionBuildService
+        private RevisionBuildService $revisionBuildService,
+        private FixationUserService $fixationUserService,
+        private FixationGroupService $fixationGroupService,
+        private WorkShopRepository $workShopRepository
     ) {
     }
 
@@ -27,10 +36,10 @@ readonly class WorkshopBuildService
      * @param User $user
      * @param Group $group
      *
-     * @todo Refactor this. Move foreach`s to separate service
-     *
      * @return array
      * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws RuntimeException
      */
     public function start(WorkShop $workShop, User $user, Group $group): array
     {
@@ -38,29 +47,51 @@ readonly class WorkshopBuildService
 
         /** @var Exercise $exercise */
         foreach ($workShop->getExercises() as $exercise) {
-            $exerciseRevision = $this->revisionBuildService->buildRevision($group, $exercise);
-            $this->fixationService->build($exercise, $user, $exerciseRevision, $group);
+            $exerciseRevision = $this->revisionBuildService
+                ->buildRevision($group, $exercise);
+            $fixation = $this->fixationService->build(
+                $exercise,
+                $this->fixationUserService->build($user),
+                $exerciseRevision,
+                $this->fixationGroupService->build($group),
+            );
             $questions = array_merge($questions, $exercise->getQuestions()->toArray());
         }
+
 
         $answers = [];
 
         /** @var Question $question */
         foreach ($questions as $question) {
             $questionRevision = $this->revisionBuildService->buildRevision($group, $question);
-            $this->fixationService->build($question, $user, $questionRevision, $group);
+            $this->fixationService->build(
+                $question,
+                $this->fixationUserService->build($user),
+                $questionRevision,
+                $this->fixationGroupService->build($group)
+            );
             $answers = array_merge($answers, $question->getAnswers()->toArray());
         }
 
         /** @var Answer $answer */
         foreach ($answers as $answer) {
             $answerRevision = $this->revisionBuildService->buildRevision($group, $answer);
-            $this->fixationService->build($answer, $user, $answerRevision, $group);
+            $this->fixationService->build(
+                $answer,
+                $this->fixationUserService->build($user),
+                $answerRevision,
+                $this->fixationGroupService->build($group)
+            );
         }
 
         $workshopRevision = $this->revisionBuildService->buildRevision($group, $workShop);
-        $workshopFixation = $this->fixationService->build($workShop, $user, $workshopRevision, $group);
-//        $this->fixationService->
+        $this->fixationService->create(
+            $workShop,
+            $this->fixationUserService->build($user),
+            $workshopRevision,
+            $this->fixationGroupService->build($group)
+        );
+        $this->workShopRepository->refresh($workShop);
 
         return $workShop->toArray();
     }
