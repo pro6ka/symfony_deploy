@@ -105,13 +105,17 @@ class GroupController extends AbstractController
     public function removeByOwner(): JsonResponse
     {
         $user = $this->userService->find(2);
-        /*
+        $group = $this->groupService->find(2);
+        /**
+         * start workshop
         $group = $this->groupService->find(2);
         $workshop = $this->workShopService->findForUserById(2, $user);
 
         return $this->json($this->workshopBuildService->start($workshop, $user, $group));
         */
-        /*
+        /**
+         * exercise create
+         *
         $workshop = $this->workShopService->findById(3);
         $exercise = $this->exerciseService->create(
             title: 'first exercise for second workshop',
@@ -119,7 +123,9 @@ class GroupController extends AbstractController
             workShop: $workshop
         );
         */
-        /*
+        /**
+         * questions create
+         *
         $exercise = $this->exerciseService->findById(5);
         $questions = [
             [
@@ -140,13 +146,39 @@ class GroupController extends AbstractController
             dump($questionResult);
         }
         */
+        /**
+         * answers create
+         *
         $question = $this->questionService->findById(6);
         $answer = $this->answerService->create(
             title: 'anwsers title for sixth question',
             description: 'anwsers title for sixth question',
             question: $question
         );
-        dump($answer);
+        */
+        $workshop = $this->workShopService->findById(3);
+        /**
+         * start sixth workshop
+         *
+        $workshop = $this->workShopService->findById(3);
+        $result = $this->workshopBuildService->start($workshop, $user, $group);
+        dump($result);
+        die;
+         */
+        /**
+         * find exercise by id in workshop for user
+         */
+        $exercise = $this->exerciseService->getByIdForUser(
+            5,
+            user: $user,
+            group: $group
+        );
+        /**
+        find exercises list for workshop
+         *
+//      $exercises = $this->exerciseService->findForWorkShop($workshop, $user, $group);
+         */
+        dump($exercise);
         die;
     }
 }

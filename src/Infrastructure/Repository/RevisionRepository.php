@@ -40,10 +40,9 @@ class RevisionRepository extends AbstractRepository
     /**
      * @param RevisionableInterface $entity
      *
-     * @return null|Revision
-     * @throws NonUniqueResultException
+     * @return array|Revision[]
      */
-    public function findLastForEntity(RevisionableInterface $entity): ?Revision
+    public function findLastForEntity(RevisionableInterface $entity): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select('r')
@@ -53,9 +52,9 @@ class RevisionRepository extends AbstractRepository
             ->setParameter('entityId', $entity->getId())
             ->setParameter('entityType', $entity::class)
             ->orderBy('r.createdAt', 'DESC')
-            ->setMaxResults(1);
+            ;
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

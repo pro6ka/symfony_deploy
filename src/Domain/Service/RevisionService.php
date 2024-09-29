@@ -57,10 +57,9 @@ readonly class RevisionService
     /**
      * @param RevisionableInterface $entity
      *
-     * @return null|Revision
-     * @throws NonUniqueResultException
+     * @return array|Revision[]
      */
-    public function findLastForEntity(RevisionableInterface $entity): ?Revision
+    public function findLastForEntity(RevisionableInterface $entity): array
     {
         return $this->revisionRepository->findLastForEntity($entity);
     }

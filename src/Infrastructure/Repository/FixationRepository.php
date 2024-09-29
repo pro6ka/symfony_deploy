@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
@@ -11,7 +10,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr;
@@ -64,10 +63,9 @@ class FixationRepository extends AbstractRepository
      * @param Group $group
      * @param FixableInterface $entity
      *
-     * @return Fixation|null
-     * @throws NonUniqueResultException
+     * @return array|Fixation[]
      */
-    public function hasGroupFixation(Group $group, FixableInterface $entity): ?Fixation
+    public function hasGroupFixation(Group $group, FixableInterface $entity): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['f', 'g'])
@@ -84,7 +82,7 @@ class FixationRepository extends AbstractRepository
             ->setParameter('entityId', $entity->getId())
             ->setParameter('entityType', $entity::class);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -156,7 +154,7 @@ SQL;
             ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
             ->leftJoin(
-                'f.revision',
+                'f.revisions',
                 'r',
                 Expr\Join::WITH,
                 $queryBuilder->expr()->eq('r.id', ':revisionId')
@@ -180,5 +178,46 @@ SQL;
             ->setParameter('groupId', $group->getId());
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param string $entityType
+     * @param ArrayCollection $entityIdList
+     * @param int $userId
+     * @param int $groupId
+     *
+     * @return array
+     */
+    public function listForUserByEntity(
+        string $entityType,
+        Collection $entityIdList,
+        int $userId,
+        int $groupId
+    ): array {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('f')
+            ->from(Fixation::class, 'f')
+            ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
+            ->andWhere($queryBuilder->expr()->in('f.entityId', ':entityId'))
+            ->leftJoin(
+                'f.user',
+                'u',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('u.id', ':userId')
+            )
+            ->leftJoin(
+                'f.group',
+                'g',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('g.id', ':groupId')
+            )
+            ->setParameter('entityType', $entityType)
+            ->setParameter('entityId', $entityIdList)
+            ->setParameter('userId', $userId)
+            ->setParameter('groupId', $groupId)
+            ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

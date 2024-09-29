@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'fixation')]
-#[ORM\UniqueConstraint(name: 'fixation__revision_id__unique', columns: ['revision_id'])]
 class Fixation implements EntityInterface, HasMetaTimeStampInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
@@ -31,8 +30,11 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\Column(name: 'entity_type', type: 'string')]
     private string $entityType;
 
-    #[ORM\OneToOne(targetEntity: Revision::class)]
-    private Revision $revision;
+    #[ORM\JoinTable(name: 'fixation_revision')]
+    #[ORM\JoinColumn(name: 'fixation_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'revision_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Revision::class)]
+    private Collection $revisions;
 
     #[ORM\Column(name: 'is_done', type: 'boolean', options: ['default' => false])]
     private bool $isDone = false;
@@ -47,6 +49,7 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     {
         $this->user = new ArrayCollection();
         $this->group = new ArrayCollection();
+        $this->revisions = new ArrayCollection();
     }
 
     /**
@@ -136,11 +139,11 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
     }
 
     /**
-     * @return Revision
+     * @return Collection
      */
-    public function getRevision(): Revision
+    public function getRevisions(): Collection
     {
-        return $this->revision;
+        return $this->revisions;
     }
 
     /**
@@ -150,7 +153,9 @@ class Fixation implements EntityInterface, HasMetaTimeStampInterface
      */
     public function setRevision(Revision $revision): void
     {
-        $this->revision = $revision;
+        if (! $this->revisions->contains($revision)) {
+            $this->revisions->add($revision);
+        }
     }
 
     /**

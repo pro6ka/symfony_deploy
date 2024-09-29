@@ -32,6 +32,7 @@ readonly class WorkshopBuildService
     }
 
     /**
+     * @todo разнести foreach-и по отдельным сервисам
      * @param WorkShop $workShop
      * @param User $user
      * @param Group $group
@@ -47,14 +48,16 @@ readonly class WorkshopBuildService
 
         /** @var Exercise $exercise */
         foreach ($workShop->getExercises() as $exercise) {
-            $exerciseRevision = $this->revisionBuildService
-                ->buildRevision($group, $exercise);
-            $fixation = $this->fixationService->build(
-                $exercise,
-                $this->fixationUserService->build($user),
-                $exerciseRevision,
-                $this->fixationGroupService->build($group),
-            );
+            $exerciseRevisions = $this->revisionBuildService
+                ->buildRevisions($group, $exercise);
+            foreach ($exerciseRevisions as $exerciseRevision) {
+                $this->fixationService->build(
+                    $exercise,
+                    $this->fixationUserService->build($user),
+                    $exerciseRevision,
+                    $this->fixationGroupService->build($group),
+                );
+            }
             $questions = array_merge($questions, $exercise->getQuestions()->toArray());
         }
 
@@ -63,34 +66,41 @@ readonly class WorkshopBuildService
 
         /** @var Question $question */
         foreach ($questions as $question) {
-            $questionRevision = $this->revisionBuildService->buildRevision($group, $question);
-            $this->fixationService->build(
-                $question,
-                $this->fixationUserService->build($user),
-                $questionRevision,
-                $this->fixationGroupService->build($group)
-            );
+            $questionRevisions = $this->revisionBuildService->buildRevisions($group, $question);
+            foreach ($questionRevisions as $questionRevision) {
+                $this->fixationService->build(
+                    $question,
+                    $this->fixationUserService->build($user),
+                    $questionRevision,
+                    $this->fixationGroupService->build($group)
+                );
+            }
             $answers = array_merge($answers, $question->getAnswers()->toArray());
         }
 
         /** @var Answer $answer */
         foreach ($answers as $answer) {
-            $answerRevision = $this->revisionBuildService->buildRevision($group, $answer);
-            $this->fixationService->build(
-                $answer,
+            $answerRevisions = $this->revisionBuildService->buildRevisions($group, $answer);
+            foreach ($answerRevisions as $answerRevision) {
+                $this->fixationService->build(
+                    $answer,
+                    $this->fixationUserService->build($user),
+                    $answerRevision,
+                    $this->fixationGroupService->build($group)
+                );
+            }
+        }
+
+        $workshopRevisions = $this->revisionBuildService->buildRevisions($group, $workShop);
+        foreach ($workshopRevisions as $workshopRevision) {
+            $this->fixationService->create(
+                $workShop,
                 $this->fixationUserService->build($user),
-                $answerRevision,
+                $workshopRevision,
                 $this->fixationGroupService->build($group)
             );
         }
 
-        $workshopRevision = $this->revisionBuildService->buildRevision($group, $workShop);
-        $this->fixationService->create(
-            $workShop,
-            $this->fixationUserService->build($user),
-            $workshopRevision,
-            $this->fixationGroupService->build($group)
-        );
         $this->workShopRepository->refresh($workShop);
 
         return $workShop->toArray();

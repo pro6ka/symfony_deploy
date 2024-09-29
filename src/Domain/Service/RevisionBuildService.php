@@ -3,9 +3,9 @@
 namespace App\Domain\Service;
 
 use App\Domain\Entity\Contracts\FixableInterface;
+use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
-use Doctrine\ORM\NonUniqueResultException;
 
 readonly class RevisionBuildService
 {
@@ -23,13 +23,15 @@ readonly class RevisionBuildService
      * @param Group $group
      * @param FixableInterface $entity
      *
-     * @return Revision
-     * @throws NonUniqueResultException
+     * @return array|Revision[]
      */
-    public function buildRevision(Group $group, FixableInterface $entity): Revision
+    public function buildRevisions(Group $group, FixableInterface $entity): array
     {
         if ($groupFixation = $this->fixationService->hasGroupFixation($group, $entity)) {
-            return $groupFixation->getRevision();
+            return array_map(
+                fn (Fixation $fixation) => $fixation->getRevisions(),
+                $groupFixation
+            );
         }
 
         return $this->revisionService->findLastForEntity($entity);

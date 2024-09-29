@@ -42,10 +42,12 @@ readonly class WorkShopService
 
         foreach ($workShopList as $workShop) {
             /** @var Revision $revision */
-            if (isset($revisions[$workShop->getId()]) && $revisions[$workShop->getId()]) {
+            if (isset($revisions[$workShop->getId()])) {
                 $revision = $revisions[$workShop->getId()];
                 $setter = 'set' . ucfirst($revision->getColumnName());
-                $workShop->$setter($revision->getContentAfter());
+                if (method_exists($workShop, $setter)) {
+                    $workShop->$setter($revision->getContentAfter());
+                }
             }
         }
 
