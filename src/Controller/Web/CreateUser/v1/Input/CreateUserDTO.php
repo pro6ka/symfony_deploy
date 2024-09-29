@@ -2,7 +2,9 @@
 
 namespace App\Controller\Web\CreateUser\v1\Input;
 
+use App\Domain\ValueObject\UserRoleEnum;
 use Symfony\Component\Validator\Constraints as Assert;
+
 readonly class CreateUserDTO
 {
     public function __construct(
@@ -21,6 +23,8 @@ readonly class CreateUserDTO
         public string $email,
         #[Assert\Length(max: 32)]
         public ?string $middleName = null,
+        #[Assert\Choice(callback: [UserRoleEnum::class, 'cases'])]
+        public ?UserRoleEnum $userRole = null,
     ) {
     }
 }

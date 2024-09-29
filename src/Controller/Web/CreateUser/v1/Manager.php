@@ -9,8 +9,8 @@ use App\Domain\Service\UserService;
 
 class Manager
 {
-    public function __construct(private readonly UserService $userService)
-    {}
+    public function __construct(private readonly UserService $userService) {
+    }
 
     public function create(CreateUserDTO $createUserDTO): CreatedUserDTO
     {
@@ -19,7 +19,8 @@ class Manager
             firstName: $createUserDTO->firstName,
             lastName: $createUserDTO->lastName,
             email: $createUserDTO->email,
-            middleName: $createUserDTO->middleName
+            middleName: $createUserDTO->middleName,
+            userRole: $createUserDTO->userRole
         );
         $user = $this->userService->create($userModel);
 
@@ -31,6 +32,7 @@ class Manager
             email: $user->getEmail(),
             createdAt: $user->getCreatedAt(),
             middleName: $user->getMiddleName(),
+            userRole: $user->getUserRole()
         );
     }
 }

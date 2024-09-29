@@ -33,6 +33,7 @@ readonly class UserService
         $user->setLastName($userModel->lastName);
         $user->setMiddleName($userModel->middleName);
         $user->setEmail($userModel->email);
+        $user->setUserRole($userModel->userRole);
         $this->userRepository->create($user);
 
         return $user;

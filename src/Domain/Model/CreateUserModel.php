@@ -2,6 +2,8 @@
 
 namespace App\Domain\Model;
 
+use App\Domain\ValueObject\UserRoleEnum;
+
 class CreateUserModel
 {
     public function __construct(
@@ -10,6 +12,7 @@ class CreateUserModel
         public readonly string $lastName,
         public readonly string $email,
         public readonly ?string $middleName = null,
+        public readonly ?UserRoleEnum $userRole = null
     ) {
     }
 }

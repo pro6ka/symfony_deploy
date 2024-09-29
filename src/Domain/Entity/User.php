@@ -6,6 +6,7 @@ use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
+use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,7 +34,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private string $lastName;
 
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
-    private string $middleName;
+    private ?string $middleName;
 
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
     private string $email;
@@ -48,19 +49,22 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private Collection $groups;
 
     /**
-     * @var PersistentCollection
+     * @var Collection
      */
     #[ORM\OneToMany(targetEntity: WorkShop::class, mappedBy: 'author')]
-    private PersistentCollection $createdWorkShops;
+    private Collection $createdWorkShops;
 
     #[ORM\ManyToMany(targetEntity: WorkShop::class, mappedBy: 'students')]
     private Collection $participatedWorkShops;
 
+    #[ORM\Column(name: 'user_role', type: 'userRole', nullable: true)]
+    private ?UserRoleEnum $userRole = null;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
-        $this->createdWorkShops = new PersistentCollection();
-        $this->participatedWorkShops = new PersistentCollection();
+        $this->createdWorkShops = new ArrayCollection();
+        $this->participatedWorkShops = new ArrayCollection();
     }
 
     /**
@@ -144,11 +148,11 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     }
 
     /**
-     * @param string $middleName
+     * @param ?string $middleName
      *
      * @return void
      */
-    public function setMiddleName(string $middleName): void
+    public function setMiddleName(?string $middleName): void
     {
         $this->middleName = $middleName;
     }
@@ -307,5 +311,23 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     public function setGroups(Collection $groups): void
     {
         $this->groups = $groups;
+    }
+
+    /**
+     * @return null|UserRoleEnum
+     */
+    public function getUserRole(): ?UserRoleEnum
+    {
+        return $this->userRole;
+    }
+
+    /**
+     * @param null|UserRoleEnum $userRole
+     *
+     * @return void
+     */
+    public function setUserRole(?UserRoleEnum $userRole): void
+    {
+        $this->userRole = $userRole;
     }
 }

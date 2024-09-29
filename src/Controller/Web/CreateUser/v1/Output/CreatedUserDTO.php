@@ -2,10 +2,21 @@
 
 namespace App\Controller\Web\CreateUser\v1\Output;
 
+use App\Controller\DTO\OutputDTOInterface;
+use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;
 
-readonly class CreatedUserDTO
+readonly class CreatedUserDTO implements OutputDTOInterface
 {
+    /**
+     * @param int $id
+     * @param string $login
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $email
+     * @param DateTime $createdAt
+     * @param null|string $middleName
+     */
     public function __construct(
         public int $id,
         public string $login,
@@ -14,6 +25,7 @@ readonly class CreatedUserDTO
         public string $email,
         public DateTime $createdAt,
         public ?string $middleName = null,
+        public ?UserRoleEnum $userRole = null
     ) {
     }
 }
