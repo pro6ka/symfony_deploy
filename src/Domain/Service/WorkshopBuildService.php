@@ -32,7 +32,6 @@ readonly class WorkshopBuildService
     }
 
     /**
-     * @todo разнести foreach-и по отдельным сервисам
      * @param WorkShop $workShop
      * @param User $user
      * @param Group $group
