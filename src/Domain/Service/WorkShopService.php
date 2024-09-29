@@ -53,6 +53,18 @@ readonly class WorkShopService
     }
 
     /**
+     * @param int $workshopId
+     *
+     * @return null|WorkShop
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findById(int $workshopId): ?WorkShop
+    {
+        return $this->workShopRepository->findById($workshopId);
+    }
+
+    /**
      * @param int $id
      * @param User $user
      *

@@ -184,6 +184,6 @@ class Exercise implements EntityInterface, HasMetaTimeStampInterface, Revisionab
      */
     public function revisionableFields(): array
     {
-        return ['title', 'description',];
+        return ['title', 'content',];
     }
 }
