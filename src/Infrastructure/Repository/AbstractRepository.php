@@ -8,6 +8,9 @@ use Doctrine\ORM\Exception\ORMException;
 
 class AbstractRepository
 {
+    /**
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(
         protected readonly EntityManagerInterface $entityManager
     ) {

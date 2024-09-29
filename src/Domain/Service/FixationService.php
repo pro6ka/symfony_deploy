@@ -4,7 +4,6 @@ namespace App\Domain\Service;
 
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
-use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\FixationGroup;
 use App\Domain\Entity\FixationUser;
@@ -14,8 +13,6 @@ use App\Domain\Entity\User;
 use App\Infrastructure\Repository\FixationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\NonUniqueResultException;
-use JetBrains\PhpStorm\NoReturn;
 use RuntimeException;
 
 readonly class FixationService
@@ -149,18 +146,18 @@ readonly class FixationService
 
     /**
      * @param Collection $entityCollection
-     * @param User $user
-     * @param Group $group
+     * @param int $userId
+     * @param int $groupId
      *
      * @return array|Fixation[]
      */
-    public function listForUserByEntity(Collection $entityCollection, User $user, Group $group): array
+    public function listForUserByEntity(FixableInterface $entity, int $userId, int $groupId): array
     {
         return $this->fixationRepository->listForUserByEntity(
-            entityType: $entityCollection->first()::class,
-            entityIdList: $entityCollection->map(fn (Exercise $exercise) => $exercise->getId()),
-            userId: $user->getId(),
-            groupId: $group->getId()
+            entityType: $entity::class,
+            entityId: $entity->getId(),
+            userId: $userId,
+            groupId: $groupId
         );
     }
 

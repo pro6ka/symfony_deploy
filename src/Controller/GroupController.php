@@ -166,19 +166,24 @@ class GroupController extends AbstractController
         die;
          */
         /**
-         * find exercise by id in workshop for user
-         */
+         * find exercise by id for user
+         *
+         *
         $exercise = $this->exerciseService->getByIdForUser(
-            5,
-            user: $user,
-            group: $group
+            exerciseId: 5,
+            userId: 2,
+            groupId: 2
         );
         /**
-        find exercises list for workshop
+        get question by id for user
          *
-//      $exercises = $this->exerciseService->findForWorkShop($workshop, $user, $group);
          */
-        dump($exercise);
+        $question = $this->questionService->getByIdForUser(
+            questionId: 5,
+            userId: 2,
+            groupId: 2
+        );
+        dump($question);
         die;
     }
 }

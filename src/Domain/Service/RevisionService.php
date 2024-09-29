@@ -6,7 +6,6 @@ use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
 use App\Infrastructure\Repository\RevisionRepository;
-use Doctrine\ORM\NonUniqueResultException;
 
 readonly class RevisionService
 {
@@ -52,6 +51,31 @@ readonly class RevisionService
     public function removeByOwner(HasRevisionsInterface $entity): void
     {
         $this->revisionRepository->removeByEntity($entity);
+    }
+
+    /**
+     * @param RevisionableInterface $entity
+     * @param array $revisions
+     *
+     * @return RevisionableInterface
+     */
+    public function applyToEntity(RevisionableInterface $entity, array $revisions): RevisionableInterface
+    {
+        if (isset($revisions[$entity->getId()]) && $revisions[$entity->getId()]) {
+            $revisionColumns = $revisions[$entity->getId()];
+            foreach ($entity->revisionableFields() as $field) {
+                /** @var Revision $revision */
+                $revision = $revisionColumns[$field];
+                if (isset($revisionColumns[$field])) {
+                    $setter = 'set' . ucfirst($revision->getColumnName());
+                    if (method_exists($entity, $setter)) {
+                        $entity->$setter($revision->getContentAfter());
+                    }
+                }
+            }
+        }
+
+        return $entity;
     }
 
     /**

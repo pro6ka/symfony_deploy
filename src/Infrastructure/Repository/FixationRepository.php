@@ -10,9 +10,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use RuntimeException;
@@ -182,7 +180,7 @@ SQL;
 
     /**
      * @param string $entityType
-     * @param ArrayCollection $entityIdList
+     * @param int $entityId
      * @param int $userId
      * @param int $groupId
      *
@@ -190,7 +188,7 @@ SQL;
      */
     public function listForUserByEntity(
         string $entityType,
-        Collection $entityIdList,
+        int $entityId,
         int $userId,
         int $groupId
     ): array {
@@ -199,7 +197,7 @@ SQL;
         $queryBuilder->select('f')
             ->from(Fixation::class, 'f')
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
-            ->andWhere($queryBuilder->expr()->in('f.entityId', ':entityId'))
+            ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
             ->leftJoin(
                 'f.user',
                 'u',
@@ -213,7 +211,7 @@ SQL;
                 $queryBuilder->expr()->eq('g.id', ':groupId')
             )
             ->setParameter('entityType', $entityType)
-            ->setParameter('entityId', $entityIdList)
+            ->setParameter('entityId', $entityId)
             ->setParameter('userId', $userId)
             ->setParameter('groupId', $groupId)
             ;

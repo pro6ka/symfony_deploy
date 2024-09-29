@@ -2,24 +2,23 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
-use App\Domain\Entity\Fixation;
-use App\Domain\Entity\Group;
-use App\Domain\Entity\Revision;
-use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Infrastructure\Repository\ExerciseRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
-readonly class ExerciseService
+readonly class ExerciseService extends AbstractFixableService
 {
     /**
+     * @param FixationService $fixationService
+     * @param RevisionService $revisionService
      * @param ExerciseRepository $exerciseRepository
      */
     public function __construct(
         private FixationService $fixationService,
+        private RevisionService $revisionService,
         private ExerciseRepository $exerciseRepository
     ) {
     }
@@ -56,36 +55,32 @@ readonly class ExerciseService
         return $this->exerciseRepository->findById($exerciseId);
     }
 
-    public function getByIdForUser(int $exerciseId, User $user, Group $group)
+    /**
+     * @param int $exerciseId
+     * @param int $userId
+     * @param int $groupId
+     *
+     * @return null|Exercise|RevisionableInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function getByIdForUser(int $exerciseId, int $userId, int $groupId): Exercise|RevisionableInterface|null
     {
         $exercise = $this->exerciseRepository->findById($exerciseId);
-        $revisions = array_reduce(
-            $this->fixationService->listForUserByEntity($exercise->getWorkShop()->getExercises(), $user, $group),
-            function ($carry, Fixation $fixation) {
-                /** @var Revision $revision */
-                foreach ($fixation->getRevisions() as $revision) {
-                    $carry[$revision->getEntityId()][$revision->getColumnName()] = $revision;
-                }
-
-                return $carry;
-            }
+        $revisions = $this->findRevisionsByFixable(
+            entity: $exercise,
+            userId: $userId,
+            groupId: $groupId
         );
 
-        /** @var Exercise $exercise */
-        if (isset($revisions[$exercise->getId()]) && $revisions[$exercise->getId()]) {
-            $revisionColumns = $revisions[$exercise->getId()];
-            foreach ($exercise->revisionableFields() as $field) {
-                /** @var Revision $revision */
-                $revision = $revisionColumns[$field];
-                if (isset($revisionColumns[$field])) {
-                    $setter = 'set' . ucfirst($revision->getColumnName());
-                    if (method_exists($exercise, $setter)) {
-                        $exercise->$setter($revision->getContentAfter());
-                    }
-                }
-            }
-        }
+        return $this->revisionService->applyToEntity($exercise, $revisions);
+    }
 
-        return $exercise;
+    /**
+     * @return FixationService
+     */
+    protected function getFixationService(): FixationService
+    {
+        return $this->fixationService;
     }
 }
