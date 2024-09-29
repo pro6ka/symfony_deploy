@@ -3,17 +3,26 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use Doctrine\ORM\PersistentCollection;
+use UnexpectedValueException;
 
 #[ORM\Table(name: '`group`')]
 #[ORM\Entity]
 #[ORM\UniqueConstraint(name: 'group__name_unique', columns: ['name'])]
-class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActiveInterface
+class Group implements
+    EntityInterface,
+    HasMetaTimeStampInterface,
+    HasMetaIsActiveInterface,
+    HasRevisionsInterface,
+    HasFixationsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -41,9 +50,14 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
     private Collection $participants;
 
+    #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
+    private Collection $workshops;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->workshops = new ArrayCollection();
+        $this->fixations = new ArrayCollection();
     }
 
     /**
@@ -178,6 +192,35 @@ class Group implements EntityInterface, HasMetaTimeStampInterface, HasMetaIsActi
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
+        }
+    }
+
+    /**
+     * @return PersistentCollection
+     */
+    public function getWorkshops(): PersistentCollection
+    {
+        return $this->workshops;
+    }
+
+    /**
+     * @param PersistentCollection $workshops
+     */
+    public function setWorkshops(PersistentCollection $workshops): void
+    {
+        $this->workshops = $workshops;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     * @throws UnexpectedValueException
+     */
+    public function addWorkShop(WorkShop $workShop): void
+    {
+        if (! $this->workshops->contains($workShop)) {
+            $this->workshops->add($workShop);
         }
     }
 

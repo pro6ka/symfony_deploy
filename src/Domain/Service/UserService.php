@@ -7,13 +7,16 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\CreateUserModel;
 use App\Infrastructure\Repository\UserRepository;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use RuntimeException;
 
-class UserService
+readonly class UserService
 {
     /**
      * @param UserRepository $userRepository
      */
-    public function __construct(private readonly UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
     }
 
@@ -39,6 +42,7 @@ class UserService
      * @param string $login
      *
      * @return array
+     * @throws RuntimeException
      */
     public function findUserByLogin(string $login): array
     {
@@ -49,6 +53,7 @@ class UserService
      * @param int $id
      *
      * @return array
+     * @throws RuntimeException
      */
     public function findUserById(int $id): array
     {
@@ -69,6 +74,8 @@ class UserService
      * @param int $id
      *
      * @return null|User
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function find(int $id): ?User
     {

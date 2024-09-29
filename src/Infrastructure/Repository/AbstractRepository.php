@@ -8,6 +8,9 @@ use Doctrine\ORM\Exception\ORMException;
 
 class AbstractRepository
 {
+    /**
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(
         protected readonly EntityManagerInterface $entityManager
     ) {
@@ -40,7 +43,7 @@ class AbstractRepository
      * @return void
      * @throws ORMException
      */
-    protected function refresh(EntityInterface $entity): void
+    public function refresh(EntityInterface $entity): void
     {
         $this->entityManager->refresh($entity);
     }

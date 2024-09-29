@@ -6,6 +6,8 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use RuntimeException;
 
 class UserRepository extends AbstractRepository
 {
@@ -22,6 +24,7 @@ class UserRepository extends AbstractRepository
      * @param int $id
      *
      * @return null|User
+     * @throws RuntimeException
      */
     public function findById(int $id): ?User
     {
@@ -33,6 +36,7 @@ class UserRepository extends AbstractRepository
      * @param string $login
      *
      * @return null|User
+     * @throws RuntimeException
      */
     public function findByLogin(string $login): ?User
     {
@@ -63,6 +67,8 @@ class UserRepository extends AbstractRepository
      * @param int $id
      *
      * @return null|User
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function find(int $id): ?User
     {
@@ -74,7 +80,6 @@ class UserRepository extends AbstractRepository
      * @param Group $group
      *
      * @return void
-     * @throws ORMException
      */
     public function addGroup(User $user, Group $group): void
     {

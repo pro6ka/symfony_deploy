@@ -3,17 +3,20 @@
 namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
+use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
 #[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
-class User implements EntityInterface, HasMetaTimeStampInterface
+class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -44,9 +47,20 @@ class User implements EntityInterface, HasMetaTimeStampInterface
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'participants')]
     private Collection $groups;
 
+    /**
+     * @var PersistentCollection
+     */
+    #[ORM\OneToMany(targetEntity: WorkShop::class, mappedBy: 'author')]
+    private PersistentCollection $createdWorkShops;
+
+    #[ORM\ManyToMany(targetEntity: WorkShop::class, mappedBy: 'students')]
+    private Collection $participatedWorkShops;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->createdWorkShops = new PersistentCollection();
+        $this->participatedWorkShops = new PersistentCollection();
     }
 
     /**
@@ -213,5 +227,85 @@ class User implements EntityInterface, HasMetaTimeStampInterface
             'lastName' => $this->lastName,
             'middleName' => $this->getMiddleName(),
         ];
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCreatedWorkShops(): Collection
+    {
+        return $this->createdWorkShops;
+    }
+
+    /**
+     * @param ArrayCollection $workShops
+     *
+     * @return void
+     */
+    public function setWorkShops(ArrayCollection $workShops): void
+    {
+        $this->createdWorkShops = $workShops;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     * @throws \UnexpectedValueException
+     */
+    public function addCreatedWorkSHop(WorkShop $workShop): void
+    {
+        if (! $this->createdWorkShops->contains($workShop)) {
+            $this->createdWorkShops->add($workShop);
+        }
+    }
+
+    /**
+     * @return PersistentCollection
+     */
+    public function getParticipatedWorkShops(): PersistentCollection
+    {
+        return $this->participatedWorkShops;
+    }
+
+    /**
+     * @param PersistentCollection $participatedWorkShops
+     *
+     * @return void
+     */
+    public function setParticipatedWorkShops(PersistentCollection $participatedWorkShops): void
+    {
+        $this->participatedWorkShops = $participatedWorkShops;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     * @throws \UnexpectedValueException
+     */
+    public function addParticipatedWorkShop(WorkShop $workShop): void
+    {
+        if (! $this->participatedWorkShops->contains($workShop)) {
+            $this->participatedWorkShops->add($workShop);
+        }
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param Collection $groups
+     *
+     * @return void
+     */
+    public function setGroups(Collection $groups): void
+    {
+        $this->groups = $groups;
     }
 }

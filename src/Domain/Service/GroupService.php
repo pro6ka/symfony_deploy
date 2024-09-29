@@ -5,6 +5,8 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Infrastructure\Repository\GroupRepository;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 
 readonly class GroupService
 {
@@ -33,6 +35,8 @@ readonly class GroupService
      * @param int $groupId
      *
      * @return null|Group
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function activate(int $groupId): ?Group
     {
@@ -51,6 +55,8 @@ readonly class GroupService
      * @param int $groupId
      *
      * @return null|Group
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function find(int $groupId): ?Group
     {
