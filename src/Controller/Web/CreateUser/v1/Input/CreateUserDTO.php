@@ -9,19 +9,19 @@ readonly class CreateUserDTO
 {
     public function __construct(
         #[Assert\NotBlank]
-        #[Assert\Length(max: 32)]
+        #[Assert\Length(min: 1, max: 32)]
         public string $login,
         #[Assert\NotBlank]
-        #[Assert\Length(max: 32)]
+        #[Assert\Length(min: 1, max: 32)]
         public string $firstName,
         #[Assert\NotBlank]
-        #[Assert\Length(max: 32)]
+        #[Assert\Length(min: 1, max: 32)]
         public string $lastName,
         #[Assert\NotBlank]
         #[Assert\Length(max: 100)]
         #[Assert\Email]
         public string $email,
-        #[Assert\Length(max: 32)]
+        #[Assert\Length(min: 1, max: 32)]
         public ?string $middleName = null,
         #[Assert\Choice(callback: [UserRoleEnum::class, 'cases'])]
         public ?UserRoleEnum $userRole = null,
