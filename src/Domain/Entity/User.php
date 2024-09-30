@@ -12,11 +12,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
 #[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
+#[UniqueEntity(fields: 'email')]
+#[UniqueEntity(fields: 'login')]
 class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
@@ -216,21 +219,6 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
         if (! $this->groups->contains($group)) {
             $this->groups->add($group);
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'login' => $this->login,
-            'email' => $this->email,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-            'middleName' => $this->getMiddleName(),
-        ];
     }
 
     /**
