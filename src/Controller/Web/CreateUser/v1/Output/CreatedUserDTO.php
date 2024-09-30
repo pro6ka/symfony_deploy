@@ -16,6 +16,7 @@ readonly class CreatedUserDTO implements OutputDTOInterface
      * @param string $email
      * @param DateTime $createdAt
      * @param null|string $middleName
+     * @param null|UserRoleEnum $userRole
      */
     public function __construct(
         public int $id,
