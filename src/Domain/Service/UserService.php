@@ -45,7 +45,7 @@ readonly class UserService
      * @return array
      * @throws RuntimeException
      */
-    public function findUserByLogin(string $login): array
+    public function findByLogin(string $login): array
     {
         return $this->userRepository->findByLogin($login)?->toArray() ?? [];
     }
@@ -56,7 +56,7 @@ readonly class UserService
      * @return array
      * @throws RuntimeException
      */
-    public function findUserById(int $id): array
+    public function findById(int $id): array
     {
         return $this->userRepository->findById($id)?->toArray() ?? [];
     }
@@ -66,7 +66,7 @@ readonly class UserService
      *
      * @return array
      */
-    public function findUserByEmail(string $email): array
+    public function findByEmail(string $email): array
     {
         return $this->userRepository->findByEmail($email);
     }

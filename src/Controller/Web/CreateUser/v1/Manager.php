@@ -5,24 +5,30 @@ namespace App\Controller\Web\CreateUser\v1;
 use App\Controller\Web\CreateUser\v1\Input\CreateUserDTO;
 use App\Controller\Web\CreateUser\v1\Output\CreatedUserDTO;
 use App\Domain\Model\CreateUserModel;
+use App\Domain\Service\ModelFactory;
 use App\Domain\Service\UserService;
 
 class Manager
 {
-    public function __construct(private readonly UserService $userService) {
+    public function __construct(
+        private readonly ModelFactory $modelFactory,
+        private readonly UserService $userService
+    ) {
     }
 
     public function create(CreateUserDTO $createUserDTO): CreatedUserDTO
     {
-        $userModel = new CreateUserModel(
-            login: $createUserDTO->login,
-            firstName: $createUserDTO->firstName,
-            lastName: $createUserDTO->lastName,
-            email: $createUserDTO->email,
-            middleName: $createUserDTO->middleName,
-            userRole: $createUserDTO->userRole
+        $createUserModel = $this->modelFactory->makeModel(
+            CreateUserModel::class,
+            $createUserDTO->login,
+            $createUserDTO->email,
+            $createUserDTO->firstName,
+            $createUserDTO->lastName,
+            $createUserDTO->middleName,
+            $createUserDTO->userRole,
         );
-        $user = $this->userService->create($userModel);
+
+        $user = $this->userService->create($createUserModel);
 
         return new CreatedUserDTO(
             id: $user->getId(),

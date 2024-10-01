@@ -6,6 +6,7 @@ use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
+use App\Domain\Service\UserService;
 use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,13 +14,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
-#[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
-#[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
-#[UniqueEntity(fields: 'email')]
-#[UniqueEntity(fields: 'login')]
+#[UniqueEntity(fields: ['email'], message: 'emleml', service: UserService::class)]
+#[UniqueEntity(fields: ['login'], message: 'lll', service: UserService::class)]
 class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
@@ -28,6 +28,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 32, unique: true, nullable: false)]
+    #[Assert\Valid()]
     private string $login;
 
     #[ORM\Column(type: 'string', length: 32, nullable: false)]
@@ -40,6 +41,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private ?string $middleName;
 
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
+    #[Assert\Valid()]
     private string $email;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
