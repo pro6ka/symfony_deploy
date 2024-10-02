@@ -18,8 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
-#[UniqueEntity(fields: ['email'], message: 'emleml', service: UserService::class)]
-#[UniqueEntity(fields: ['login'], message: 'lll', service: UserService::class)]
+#[UniqueEntity(fields: ['email'], message: 'This value {{ value }} is already used')]
+#[UniqueEntity(fields: ['login'], message: 'This value {{ value }} is already used')]
+#[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
+#[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
 class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
@@ -28,7 +30,6 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 32, unique: true, nullable: false)]
-    #[Assert\Valid()]
     private string $login;
 
     #[ORM\Column(type: 'string', length: 32, nullable: false)]
@@ -41,7 +42,6 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     private ?string $middleName;
 
     #[ORM\Column(type: 'string', length: 100, unique: true, nullable: false)]
-    #[Assert\Valid()]
     private string $email;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]

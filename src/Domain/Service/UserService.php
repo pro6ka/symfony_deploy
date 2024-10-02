@@ -2,22 +2,25 @@
 
 namespace App\Domain\Service;
 
-use App\Controller\Web\CreateUser\v1\Output\CreatedUserDTO;
-use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\CreateUserModel;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use RuntimeException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class UserService
 {
     /**
+     * @param ValidatorInterface $validator
      * @param UserRepository $userRepository
      */
-    public function __construct(private UserRepository $userRepository)
-    {
+    public function __construct(
+        private ValidatorInterface $validator,
+        private UserRepository $userRepository
+    ) {
     }
 
     /**
@@ -34,6 +37,13 @@ readonly class UserService
         $user->setMiddleName($userModel->middleName);
         $user->setEmail($userModel->email);
         $user->setUserRole($userModel->userRole);
+
+        $violations = $this->validator->validate($user);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($user, $violations);
+        }
+
         $this->userRepository->create($user);
 
         return $user;
