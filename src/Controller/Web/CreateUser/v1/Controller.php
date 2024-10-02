@@ -25,7 +25,7 @@ readonly class Controller
      *
      * @return JsonResponse
      */
-    #[Route(path: 'api/v1/user', methods: ['POST'])]
+    #[Route(path: 'api/v1/user', name: 'user_create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateUserDTO $createUserDTO): JsonResponse
     {
         return new JsonResponse($this->manager->create($createUserDTO));

@@ -8,14 +8,23 @@ use App\Domain\Model\CreateUserModel;
 use App\Domain\Service\ModelFactory;
 use App\Domain\Service\UserService;
 
-class Manager
+readonly class Manager
 {
+    /**
+     * @param ModelFactory $modelFactory
+     * @param UserService $userService
+     */
     public function __construct(
-        private readonly ModelFactory $modelFactory,
-        private readonly UserService $userService
+        private ModelFactory $modelFactory,
+        private UserService $userService
     ) {
     }
 
+    /**
+     * @param CreateUserDTO $createUserDTO
+     *
+     * @return CreatedUserDTO
+     */
     public function create(CreateUserDTO $createUserDTO): CreatedUserDTO
     {
         $createUserModel = $this->modelFactory->makeModel(

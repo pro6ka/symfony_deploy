@@ -63,12 +63,11 @@ readonly class UserService
     /**
      * @param int $id
      *
-     * @return array
-     * @throws RuntimeException
+     * @return null|User
      */
-    public function findById(int $id): array
+    public function findById(int $id): ?User
     {
-        return $this->userRepository->findById($id)?->toArray() ?? [];
+        return $this->userRepository->findById($id);
     }
 
     /**
