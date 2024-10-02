@@ -21,9 +21,9 @@ class Manager
         $createUserModel = $this->modelFactory->makeModel(
             CreateUserModel::class,
             $createUserDTO->login,
-            $createUserDTO->email,
             $createUserDTO->firstName,
             $createUserDTO->lastName,
+            $createUserDTO->email,
             $createUserDTO->middleName,
             $createUserDTO->userRole,
         );
