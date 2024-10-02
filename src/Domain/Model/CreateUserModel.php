@@ -27,7 +27,7 @@ readonly class CreateUserModel
         public string $lastName,
         #[Assert\NotBlank]
         #[Assert\Length(max: 100)]
-        #[Assert\Email]
+        #[Assert\Email(message: 'The email {{ value }} is not valid email')]
         public string $email,
         #[Assert\Length(min: 1, max: 32)]
         public ?string $middleName = null,
