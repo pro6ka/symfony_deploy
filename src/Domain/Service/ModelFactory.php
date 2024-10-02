@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @template T
  */
+
 readonly class ModelFactory
 {
     /**
