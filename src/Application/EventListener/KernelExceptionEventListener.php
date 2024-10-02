@@ -10,14 +10,19 @@ use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 class KernelExceptionEventListener
 {
-    private const DEFAULT_PROPERTY = 'error';
+    private const string DEFAULT_PROPERTY = 'error';
 
-    public function onKernelException(ExceptionEvent $event)
+    /**
+     * @param ExceptionEvent $event
+     *
+     * @return void
+     */
+    public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
         if ($exception instanceof HttpExceptionInterface) {
-            $exception = $exception->getPrevious();
+            $event->setResponse($this->getHttpResponse($exception->getMessage(), $exception->getStatusCode()));
         }
 
         if ($exception instanceof ValidationFailedException) {
@@ -39,12 +44,12 @@ class KernelExceptionEventListener
 
     /**
      * @param $message
-     * @param $code
+     * @param int $code
      *
      * @return Response
      */
-    private function getHttpResponse($message, $code = 500): Response
+    private function getHttpResponse($message, int $code = 500): Response
     {
-        return new JsonResponse(['message' => $message], 500);
+        return new JsonResponse(['message' => $message], $code);
     }
 }

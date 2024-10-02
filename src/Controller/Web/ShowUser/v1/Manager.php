@@ -5,6 +5,7 @@ namespace App\Controller\Web\ShowUser\v1;
 use App\Controller\Web\ShowUser\v1\Output\ShowUserDTO;
 use App\Domain\Service\UserService;
 use App\Domain\ValueObject\UserRoleEnum;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
@@ -21,6 +22,9 @@ readonly class Manager
     public function show(int $userId): ShowUserDTO
     {
         $user = $this->userService->findById($userId);
+        if (! $user) {
+            throw new NotFoundHttpException(sprintf('User with id:%d not found', $userId));
+        }
 
         return new ShowUserDTO(
             id: $user->getId(),
