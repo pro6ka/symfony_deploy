@@ -4,9 +4,12 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\ListUserItemModel;
+use App\Domain\Model\ListUserModel;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use RuntimeException;
 
 class UserRepository extends AbstractRepository
@@ -86,5 +89,27 @@ class UserRepository extends AbstractRepository
         $user->addGroup($group);
         $group->addParticipant($user);
         $this->flush();
+    }
+
+    public function getList(int $page, int $pageSize, int $firstResult = 0)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('u')
+            ->from(User::class, 'u')
+            ;
+        $paginator = new Paginator($queryBuilder->getQuery());
+        $total = $paginator->count();
+
+//        $queryBuilder->getQuery()->setFirstResult($pageSize * ($page - 1))
+        $queryBuilder->getQuery()->setFirstResult($firstResult)
+            ->setMaxResults($pageSize)
+            ;
+
+        return new ListUserModel(
+            userList: $queryBuilder->getQuery()->getResult(),
+            total: $total,
+            page: $page,
+            pageSize: ListUserModel::PAGE_SIZE
+        );
     }
 }

@@ -91,4 +91,9 @@ readonly class UserService
     {
         return $this->userRepository->find($id);
     }
+
+    public function getList(int $page)
+    {
+        return $this->userRepository->getList($page);
+    }
 }

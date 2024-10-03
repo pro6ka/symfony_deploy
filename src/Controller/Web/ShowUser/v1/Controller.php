@@ -22,7 +22,7 @@ readonly class Controller
      *
      * @return JsonResponse
      */
-    #[Route(path: 'api/v1/user/{userId}', name: 'user_show', requirements: ['userId' => '\d+'])]
+    #[Route(path: 'api/v1/user/{userId}', name: 'user_show', requirements: ['userId' => '\d+'], methods: ['GET'])]
     public function __invoke($userId): JsonResponse
     {
         return new JsonResponse($this->manager->show($userId));
