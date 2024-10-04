@@ -55,6 +55,16 @@ readonly class UserService
     }
 
     /**
+     * @param User $user
+     *
+     * @return void
+     */
+    public function remove(User $user): void
+    {
+        $this->userRepository->removeUser($user);
+    }
+
+    /**
      * @param string $login
      *
      * @return array

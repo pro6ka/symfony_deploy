@@ -107,4 +107,14 @@ class UserRepository extends AbstractRepository
 
         return new Paginator($queryBuilder->getQuery());
     }
+
+    /**
+     * @param User $user
+     *
+     * @return void
+     */
+    public function removeUser(User $user): void
+    {
+        $this->remove($user);
+    }
 }

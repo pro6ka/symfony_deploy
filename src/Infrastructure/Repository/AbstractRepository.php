@@ -41,6 +41,17 @@ class AbstractRepository
      * @param EntityInterface $entity
      *
      * @return void
+     */
+    protected function remove(EntityInterface $entity): void
+    {
+        $this->entityManager->remove($entity);
+        $this->flush();
+    }
+
+    /**
+     * @param EntityInterface $entity
+     *
+     * @return void
      * @throws ORMException
      */
     public function refresh(EntityInterface $entity): void

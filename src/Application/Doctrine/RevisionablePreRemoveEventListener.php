@@ -9,10 +9,11 @@ use App\Domain\Service\FixationService;
 use App\Domain\Service\RevisionService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PostRemoveEventArgs;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Events;
 
 #[AsDoctrineListener(event: Events::preRemove)]
-readonly class RevisionablePostRemoveEventListener
+readonly class RevisionablePreRemoveEventListener
 {
     /**
      * @param RevisionService $revisionService
@@ -29,7 +30,7 @@ readonly class RevisionablePostRemoveEventListener
      *
      * @return void
      */
-    public function preRemove(PostRemoveEventArgs $event): void
+    public function preRemove(PreRemoveEventArgs $event): void
     {
         $entity = $event->getObject();
 

@@ -120,10 +120,15 @@ SQL;
         $query->setParameter($tableName . 'Id', $owner->getId());
         $ownersFixations = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
 
+        if (! $ownersFixations) {
+            return;
+        }
+
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->delete(Fixation::class, 'f')
             ->andWhere('id in (:ids)')
             ->setParameter('ids', array_column($ownersFixations, 'id'));
+
         $queryBuilder->getQuery()->execute();
     }
 
