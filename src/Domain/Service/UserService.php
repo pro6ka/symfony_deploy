@@ -4,15 +4,20 @@ namespace App\Domain\Service;
 
 use App\Domain\Entity\User;
 use App\Domain\Model\CreateUserModel;
+use App\Domain\Model\ListUserModel;
+use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use RuntimeException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class UserService
 {
+    use PaginationTrait;
+
     /**
      * @param ValidatorInterface $validator
      * @param UserRepository $userRepository
@@ -92,8 +97,17 @@ readonly class UserService
         return $this->userRepository->find($id);
     }
 
-    public function getList(int $page)
+    /**
+     * @param int $page
+     *
+     * @return Paginator
+     */
+    public function getList(int $page): Paginator
     {
-        return $this->userRepository->getList($page);
+        return $this->userRepository->getList(
+            page: $page,
+            pageSize: ListUserModel::PAGE_SIZE,
+            firstResult: $this->countPageSize(page: $page, pageSize: ListUserModel::PAGE_SIZE)
+        );
     }
 }

@@ -3,30 +3,47 @@
 namespace App\Controller\Web\ListUser\v1;
 
 use App\Controller\Web\ListUser\v1\Output\ListUserItemDTO;
-use App\Domain\Model\ListUserItemModel;
+use App\Domain\Model\ListUserModel;
 use App\Domain\Service\UserService;
 
 readonly class Manager
 {
+    /**
+     * @param UserService $userService
+     */
     public function __construct(
-       private UserService $userService
+        private UserService $userService
     ) {
     }
 
-    public function getList(int $page)
+    /**
+     * @param int $page
+     *
+     * @return ListUserModel
+     */
+    public function getList(int $page): ListUserModel
     {
-        return array_map(function (ListUserItemModel $user) {
-            return new ListUserItemDTO(
-                id: $user->id,
-                login: $user->login,
-                firstName: $user->firstname,
-                lastName: $user->lastName,
-                middleName: $user->middleName,
-                email: $user->email,
-                createdAt: $user->createdAt,
-                updatedAt: $user->updatedAt,
-                userRole: $user->userRole
+        $paginator = $this->userService->getList($page);
+        $userList = [];
+
+        foreach ($paginator as $user) {
+            $userList[] = new ListUserItemDTO(
+                id: $user->getId(),
+                login: $user->getLogin(),
+                firstName: $user->getFirstName(),
+                lastName: $user->getLastName(),
+                middleName: $user->getMiddleName(),
+                email: $user->getEmail(),
+                createdAt: $user->getCreatedAt(),
+                updatedAt: $user->getUpdatedAt(),
+                userRole: $user->getUserRole()
             );
-        }, $this->userService->getList($page));
+        }
+
+        return new ListUserModel(
+            userList: $userList,
+            total: $paginator->count(),
+            page: $page
+        );
     }
 }
