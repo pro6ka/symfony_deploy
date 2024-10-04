@@ -5,7 +5,7 @@ namespace App\Controller\Web\DeleteUser\v1;
 use App\Domain\Entity\User;
 use App\Domain\Service\UserService;
 
-class Manager
+readonly class Manager
 {
     /**
      * @param UserService $userService

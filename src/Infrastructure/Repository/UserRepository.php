@@ -4,6 +4,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\UpdateUserNameModel;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -116,5 +117,33 @@ class UserRepository extends AbstractRepository
     public function removeUser(User $user): void
     {
         $this->remove($user);
+    }
+
+    /**
+     * @param UpdateUserNameModel $userNameModel
+     *
+     * @return null|User
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function updateUserName(UpdateUserNameModel $userNameModel): ?User
+    {
+        $user = $this->find($userNameModel->id);
+        if (! $user) {
+            return null;
+        }
+        if ($userNameModel->firstName) {
+            $user->setFirstName($userNameModel->firstName);
+        }
+        if ($userNameModel->lastName) {
+            $user->setLastName($userNameModel->lastName);
+        }
+        if ($userNameModel->middleName) {
+            $user->setMiddleName($userNameModel->middleName);
+        }
+
+        $this->flush();
+
+        return $user;
     }
 }

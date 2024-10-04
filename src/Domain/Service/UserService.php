@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\User;
 use App\Domain\Model\CreateUserModel;
 use App\Domain\Model\ListUserModel;
+use App\Domain\Model\UpdateUserNameModel;
 use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
@@ -119,5 +120,17 @@ readonly class UserService
             pageSize: ListUserModel::PAGE_SIZE,
             firstResult: $this->countPageSize(page: $page, pageSize: ListUserModel::PAGE_SIZE)
         );
+    }
+
+    /**
+     * @param UpdateUserNameModel $userNameModel
+     *
+     * @return User|null
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function updateUserName(UpdateUserNameModel $userNameModel): ?User
+    {
+        return $this->userRepository->updateUsername($userNameModel);
     }
 }
