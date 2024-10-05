@@ -57,7 +57,6 @@ class Group implements
     {
         $this->participants = new ArrayCollection();
         $this->workshops = new ArrayCollection();
-        $this->fixations = new ArrayCollection();
     }
 
     /**
@@ -192,6 +191,18 @@ class Group implements
     {
         if (!$this->participants->contains($participant)) {
             $this->participants->add($participant);
+        }
+    }
+
+    /**
+     * @param User $participant
+     *
+     * @return void
+     */
+    public function removeParticipant(User $participant): void
+    {
+        if ($this->participants->contains($participant)) {
+            $this->participants->removeELement($participant);
         }
     }
 

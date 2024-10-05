@@ -224,6 +224,18 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     }
 
     /**
+     * @param Group $group
+     *
+     * @return void
+     */
+    public function leaveGroup(Group $group): void
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+        }
+    }
+
+    /**
      * @return Collection
      */
     public function getCreatedWorkShops(): Collection
