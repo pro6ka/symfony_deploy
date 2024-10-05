@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\User;
 
 use App\Controller\Web\User\ListUser\v1\Output\ListUserItemDTO;
 
