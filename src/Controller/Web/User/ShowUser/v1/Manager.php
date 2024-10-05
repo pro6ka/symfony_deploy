@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Controller\Web\ShowUser\v1;
+namespace App\Controller\Web\User\ShowUser\v1;
 
-use App\Controller\Web\ShowUser\v1\Output\ShowUserDTO;
+use App\Controller\Web\User\ShowUser\v1\Output\ShowUserDTO;
 use App\Domain\Service\UserService;
-use App\Domain\ValueObject\UserRoleEnum;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager

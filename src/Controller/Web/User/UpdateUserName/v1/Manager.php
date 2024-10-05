@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Controller\Web\UpdateUserName\v1;
+namespace App\Controller\Web\User\UpdateUserName\v1;
 
-use App\Controller\Web\UpdateUserName\v1\Input\UserNameDTO;
-use App\Controller\Web\UpdateUserName\v1\Output\UpdatedUserDTO;
-use App\Domain\Model\UpdateUserNameModel;
+use App\Controller\Web\User\UpdateUserName\v1\Input\UserNameDTO;
+use App\Controller\Web\User\UpdateUserName\v1\Output\UpdatedUserDTO;
+use App\Domain\Model\User\UpdateUserNameModel;
 use App\Domain\Service\ModelFactory;
 use App\Domain\Service\UserService;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\ShowUser\v1;
+namespace App\Controller\Web\User\ShowUser\v1;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;

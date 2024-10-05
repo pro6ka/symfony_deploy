@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\UpdateUserName\v1\Input;
+namespace App\Controller\Web\User\UpdateUserName\v1\Input;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

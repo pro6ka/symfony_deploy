@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\Web\ListUser\v1;
+namespace App\Controller\Web\User\ListUser\v1;
 
-use App\Controller\Web\ListUser\v1\Output\ListUserItemDTO;
-use App\Domain\Model\ListUserModel;
+use App\Controller\Web\User\ListUser\v1\Output\ListUserItemDTO;
+use App\Domain\Model\User\ListUserModel;
 use App\Domain\Service\UserService;
 
 readonly class Manager

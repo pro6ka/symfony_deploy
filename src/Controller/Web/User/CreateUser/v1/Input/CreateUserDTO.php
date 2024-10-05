@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\CreateUser\v1\Input;
+namespace App\Controller\Web\User\CreateUser\v1\Input;
 
 use App\Domain\ValueObject\UserRoleEnum;
 use Symfony\Component\Validator\Constraints as Assert;

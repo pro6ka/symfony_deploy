@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\ListUser\v1\Output;
+namespace App\Controller\Web\User\ListUser\v1\Output;
 
 use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;

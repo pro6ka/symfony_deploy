@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\UpdateUserName\v1\Output;
+namespace App\Controller\Web\User\UpdateUserName\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
 use App\Domain\ValueObject\UserRoleEnum;

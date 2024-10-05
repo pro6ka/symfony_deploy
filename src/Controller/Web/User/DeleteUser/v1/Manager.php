@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\DeleteUser\v1;
+namespace App\Controller\Web\User\DeleteUser\v1;
 
 use App\Domain\Entity\User;
 use App\Domain\Service\UserService;

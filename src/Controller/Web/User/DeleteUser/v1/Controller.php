@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\DeleteUser\v1;
+namespace App\Controller\Web\User\DeleteUser\v1;
 
 use App\Domain\Entity\User;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -10,8 +10,11 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
-class Controller
+readonly class Controller
 {
+    /**
+     * @param Manager $manager
+     */
     public function __construct(private Manager $manager)
     {
     }
@@ -22,7 +25,7 @@ class Controller
      * @return Response
      */
     #[Route(path: 'api/v1/user/{id}', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function delete(#[MapEntity(id: 'id')] User $user): Response
+    public function __invoke(#[MapEntity(id: 'id')] User $user): Response
     {
         $this->manager->deleteUser($user);
 
