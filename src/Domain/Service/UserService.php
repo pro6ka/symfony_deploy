@@ -2,10 +2,11 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use App\Domain\Model\CreateUserModel;
-use App\Domain\Model\ListUserModel;
-use App\Domain\Model\UpdateUserNameModel;
+use App\Domain\Model\User\CreateUserModel;
+use App\Domain\Model\User\ListUserModel;
+use App\Domain\Model\User\UpdateUserNameModel;
 use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
@@ -132,5 +133,18 @@ readonly class UserService
     public function updateUserName(UpdateUserNameModel $userNameModel): ?User
     {
         return $this->userRepository->updateUsername($userNameModel);
+    }
+
+    /**
+     * @param int $userId
+     * @param Group $group
+     *
+     * @return null|User
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function leaveGroup(int $userId, Group $group): ?User
+    {
+        return $this->userRepository->leaveGroup($userId, $group);
     }
 }

@@ -73,4 +73,15 @@ readonly class GroupService
     {
         return $this->groupRepository->addParticipant($group, $user);
     }
+
+    /**
+     * @param Group $group
+     * @param User $user
+     *
+     * @return Group
+     */
+    public function removeParticipant(Group $group, User $user): Group
+    {
+        return $this->groupRepository->removeParticipant($group, $user);
+    }
 }

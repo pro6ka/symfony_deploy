@@ -58,13 +58,27 @@ class GroupRepository extends AbstractRepository
      * @param Group $group
      * @param User $user
      *
-     * @return array
+     * @return Group
      */
-    public function addParticipant(Group $group, User $user): array
+    public function addParticipant(Group $group, User $user): Group
     {
         $group->addParticipant($user);
         $this->flush();
 
-        return $group->toArray();
+        return $group;
+    }
+
+    /**
+     * @param Group $group
+     * @param User $user
+     *
+     * @return Group
+     */
+    public function removeParticipant(Group $group, User $user): Group
+    {
+        $group->removeParticipant($user);
+        $this->flush();
+
+        return $group;
     }
 }

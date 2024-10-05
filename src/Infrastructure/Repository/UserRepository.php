@@ -4,7 +4,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use App\Domain\Model\UpdateUserNameModel;
+use App\Domain\Model\User\UpdateUserNameModel;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -142,6 +142,28 @@ class UserRepository extends AbstractRepository
             $user->setMiddleName($userNameModel->middleName);
         }
 
+        $this->flush();
+
+        return $user;
+    }
+
+    /**
+     * @param int $userId
+     * @param Group $group
+     *
+     * @return null|User
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function leaveGroup(int $userId, Group $group): ?User
+    {
+        $user = $this->entityManager->getRepository(User::class)
+            ->find($userId);
+        if (! $userId) {
+            return null;
+        }
+
+        $user->leaveGroup($group);
         $this->flush();
 
         return $user;
