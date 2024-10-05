@@ -2,7 +2,7 @@
 
 namespace App\Domain\Model;
 
-use App\Controller\Web\ListUser\v1\Output\ListUserItemDTO;
+use App\Controller\Web\User\ListUser\v1\Output\ListUserItemDTO;
 
 readonly class ListUserModel
 {
