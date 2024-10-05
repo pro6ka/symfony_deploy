@@ -6,7 +6,6 @@ use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
-use App\Domain\Service\UserService;
 use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +13,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]

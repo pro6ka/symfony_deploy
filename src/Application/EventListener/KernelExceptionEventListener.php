@@ -22,7 +22,7 @@ class KernelExceptionEventListener
         $exception = $event->getThrowable();
 
         if ($exception instanceof HttpExceptionInterface) {
-            $event->setResponse($this->getHttpResponse($exception->getMessage(), $exception->getStatusCode()));
+            $exception = $exception->getPrevious();
         }
 
         if ($exception instanceof ValidationFailedException) {
@@ -30,6 +30,11 @@ class KernelExceptionEventListener
         }
     }
 
+    /**
+     * @param ValidationFailedException $exception
+     *
+     * @return Response
+     */
     private function getValidationFailedResponse(ValidationFailedException $exception): Response
     {
         $response = [];

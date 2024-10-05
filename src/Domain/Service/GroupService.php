@@ -4,31 +4,47 @@ namespace App\Domain\Service;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\CreateGroupModel;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class GroupService
 {
     /**
      * @param GroupRepository $groupRepository
+     * @param ValidatorInterface $validator
      */
-    public function __construct(private GroupRepository $groupRepository)
-    {
+    public function __construct(
+        private GroupRepository $groupRepository,
+        private ValidatorInterface $validator
+    ) {
     }
 
     /**
-     * @param string $name
+     * @param CreateGroupModel $groupModel
      *
-     * @return array
+     * @return Group
      */
-    public function create(string $name): array
+    public function create(CreateGroupModel $groupModel): Group
     {
         $group = new Group();
-        $group->setName($name);
+        $group->setName($groupModel->name);
+        $group->setIsActive($groupModel->isActive);
+        $group->setWorkingFrom($groupModel->workingFrom);
+        $group->setWorkingTo($groupModel->workingTo);
+
+        $violations = $this->validator->validate($group);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($group, $violations);
+        }
+
         $this->groupRepository->create($group);
 
-        return $group->toArray();
+        return $group;
     }
 
     /**

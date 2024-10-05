@@ -4,7 +4,6 @@ namespace App\Domain\Entity;
 
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
-use App\Domain\Entity\Contracts\HasMetaIsActiveInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,15 +11,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use UnexpectedValueException;
 
 #[ORM\Table(name: '`group`')]
 #[ORM\Entity]
+#[UniqueEntity(fields: ['name'], message: 'This value {{ value }} of name is already used')]
 #[ORM\UniqueConstraint(name: 'group__name_unique', columns: ['name'])]
 class Group implements
     EntityInterface,
     HasMetaTimeStampInterface,
-    HasMetaIsActiveInterface,
     HasRevisionsInterface,
     HasFixationsInterface
 {
@@ -39,7 +39,7 @@ class Group implements
     private DateTime $workingFrom;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private DateTime $workingTo;
+    private ?DateTime $workingTo;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private DateTime $createdAt;
@@ -108,9 +108,17 @@ class Group implements
      *
      * @return void
      */
-    public function setIsActive(bool $isActive = false): void
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
     }
 
     /**
@@ -132,19 +140,19 @@ class Group implements
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getWorkingTo(): DateTime
+    public function getWorkingTo(): ?DateTime
     {
         return $this->workingTo;
     }
 
     /**
-     * @param DateTime $workingTo
+     * @param DateTime|null $workingTo
      *
      * @return void
      */
-    public function setWorkingTo(DateTime $workingTo): void
+    public function setWorkingTo(?DateTime $workingTo): void
     {
         $this->workingTo = $workingTo;
     }
