@@ -27,6 +27,12 @@ doctrine:
                 alias: App\Domain\Entity
         controller_resolver:
             auto_mapping: false
+        filters:
+          is_active_filter:
+            class: App\Application\Doctrine\Filters\IsActiveFilter
+            enabled: true
+            parameters:
+              checkIsActive: true
 
 when@test:
     doctrine:

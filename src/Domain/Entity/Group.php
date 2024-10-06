@@ -2,6 +2,7 @@
 
 namespace App\Domain\Entity;
 
+use App\Domain\Entity\Contracts\ActivatedInterface;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
@@ -22,7 +23,8 @@ class Group implements
     EntityInterface,
     HasMetaTimeStampInterface,
     HasRevisionsInterface,
-    HasFixationsInterface
+    HasFixationsInterface,
+    ActivatedInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
