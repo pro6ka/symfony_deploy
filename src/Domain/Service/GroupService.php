@@ -84,9 +84,9 @@ readonly class GroupService
      * @param Group $group
      * @param User $user
      *
-     * @return array
+     * @return Group
      */
-    public function addParticipant(Group $group, User $user): array
+    public function addParticipant(Group $group, User $user): Group
     {
         return $this->groupRepository->addParticipant($group, $user);
     }
