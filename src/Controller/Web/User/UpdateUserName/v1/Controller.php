@@ -27,7 +27,7 @@ readonly class Controller
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    #[Route(path: 'api/v1/user/update-name', methods: ['POST'])]
+    #[Route(path: 'api/v1/user/update-name', name: 'user_update_name', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] UserNameDTO $userNameDTO): JsonResponse
     {
         return new JsonResponse($this->manager->updateUserName($userNameDTO));

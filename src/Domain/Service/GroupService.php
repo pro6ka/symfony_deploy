@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\CreateGroupModel;
+use App\Domain\Model\Group\UpdateGroupNameModel;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -117,5 +118,28 @@ readonly class GroupService
     public function delete(int $groupId): void
     {
         $this->groupRepository->delete($groupId);
+    }
+
+    /**
+     * @param UpdateGroupNameModel $updateGroupNameModel
+     *
+     * @return Group|null
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function updateName(UpdateGroupNameModel $updateGroupNameModel): ?Group
+    {
+        $group = $this->groupRepository->find($updateGroupNameModel->id);
+        $group->setName($updateGroupNameModel->name);
+
+        $violations = $this->validator->validate($group);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($group, $violations);
+        }
+
+        $this->groupRepository->update();
+
+        return $group;
     }
 }

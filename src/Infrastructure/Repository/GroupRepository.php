@@ -4,6 +4,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\UpdateGroupNameModel;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use RuntimeException;
@@ -114,5 +115,13 @@ class GroupRepository extends AbstractRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->execute();
+    }
+
+    /**
+     * @return void
+     */
+    public function update(): void
+    {
+        $this->flush();
     }
 }
