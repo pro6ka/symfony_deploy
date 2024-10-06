@@ -21,12 +21,6 @@ class GroupRepository extends AbstractRepository
         return $this->store($group);
     }
 
-    public function findById(int $id)
-    {
-        dump($id);
-        die;
-    }
-
     /**
      * @param string $name
      *
