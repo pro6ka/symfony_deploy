@@ -20,6 +20,12 @@ class GroupRepository extends AbstractRepository
         return $this->store($group);
     }
 
+    public function findById(int $id)
+    {
+        dump($id);
+        die;
+    }
+
     /**
      * @param string $name
      *
@@ -88,5 +94,25 @@ class GroupRepository extends AbstractRepository
     public function getList(): array
     {
         return $this->entityManager->getRepository(Group::class)->findAll();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $filters = $this->entityManager->getFilters();
+
+        if ($filters->isEnabled('is_active_filter')) {
+            $filters->disable('is_active_filter');
+        }
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->delete(Group::class, 'g')
+            ->where($queryBuilder->expr()->eq('g.id', ':id'))
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
     }
 }

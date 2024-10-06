@@ -108,4 +108,14 @@ readonly class GroupService
     {
         return $this->groupRepository->getList();
     }
+
+    /**
+     * @param int $groupId
+     *
+     * @return void
+     */
+    public function delete(int $groupId): void
+    {
+        $this->groupRepository->delete($groupId);
+    }
 }
