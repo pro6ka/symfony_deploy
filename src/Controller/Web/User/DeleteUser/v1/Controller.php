@@ -24,7 +24,7 @@ readonly class Controller
      *
      * @return Response
      */
-    #[Route(path: 'api/v1/user/{id}', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[Route(path: 'api/v1/user/{id}', name: 'user_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function __invoke(#[MapEntity(id: 'id')] User $user): Response
     {
         $this->manager->deleteUser($user);
