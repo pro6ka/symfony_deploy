@@ -81,4 +81,12 @@ class GroupRepository extends AbstractRepository
 
         return $group;
     }
+
+    /**
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this->entityManager->getRepository(Group::class)->findAll();
+    }
 }

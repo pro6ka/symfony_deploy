@@ -58,7 +58,7 @@ readonly class GroupService
     {
         $group = $this->groupRepository->find($groupId);
 
-        if (! $group instanceof Group) {
+        if (!$group instanceof Group) {
             return null;
         }
 
@@ -99,5 +99,13 @@ readonly class GroupService
     public function removeParticipant(Group $group, User $user): Group
     {
         return $this->groupRepository->removeParticipant($group, $user);
+    }
+
+    /**
+     * @return array
+     */
+    public function showList(): array
+    {
+        return $this->groupRepository->getList();
     }
 }
