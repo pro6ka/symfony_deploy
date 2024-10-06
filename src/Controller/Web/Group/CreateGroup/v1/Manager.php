@@ -36,7 +36,7 @@ readonly class Manager
         return new CreatedGroupDTO(
             id: $group->getId(),
             name: $group->getName(),
-            isActive: $group->isActive(),
+            isActive: $group->getIsActive(),
             createdAt: $group->getCreatedAt(),
             updatedAt: $group->getUpdatedAt(),
             workingFrom: $group->getWorkingFrom(),

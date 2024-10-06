@@ -96,14 +96,6 @@ class Group implements
     }
 
     /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return $this->isActive;
-    }
-
-    /**
      * @param bool $isActive
      *
      * @return void
@@ -257,5 +249,23 @@ class Group implements
                 $this->participants->toArray()
             )
         ];
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    /**
+     * @param Collection $participants
+     *
+     * @return void
+     */
+    public function setParticipants(Collection $participants): void
+    {
+        $this->participants = $participants;
     }
 }
