@@ -6,6 +6,7 @@ use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
+use App\Domain\ValueObject\AppRolesEnum;
 use App\Domain\ValueObject\UserRoleEnum;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -62,6 +63,9 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
 
     #[ORM\Column(name: 'user_role', type: 'userRole', nullable: true)]
     private ?UserRoleEnum $userRole = null;
+
+    #[ORM\Column(name: 'app_roles', type: 'json', length: 1024, nullable: false, options: ['default' => '{}'])]
+    private array $appRoles = [];
 
     public function __construct()
     {
@@ -329,5 +333,25 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     public function setUserRole(?UserRoleEnum $userRole): void
     {
         $this->userRole = $userRole;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAppRoles(): array
+    {
+        $roles = $this->appRoles;
+        $roles[] = AppRolesEnum::ROLE_USER->value;
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array|string[] $appRoles
+     *
+     * @return void
+     */
+    public function setAppRoles(array $appRoles): void
+    {
+        $this->appRoles = $appRoles;
     }
 }
