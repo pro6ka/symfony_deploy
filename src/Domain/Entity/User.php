@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
@@ -21,7 +23,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: ['login'], message: 'This value {{ value }} is already used')]
 #[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
-class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface
+class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -66,6 +68,9 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
 
     #[ORM\Column(name: 'app_roles', type: 'json', length: 1024, nullable: false, options: ['default' => '{}'])]
     private array $appRoles = [];
+
+    #[ORM\Column(name: 'password', type: 'string', nullable: false, options: ['default' => ''])]
+    private string $password;
 
     public function __construct()
     {
@@ -353,5 +358,36 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     public function setAppRoles(array $appRoles): void
     {
         $this->appRoles = $appRoles;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles(): array
+    {
+        return $this->getAppRoles();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials(): void
+    {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->login;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword(): ?string
+    {
+        // TODO: Implement getPassword() method.
     }
 }
