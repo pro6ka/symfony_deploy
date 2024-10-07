@@ -26,7 +26,9 @@ readonly class CreatedUserDTO implements OutputDTOInterface
         public string $email,
         public DateTime $createdAt,
         public ?string $middleName = null,
-        public ?UserRoleEnum $userRole = null
+        public ?UserRoleEnum $userRole = null,
+        /** @var string[] $appRoles */
+        public array $appRoles = []
     ) {
     }
 }

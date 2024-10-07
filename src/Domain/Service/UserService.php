@@ -13,6 +13,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use RuntimeException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -26,6 +27,7 @@ readonly class UserService
      */
     public function __construct(
         private ValidatorInterface $validator,
+        private UserPasswordHasherInterface $userPasswordHasher,
         private UserRepository $userRepository
     ) {
     }
@@ -39,11 +41,13 @@ readonly class UserService
     {
         $user = new User();
         $user->setLogin($userModel->login);
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $userModel->password));
         $user->setFirstName($userModel->firstName);
         $user->setLastName($userModel->lastName);
         $user->setMiddleName($userModel->middleName);
         $user->setEmail($userModel->email);
         $user->setUserRole($userModel->userRole);
+        $user->setAppRoles($userModel->appRoles);
 
         $violations = $this->validator->validate($user);
 

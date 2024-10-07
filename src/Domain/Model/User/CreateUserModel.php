@@ -20,6 +20,8 @@ readonly class CreateUserModel
         #[Assert\Length(min: 1, max: 32)]
         public string $login,
         #[Assert\NotBlank]
+        public string $password,
+        #[Assert\NotBlank]
         #[Assert\Length(min: 1, max: 32)]
         public string $firstName,
         #[Assert\NotBlank]
@@ -32,7 +34,8 @@ readonly class CreateUserModel
         #[Assert\Length(min: 1, max: 32)]
         public ?string $middleName = null,
         #[Assert\Choice(callback: [UserRoleEnum::class, 'cases'])]
-        public ?UserRoleEnum $userRole = null
+        public ?UserRoleEnum $userRole = null,
+        public array $appRoles = []
     ) {
     }
 }

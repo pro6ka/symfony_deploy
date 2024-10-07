@@ -30,11 +30,13 @@ readonly class Manager
         $createUserModel = $this->modelFactory->makeModel(
             CreateUserModel::class,
             $createUserDTO->login,
+            $createUserDTO->password,
             $createUserDTO->firstName,
             $createUserDTO->lastName,
             $createUserDTO->email,
             $createUserDTO->middleName,
             $createUserDTO->userRole,
+            $createUserDTO->appRoles
         );
 
         $user = $this->userService->create($createUserModel);
@@ -47,7 +49,8 @@ readonly class Manager
             email: $user->getEmail(),
             createdAt: $user->getCreatedAt(),
             middleName: $user->getMiddleName(),
-            userRole: $user->getUserRole()
+            userRole: $user->getUserRole(),
+            appRoles: $user->getAppRoles()
         );
     }
 }

@@ -384,10 +384,22 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     }
 
     /**
-     * @inheritDoc
+     * Returns the hashed password used to authenticate the user.
+     *
+     * Usually on authentication, a plain-text password will be compared to this value.
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     *
+     * @return void
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 }
