@@ -12,6 +12,7 @@ use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Random\RandomException;
 use RuntimeException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
@@ -23,6 +24,7 @@ readonly class UserService
 
     /**
      * @param ValidatorInterface $validator
+     * @param UserPasswordHasherInterface $userPasswordHasher
      * @param UserRepository $userRepository
      */
     public function __construct(
@@ -150,5 +152,34 @@ readonly class UserService
     public function leaveGroup(int $userId, Group $group): ?User
     {
         return $this->userRepository->leaveGroup($userId, $group);
+    }
+
+    /**
+     * @param string $login
+     *
+     * @return null|User
+     */
+    public function findUserByLogin(string $login): ?User
+    {
+        $users = $this->userRepository->findUserByLogin($login);
+
+        return $users[0];
+    }
+
+    /**
+     * @param string $login
+     *
+     * @return null|string
+     * @throws RandomException
+     */
+    public function updateUserToken(string $login): ?string
+    {
+        $user = $this->findUserByLogin($login);
+
+        if ($user === null) {
+            return null;
+        }
+
+        return $this->userRepository->updateUserToken($user);
     }
 }

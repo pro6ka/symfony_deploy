@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Random\RandomException;
 use RuntimeException;
 
 class UserRepository extends AbstractRepository
@@ -167,5 +168,30 @@ class UserRepository extends AbstractRepository
         $this->flush();
 
         return $user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return string
+     * @throws RandomException
+     */
+    public function updateUserToken(User $user): string
+    {
+        $token = base64_encode(random_bytes(21));
+        $user->setToken($token);
+        $this->flush();
+
+        return $token;
+    }
+
+    /**
+     * @param string $login
+     *
+     * @return array
+     */
+    public function findUserByLogin(string $login): array
+    {
+        return $this->entityManager->getRepository(User::class)->findBy(['login' => $login]);
     }
 }
