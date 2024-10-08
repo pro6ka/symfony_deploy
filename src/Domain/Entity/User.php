@@ -72,6 +72,9 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     #[ORM\Column(name: 'password', type: 'string', nullable: false, options: ['default' => ''])]
     private string $password;
 
+    #[ORM\Column(name: 'token', type: 'string', length: 32, unique: true, nullable: true)]
+    private ?string $token = null;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
@@ -401,5 +404,23 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param null|string $token
+     *
+     * @return void
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
     }
 }
