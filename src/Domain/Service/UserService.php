@@ -182,4 +182,14 @@ readonly class UserService
 
         return $this->userRepository->updateUserToken($user);
     }
+
+    /**
+     * @param string $token
+     *
+     * @return null|User
+     */
+    public function findUserByToken(string $token): ?User
+    {
+        return $this->userRepository->findUserByToken($token);
+    }
 }

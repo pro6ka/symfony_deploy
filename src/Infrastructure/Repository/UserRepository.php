@@ -194,4 +194,17 @@ class UserRepository extends AbstractRepository
     {
         return $this->entityManager->getRepository(User::class)->findBy(['login' => $login]);
     }
+
+    /**
+     * @param string $token
+     *
+     * @return null|User
+     */
+    public function findUserByToken(string $token): ?User
+    {
+        /** @var User|null $user */
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['token' => $token]);
+
+        return $user;
+    }
 }
