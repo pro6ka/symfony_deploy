@@ -2,17 +2,17 @@
 
 namespace App\Controller\Exception;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnAuthorizedException extends Exception implements HttpComplaintExceptionInterface
+class AccessDeniedException extends \Exception implements HttpComplaintExceptionInterface
 {
+
     /**
      * @inheritDoc
      */
-   public function getHttpCode(): int
+    public function getHttpCode(): int
     {
-        return Response::HTTP_UNAUTHORIZED;
+        return Response::HTTP_FORBIDDEN;
     }
 
     /**
@@ -20,6 +20,6 @@ class UnAuthorizedException extends Exception implements HttpComplaintExceptionI
      */
     public function getHttpResponseBody(): string
     {
-        return 'Unauthorized';
+        return 'Access Denied';
     }
 }

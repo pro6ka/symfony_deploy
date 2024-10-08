@@ -3,6 +3,7 @@
 namespace App\Application\Security;
 
 use App\Domain\Service\UserService;
+use Random\RandomException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 readonly class AuthService
@@ -31,5 +32,16 @@ readonly class AuthService
         }
 
         return $this->passwordHasher->isPasswordValid($user, $password);
+    }
+
+    /**
+     * @param string $login
+     *
+     * @return null|string
+     * @throws RandomException
+     */
+    public function getToken(string $login): ?string
+    {
+        return $this->userService->updateUserToken($login);
     }
 }

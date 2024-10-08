@@ -12,5 +12,5 @@ interface HttpComplaintExceptionInterface
     /**
      * @return string
      */
-    public function getResponseBody(): string;
+    public function getHttpResponseBody(): string;
 }

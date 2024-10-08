@@ -2,6 +2,7 @@
 
 namespace App\Application\EventListener;
 
+use App\Controller\Exception\HttpComplaintExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -21,12 +22,16 @@ class KernelExceptionEventListener
     {
         $exception = $event->getThrowable();
 
-        if ($exception instanceof HttpExceptionInterface) {
-            $exception = $exception->getPrevious();
-        }
+        if ($exception instanceof HttpComplaintExceptionInterface) {
+            $event->setResponse($this->getHttpResponse($exception->getHttpResponseBody(), $exception->getHttpCode()));
+        } else {
+            if ($exception instanceof HttpExceptionInterface) {
+                $exception = $exception->getPrevious();
+            }
 
-        if ($exception instanceof ValidationFailedException) {
-            $event->setResponse($this->getValidationFailedResponse($exception));
+            if ($exception instanceof ValidationFailedException) {
+                $event->setResponse($this->getValidationFailedResponse($exception));
+            }
         }
     }
 
