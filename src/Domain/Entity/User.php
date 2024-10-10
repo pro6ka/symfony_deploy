@@ -72,7 +72,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     #[ORM\Column(name: 'password', type: 'string', nullable: false, options: ['default' => ''])]
     private string $password;
 
-    #[ORM\Column(name: 'token', type: 'string', length: 32, unique: true, nullable: true)]
+    #[ORM\Column(name: 'token', type: 'string', length: 255, unique: true, nullable: true)]
     private ?string $token = null;
 
     public function __construct()
