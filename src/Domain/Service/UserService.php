@@ -192,4 +192,13 @@ readonly class UserService
     {
         return $this->userRepository->findUserByToken($token);
     }
+
+    public function clearUserToken(string $login)
+    {
+        $user = $this->findUserByLogin($login);
+
+        if ($user !== null) {
+            $this->userRepository->clearUserToken($user);
+        }
+    }
 }

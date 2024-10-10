@@ -23,7 +23,8 @@ class JWTAuthenticator extends AbstractAuthenticator
      */
     public function __construct(
         private readonly JWTEncoderInterface $JWTEncoder
-    ) {}
+    ) {
+    }
 
     /**
      * @inheritDoc
@@ -48,7 +49,12 @@ class JWTAuthenticator extends AbstractAuthenticator
             throw new UnAuthorizedException();
         }
 
-        $tokenData = $this->JWTEncoder->decode($token);
+        try {
+            $tokenData = $this->JWTEncoder->decode($token);
+        } catch (JWTDecodeFailureException $e) {
+            $message = $e->getReason() === JWTDecodeFailureException::EXPIRED_TOKEN ? 'Expired token' : '';
+            throw new UnAuthorizedException($message);
+        }
 
         if (! isset($tokenData['username'])) {
             throw new UnAuthorizedException();

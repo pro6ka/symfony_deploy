@@ -20,6 +20,6 @@ class UnAuthorizedException extends Exception implements HttpComplaintExceptionI
      */
     public function getHttpResponseBody(): string
     {
-        return 'Unauthorized';
+        return empty($this->getMessage()) ? 'Unauthorized' : $this->getMessage();
     }
 }

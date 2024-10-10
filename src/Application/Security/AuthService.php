@@ -13,6 +13,8 @@ readonly class AuthService
     /**
      * @param UserService $userService
      * @param UserPasswordHasherInterface $passwordHasher
+     * @param JWTEncoderInterface $JWTEncoder
+     * @param int $tokenTTL
      */
     public function __construct(
         private UserService $userService,

@@ -5,6 +5,7 @@ namespace App\Controller\Web\GetToken\v1;
 use App\Application\Security\AuthService;
 use App\Controller\Exception\AccessDeniedException;
 use App\Controller\Exception\UnAuthorizedException;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Random\RandomException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +24,7 @@ readonly class Manager
      * @return string
      * @throws AccessDeniedException
      * @throws UnAuthorizedException
-     * @throws RandomException
+     * @throws JWTEncodeFailureException
      */
     public function getToken(Request $request): string
     {
