@@ -26,7 +26,7 @@ readonly class GroupBuildService
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addParticipant(int $groupId, int $userId): Group
+    public function addParticipant(int $groupId, int $userId): ?Group
     {
         $group = $this->groupService->find($groupId);
 
