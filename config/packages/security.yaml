@@ -35,7 +35,17 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+      # user route
+      - { route: user_leave_group, roles: [ROLE_STUDENT] }
+      - { route: user_update_name, roles: [ROLE_STUDENT, ROLE_TEACHER] }
+      - { route: user_show, roles: [ROLE_STUDENT, ROLE_TEACHER] }
+      - { route: user_list, roles: [ROLE_TEACHER] }
       - { path: ^/api/v[\d]+/user, roles: ROLE_ADMIN }
+      # group route
+      - { route: group_list, roles: ROLE_STUDENT }
+      - { route: group_show, roles: ROLE_STUDENT }
+      - { route: group_add_participant, roles: ROLE_TEACHER }
+      - { path: ^/api/v[\d]+/group, roles: ROLE_METHODOLOGIST }
     role_hierarchy:
       ROLE_USER:
         - ROLE_VIEW_WORKSHOP_LIST
