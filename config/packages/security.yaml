@@ -37,11 +37,28 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
       - { path: ^/api/v[\d]+/user, roles: ROLE_ADMIN }
     role_hierarchy:
+      ROLE_USER:
+        - ROLE_VIEW_WORKSHOP_LIST
+      ROLE_STUDENT:
+        - ROLE_USER
+        - ROLE_LEAVE_GROUP
+        - ROLE_START_WORKSHOP
+        - ROLE_WORKSHOP_STUDENT
+      ROLE_TEACHER:
+        - ROLE_USER
+        - ROLE_WORKSHOP_EDITOR
+        - ROLE_GROUP_ADD_PARTICIPANT
+        - ROLE_START_WORKSHOP
+        - ROLE_WORKSHOP_STUDENT
+      ROLE_METHODOLOGIST:
+        - ROLE_USER
+        - ROLE_GROUP_EDITOR
+        - ROLE_TEACHER
       ROLE_ADMIN:
-        - ROLE_VIEW
-        - ROLE_GET_LIST
-        - ROLE_EDIT
-        - ROLE_DELETE
+        - ROLE_USER
+        - ROLE_STUDENT
+        - ROLE_TEACHER
+        - ROLE_METHODOLOGIST
 
 when@test:
     security:
