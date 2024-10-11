@@ -29,6 +29,7 @@ readonly class Controller
      */
     #[Route(
         path: 'api/v1/group/{groupId}/remove-participant/{userId}',
+        name: 'group_remove_participant',
         requirements: ['groupId' => '\d+', 'userId' => '\d+'],
         methods: ['POST']
     )]

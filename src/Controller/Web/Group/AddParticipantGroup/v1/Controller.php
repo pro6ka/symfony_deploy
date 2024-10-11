@@ -29,6 +29,7 @@ readonly class Controller
      */
     #[Route(
         path: 'api/v1/group/{groupId}/add-participant/{userId}',
+        name: 'group_add_participant',
         requirements: ['groupId' => '\d+', 'userId' => '\d+'],
         methods: ['POST']
     )]
