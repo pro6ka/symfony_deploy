@@ -212,15 +212,4 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     {
         return ['title', 'description',];
     }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'description' => $this->getDescription(),
-            'author' => $this->getAuthor()->toArray(),
-            'exercises' => $this->getExercises()->toArray(),
-        ];
-    }
 }

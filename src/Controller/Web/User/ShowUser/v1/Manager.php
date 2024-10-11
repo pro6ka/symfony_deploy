@@ -8,6 +8,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
+    /**
+     * @param UserService $userService
+     */
     public function __construct(
         private UserService $userService
     ) {

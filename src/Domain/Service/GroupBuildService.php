@@ -2,6 +2,7 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Entity\Group;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
@@ -21,11 +22,11 @@ readonly class GroupBuildService
      * @param int $groupId
      * @param int $userId
      *
-     * @return null|array
+     * @return Group
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addParticipant(int $groupId, int $userId): ?array
+    public function addParticipant(int $groupId, int $userId): Group
     {
         $group = $this->groupService->find($groupId);
 

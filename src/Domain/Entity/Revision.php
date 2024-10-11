@@ -158,17 +158,4 @@ class Revision implements EntityInterface
     {
         $this->contentAfter = $contentAfter;
     }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'createdAt' => $this->createdAt,
-            'entityId' => $this->entityId,
-            'entityType' => $this->entityType,
-            'columnName' => $this->columnName,
-            'contentBefore' => $this->contentBefore,
-            'contentAfter' => $this->contentAfter,
-        ];
-    }
 }

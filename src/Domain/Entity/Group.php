@@ -209,9 +209,9 @@ class Group implements
     }
 
     /**
-     * @return PersistentCollection
+     * @return ArrayCollection|Collection
      */
-    public function getWorkshops(): PersistentCollection
+    public function getWorkshops(): ArrayCollection|Collection
     {
         return $this->workshops;
     }

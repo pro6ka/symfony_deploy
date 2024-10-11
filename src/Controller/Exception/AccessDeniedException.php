@@ -2,11 +2,11 @@
 
 namespace App\Controller\Exception;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class AccessDeniedException extends \Exception implements HttpComplaintExceptionInterface
+class AccessDeniedException extends Exception implements HttpComplaintExceptionInterface
 {
-
     /**
      * @inheritDoc
      */

@@ -2,17 +2,10 @@
 
 namespace App\Controller;
 
-use App\Domain\Entity\Group;
-use App\Domain\Entity\User;
-use App\Domain\Service\AnswerService;
-use App\Domain\Service\ExerciseService;
-use App\Domain\Service\FixationService;
 use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\QuestionService;
-use App\Domain\Service\RevisionService;
 use App\Domain\Service\UserService;
-use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
@@ -20,7 +13,6 @@ use Doctrine\ORM\OptimisticLockException;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,20 +24,14 @@ class GroupController extends AbstractController
      * @param GroupBuildService $groupBuildService
      * @param UserService $userService
      * @param WorkShopService $workShopService
-     * @param WorkshopBuildService $workshopBuildService
-     * @param ExerciseService $exerciseService
      * @param QuestionService $questionService
-     * @param AnswerService $answerService
      */
     public function __construct(
         private readonly GroupService $groupService,
         private readonly GroupBuildService $groupBuildService,
         private readonly UserService $userService,
         private readonly WorkShopService $workShopService,
-        private readonly WorkshopBuildService $workshopBuildService,
-        private readonly ExerciseService $exerciseService,
         private readonly QuestionService $questionService,
-        private readonly AnswerService $answerService
     ) {
     }
 
@@ -95,13 +81,11 @@ class GroupController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @throws ContainerExceptionInterface
      * @throws NonUniqueResultException
-     * @throws NotFoundExceptionInterface
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    #[Route('/group/rbowner')]
+    #[NoReturn] #[Route('/group/rbowner')]
     public function removeByOwner(): JsonResponse
     {
         $user = $this->userService->find(2);

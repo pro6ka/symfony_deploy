@@ -21,7 +21,8 @@ readonly class AuthService
         private UserPasswordHasherInterface $passwordHasher,
         private JWTEncoderInterface $JWTEncoder,
         private int $tokenTTL
-    ) {}
+    ) {
+    }
 
     /**
      * @param string $login

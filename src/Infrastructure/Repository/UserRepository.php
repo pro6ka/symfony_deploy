@@ -5,7 +5,6 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\User\UpdateUserNameModel;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -36,37 +35,6 @@ class UserRepository extends AbstractRepository
     }
 
     /**
-     * @param string $login
-     *
-     * @return null|User
-     * @throws RuntimeException
-     */
-    public function findByLogin(string $login): ?User
-    {
-        $criteria = new Criteria();
-        $criteria->andWhere(Criteria::expr()?->eq('login', $login));
-        $repository =  $this->entityManager->getRepository(User::class);
-
-        return $repository->matching($criteria)->first();
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return array
-     */
-    public function findByEmail(string $email): array
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-        $queryBuilder->select('u')
-            ->from(User::class, 'u')
-            ->andWhere($queryBuilder->expr()->eq('u.email', ':email'))
-            ->setParameter('email', $email);
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
      * @param int $id
      *
      * @return null|User
@@ -92,13 +60,12 @@ class UserRepository extends AbstractRepository
     }
 
     /**
-     * @param int $page
      * @param int $pageSize
      * @param int $firstResult
      *
      * @return Paginator
      */
-    public function getList(int $page, int $pageSize, int $firstResult = 0): Paginator
+    public function getList(int $pageSize, int $firstResult = 0): Paginator
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select('u')

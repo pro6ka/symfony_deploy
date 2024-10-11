@@ -3,6 +3,7 @@
 namespace App\Controller\Web\User\ListUser\v1;
 
 use App\Controller\Web\User\ListUser\v1\Output\ListUserItemDTO;
+use App\Domain\Model\PaginationModel;
 use App\Domain\Model\User\ListUserModel;
 use App\Domain\Service\UserService;
 
@@ -42,8 +43,11 @@ readonly class Manager
 
         return new ListUserModel(
             userList: $userList,
-            total: $paginator->count(),
-            page: $page
+            pagination: new PaginationModel(
+                total: $paginator->count(),
+                page: $page,
+                pageSize: ListUserMOdel::PAGE_SIZE
+            )
         );
     }
 }

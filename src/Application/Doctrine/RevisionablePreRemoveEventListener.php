@@ -4,11 +4,9 @@ namespace App\Application\Doctrine;
 
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
-use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Service\FixationService;
 use App\Domain\Service\RevisionService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Events;
 
@@ -26,7 +24,7 @@ readonly class RevisionablePreRemoveEventListener
     }
 
     /**
-     * @param PostRemoveEventArgs $event
+     * @param PreRemoveEventArgs $event
      *
      * @return void
      */

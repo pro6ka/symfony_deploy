@@ -17,7 +17,8 @@ readonly class Manager
     public function __construct(
         private AuthService $authService,
         private UserService $userService
-    ) {}
+    ) {
+    }
 
     /**
      * @param UserInterface $user

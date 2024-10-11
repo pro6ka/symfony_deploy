@@ -13,7 +13,6 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Random\RandomException;
-use RuntimeException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -102,7 +101,6 @@ readonly class UserService
     public function getList(int $page): Paginator
     {
         return $this->userRepository->getList(
-            page: $page,
             pageSize: ListUserModel::PAGE_SIZE,
             firstResult: $this->countPageSize(page: $page, pageSize: ListUserModel::PAGE_SIZE)
         );

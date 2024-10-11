@@ -2,7 +2,6 @@
 
 namespace App\Controller\Web\Group\DeleteGroup\v1;
 
-use App\Domain\Entity\Group;
 use App\Domain\Service\GroupService;
 
 readonly class Manager

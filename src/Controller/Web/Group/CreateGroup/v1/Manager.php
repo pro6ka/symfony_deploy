@@ -12,6 +12,10 @@ use Exception;
 
 readonly class Manager
 {
+    /**
+     * @param ModelFactory $modelFactory
+     * @param GroupService $groupService
+     */
     public function __construct(
         private ModelFactory $modelFactory,
         private GroupService $groupService

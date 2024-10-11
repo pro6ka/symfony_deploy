@@ -11,6 +11,9 @@ readonly class AuthUser implements UserInterface
     /** @var array|string[] */
     private array $roles;
 
+    /**
+     * @param array $credentials
+     */
     public function __construct(array $credentials)
     {
         $this->username = $credentials['username'];

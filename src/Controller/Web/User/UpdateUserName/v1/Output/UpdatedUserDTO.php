@@ -8,7 +8,6 @@ use DateTime;
 
 readonly class UpdatedUserDTO implements OutputDTOInterface
 {
-
     /**
      * @param int $id
      * @param string $login

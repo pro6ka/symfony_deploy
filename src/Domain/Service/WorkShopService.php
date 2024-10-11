@@ -35,7 +35,7 @@ readonly class WorkShopService
         $revisions = array_reduce(
             $fixations->toArray(),
             function ($carry, Fixation $fixation) {
-                $carry[$fixation->getRevision()->getEntityId()] = $fixation->getRevision();
+                $carry[$fixation->getRevisions()->getEntityId()] = $fixation->getRevision();
                 return $carry;
             },
         );

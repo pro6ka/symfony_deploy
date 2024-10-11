@@ -7,7 +7,6 @@ use App\Domain\Service\RevisionService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[AsDoctrineListener(event: Events::preUpdate)]
 readonly class RevisionablePreUpdateEventListener

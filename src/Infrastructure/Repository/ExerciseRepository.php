@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Exercise;
-use App\Domain\Entity\WorkShop;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 

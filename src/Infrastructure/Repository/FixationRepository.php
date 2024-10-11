@@ -110,7 +110,7 @@ class FixationRepository extends AbstractRepository
         $sql = <<<SQL
 select f.id
 from public.fixation f
-    right join public.fixation_{$tableName} fu on fu.fixation_id=f.id
+    right join public.fixation_ . $tableName fu on fu.fixation_id=f.id
     left join public.$tableName u on fu.{$tableName}_id=u.id
 where fu.{$tableName}_id=:{$tableName}Id
 SQL;

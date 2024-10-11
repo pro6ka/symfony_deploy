@@ -65,4 +65,14 @@ class FixationGroup
     {
         $this->fixation = $fixation;
     }
+
+    /**
+     * @param null|int $id
+     *
+     * @return void
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
 }

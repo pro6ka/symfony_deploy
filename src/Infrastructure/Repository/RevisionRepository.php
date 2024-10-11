@@ -5,7 +5,6 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
-use Doctrine\ORM\NonUniqueResultException;
 
 class RevisionRepository extends AbstractRepository
 {

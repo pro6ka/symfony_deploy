@@ -16,6 +16,7 @@ use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use UnexpectedValueException;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity]
@@ -23,7 +24,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['login'], message: 'This value {{ value }} is already used')]
 #[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
-class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsInterface, HasRevisionsInterface, UserInterface, PasswordAuthenticatedUserInterface
+class User implements
+    EntityInterface,
+    HasMetaTimeStampInterface,
+    HasFixationsInterface,
+    HasRevisionsInterface,
+    UserInterface,
+    PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -267,7 +274,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
      * @param WorkShop $workShop
      *
      * @return void
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function addCreatedWorkSHop(WorkShop $workShop): void
     {
@@ -277,9 +284,9 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
     }
 
     /**
-     * @return PersistentCollection
+     * @return ArrayCollection|Collection
      */
-    public function getParticipatedWorkShops(): PersistentCollection
+    public function getParticipatedWorkShops(): ArrayCollection|Collection
     {
         return $this->participatedWorkShops;
     }
@@ -298,7 +305,7 @@ class User implements EntityInterface, HasMetaTimeStampInterface, HasFixationsIn
      * @param WorkShop $workShop
      *
      * @return void
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function addParticipatedWorkShop(WorkShop $workShop): void
     {

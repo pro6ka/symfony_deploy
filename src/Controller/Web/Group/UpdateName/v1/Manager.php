@@ -20,7 +20,8 @@ readonly class Manager
     public function __construct(
         private ModelFactory $modelFactory,
         private GroupService $groupService
-    ) {}
+    ) {
+    }
 
     /**
      * @param int $id
@@ -39,7 +40,7 @@ readonly class Manager
         ));
 
         if (! $group) {
-            throw new NotFoundHttpException(sprintf('Group id: %d not found', $updateGroupNameDTO->id));
+            throw new NotFoundHttpException(sprintf('Group id: %d not found', $id));
         }
 
         return new UpdatedGroupDTO(

@@ -9,11 +9,13 @@ readonly class CreateUserModel
 {
     /**
      * @param string $login
+     * @param string $password
      * @param string $firstName
      * @param string $lastName
      * @param string $email
      * @param null|string $middleName
      * @param null|UserRoleEnum $userRole
+     * @param array $appRoles
      */
     public function __construct(
         #[Assert\NotBlank]

@@ -21,7 +21,8 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
      */
     public function __construct(
         private readonly UserService $userService
-    ) {}
+    ) {
+    }
 
     /**
      * @inheritDoc

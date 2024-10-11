@@ -3,7 +3,6 @@
 namespace App\Controller\Web\Group\CreateGroup\v1\Input;
 
 use App\Domain\Model\Group\CreateGroupModel;
-use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 readonly class CreateGroupDTO

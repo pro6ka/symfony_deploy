@@ -12,7 +12,6 @@ use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Infrastructure\Repository\FixationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use RuntimeException;
 
 readonly class FixationService
@@ -145,7 +144,7 @@ readonly class FixationService
     }
 
     /**
-     * @param Collection $entityCollection
+     * @param FixableInterface $entity
      * @param int $userId
      * @param int $groupId
      *

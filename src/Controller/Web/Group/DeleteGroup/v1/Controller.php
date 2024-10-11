@@ -2,8 +2,6 @@
 
 namespace App\Controller\Web\Group\DeleteGroup\v1;
 
-use App\Domain\Entity\Group;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +18,7 @@ readonly class Controller
     }
 
     /**
-     * @param Group $group
+     * @param int $id
      *
      * @return JsonResponse
      */

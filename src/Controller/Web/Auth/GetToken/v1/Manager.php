@@ -6,6 +6,7 @@ use App\Application\Security\AuthService;
 use App\Controller\Exception\AccessDeniedException;
 use App\Controller\Exception\UnAuthorizedException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
+use Random\RandomException;
 use Symfony\Component\HttpFoundation\Request;
 
 readonly class Manager
@@ -15,7 +16,8 @@ readonly class Manager
      */
     public function __construct(
         private AuthService $authService
-    ) {}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -23,7 +25,7 @@ readonly class Manager
      * @return string
      * @throws AccessDeniedException
      * @throws UnAuthorizedException
-     * @throws JWTEncodeFailureException
+     * @throws JWTEncodeFailureException|RandomException
      */
     public function getToken(Request $request): string
     {

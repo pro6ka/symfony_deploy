@@ -3,6 +3,7 @@
 namespace App\Domain\Model\User;
 
 use App\Controller\Web\User\ListUser\v1\Output\ListUserItemDTO;
+use App\Domain\Model\PaginationModel;
 
 readonly class ListUserModel
 {
@@ -10,15 +11,11 @@ readonly class ListUserModel
 
     /**
      * @param array|ListUserItemDTO[] $userList
-     * @param int $total
-     * @param int $page
-     * @param int $pageSize
+     * @param PaginationModel $pagination
      */
     public function __construct(
         public array $userList,
-        public int $total,
-        public int $page,
-        public int $pageSize = self::PAGE_SIZE
+        public PaginationModel $pagination
     ) {
     }
 }

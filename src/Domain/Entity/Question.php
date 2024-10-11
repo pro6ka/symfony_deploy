@@ -167,6 +167,11 @@ class Question implements EntityInterface, HasMetaTimeStampInterface, Revisionab
         $this->answers = $answers;
     }
 
+    /**
+     * @param Answer $answer
+     *
+     * @return void
+     */
     public function addAnswer(Answer $answer): void
     {
         if (! $this->answers->contains($answer)) {

@@ -10,7 +10,7 @@ class UnAuthorizedException extends Exception implements HttpComplaintExceptionI
     /**
      * @inheritDoc
      */
-   public function getHttpCode(): int
+    public function getHttpCode(): int
     {
         return Response::HTTP_UNAUTHORIZED;
     }

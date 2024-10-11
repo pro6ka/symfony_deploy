@@ -15,7 +15,8 @@ class Controller extends AbstractController
      */
     public function __construct(
         private readonly Manager $manager
-    ) {}
+    ) {
+    }
 
     /**
      * @return JsonResponse

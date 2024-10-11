@@ -6,6 +6,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UpdateUserNameModel
 {
+    /**
+     * @param int $id
+     * @param null|string $firstName
+     * @param null|string $lastName
+     * @param null|string $middleName
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]

@@ -20,7 +20,8 @@ readonly class Controller
      */
     public function __construct(
         private Manager $manager
-    ) {}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -28,7 +29,7 @@ readonly class Controller
      * @return Response
      * @throws AccessDeniedException
      * @throws UnAuthorizedException
-     * @throws JWTEncodeFailureException
+     * @throws JWTEncodeFailureException|RandomException
      */
     #[Route(path: 'api/v1/get-token', methods: ['POST'])]
     public function __invoke(Request $request): Response

@@ -9,9 +9,13 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class KernelViewEventListener
+readonly class KernelViewEventListener
 {
-    public function __construct(private readonly SerializerInterface $serializer) {
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(private SerializerInterface $serializer)
+    {
     }
 
     /**
