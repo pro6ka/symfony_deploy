@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Controller\Web\GetToken\v1;
+namespace App\Controller\Web\Auth\GetToken\v1;
 
 use App\Application\Security\AuthService;
 use App\Controller\Exception\AccessDeniedException;
 use App\Controller\Exception\UnAuthorizedException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
-use Random\RandomException;
 use Symfony\Component\HttpFoundation\Request;
 
 readonly class Manager

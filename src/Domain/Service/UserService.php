@@ -73,17 +73,6 @@ readonly class UserService
     }
 
     /**
-     * @param string $login
-     *
-     * @return array
-     * @throws RuntimeException
-     */
-    public function findByLogin(string $login): array
-    {
-        return $this->userRepository->findByLogin($login)?->toArray() ?? [];
-    }
-
-    /**
      * @param int $id
      *
      * @return null|User
@@ -91,16 +80,6 @@ readonly class UserService
     public function findById(int $id): ?User
     {
         return $this->userRepository->findById($id);
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return array
-     */
-    public function findByEmail(string $email): array
-    {
-        return $this->userRepository->findByEmail($email);
     }
 
     /**
@@ -193,7 +172,12 @@ readonly class UserService
         return $this->userRepository->findUserByToken($token);
     }
 
-    public function clearUserToken(string $login)
+    /**
+     * @param string $login
+     *
+     * @return void
+     */
+    public function clearUserToken(string $login): void
     {
         $user = $this->findUserByLogin($login);
 

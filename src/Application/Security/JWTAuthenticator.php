@@ -37,7 +37,6 @@ class JWTAuthenticator extends AbstractAuthenticator
     /**
      * @inheritDoc
      * @throws AuthenticationException
-     * @throws JWTDecodeFailureException
      * @throws UnAuthorizedException
      */
     public function authenticate(Request $request): Passport

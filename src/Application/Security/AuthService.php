@@ -44,15 +44,17 @@ readonly class AuthService
      * @param string $login
      *
      * @return null|string
-     * @throws JWTEncodeFailureException
+     * @throws JWTEncodeFailureException|RandomException
      */
     public function getToken(string $login): ?string
     {
         $user = $this->userService->findUserByLogin($login);
+        $this->userService->updateUserToken($login);
         $tokenData = [
             'username' => $login,
             'roles' => $user?->getRoles() ?? [],
             'exp' => time() + $this->tokenTTL,
+            'refresh_token' => $user->getToken(),
         ];
 
         return $this->JWTEncoder->encode($tokenData);

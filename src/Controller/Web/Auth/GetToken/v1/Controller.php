@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controller\Web\GetToken\v1;
+namespace App\Controller\Web\Auth\GetToken\v1;
 
 use App\Controller\Exception\AccessDeniedException;
 use App\Controller\Exception\UnAuthorizedException;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
 use Random\RandomException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 readonly class Controller
 {
+    /**
+     * @param Manager $manager
+     */
     public function __construct(
         private Manager $manager
     ) {}
@@ -24,7 +28,7 @@ readonly class Controller
      * @return Response
      * @throws AccessDeniedException
      * @throws UnAuthorizedException
-     * @throws RandomException
+     * @throws JWTEncodeFailureException
      */
     #[Route(path: 'api/v1/get-token', methods: ['POST'])]
     public function __invoke(Request $request): Response
