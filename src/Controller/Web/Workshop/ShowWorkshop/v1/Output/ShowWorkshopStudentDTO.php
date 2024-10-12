@@ -2,7 +2,9 @@
 
 namespace App\Controller\Web\Workshop\ShowWorkshop\v1\Output;
 
-readonly class ShowWorkshopStudentDTO
+use App\Controller\DTO\OutputDTOInterface;
+
+readonly class ShowWorkshopStudentDTO implements OutputDTOInterface
 {
     /**
      * @param int $id
