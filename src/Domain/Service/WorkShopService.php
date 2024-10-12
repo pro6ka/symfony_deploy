@@ -7,6 +7,7 @@ use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Workshop\CreateWorkshopModel;
+use App\Domain\Model\Workshop\EditWorkshopModel;
 use App\Domain\Model\Workshop\ListWorkshopModel;
 use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\WorkShopRepository;
@@ -125,5 +126,34 @@ readonly class WorkShopService
             pageSize: ListWorkshopModel::PAGE_SIZE,
             firstResult: $this->countPageSize(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE,)
         );
+    }
+
+    /**
+     * @param EditWorkshopModel $editWorkshopModel
+     *
+     * @return null|WorkShop
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function editWorkshop(EditWorkshopModel $editWorkshopModel): ?WorkShop
+    {
+        $workshop = $this->workShopRepository->findById($editWorkshopModel->id);
+
+        if (! $workshop) {
+            return null;
+        }
+
+        $workshop->setTitle($editWorkshopModel->title === null ? $workshop->getTitle() : $editWorkshopModel->title);
+        $workshop->setDescription($editWorkshopModel->description === null
+            ? $workshop->getDescription()
+            : $editWorkshopModel->description);
+
+        $violations = $this->validator->validate($workshop);
+
+        if ($violations->count() > 0) {
+            $this->workShopRepository->update();
+        }
+
+        return $workshop;
     }
 }

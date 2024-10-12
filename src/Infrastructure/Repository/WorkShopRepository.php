@@ -110,4 +110,12 @@ class WorkShopRepository extends AbstractRepository
 
         return new Paginator($queryBuilder->getQuery());
     }
+
+    /**
+     * @return void
+     */
+    public function update(): void
+    {
+        $this->flush();
+    }
 }
