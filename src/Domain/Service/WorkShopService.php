@@ -156,4 +156,14 @@ readonly class WorkShopService
 
         return $workshop;
     }
+
+    /**
+     * @param WorkShop $workShop
+     *
+     * @return void
+     */
+    public function deleteWorkshop(WorkShop $workShop): void
+    {
+        $this->workShopRepository->removeWorkshop($workShop);
+    }
 }

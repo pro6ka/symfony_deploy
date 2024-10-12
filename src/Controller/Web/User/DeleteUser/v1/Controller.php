@@ -22,10 +22,10 @@ readonly class Controller
     /**
      * @param User $user
      *
-     * @return Response
+     * @return JsonResponse
      */
     #[Route(path: 'api/v1/user/{id}', name: 'user_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function __invoke(#[MapEntity(id: 'id')] User $user): Response
+    public function __invoke(#[MapEntity(id: 'id')] User $user): JsonResponse
     {
         $this->manager->deleteUser($user);
 

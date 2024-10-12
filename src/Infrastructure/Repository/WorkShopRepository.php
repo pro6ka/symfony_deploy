@@ -118,4 +118,14 @@ class WorkShopRepository extends AbstractRepository
     {
         $this->flush();
     }
+
+    /**
+     * @param WorkShop $workshop
+     *
+     * @return void
+     */
+    public function removeWorkshop(WorkShop $workshop): void
+    {
+        $this->remove($workshop);
+    }
 }
