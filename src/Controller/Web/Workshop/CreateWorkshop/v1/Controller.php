@@ -13,11 +13,20 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[AsController]
 readonly class Controller
 {
+    /**
+     * @param Manager $manager
+     */
     public function __construct(
         private Manager $manager
     ) {
     }
 
+    /**
+     * @param CreateWorkshopDTO $createWorkshopDTO
+     * @param UserInterface $authUser
+     *
+     * @return JsonResponse
+     */
     #[Route(path: 'api/v1/workshop', name: 'workshop_create', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload] CreateWorkshopDTO $createWorkshopDTO,

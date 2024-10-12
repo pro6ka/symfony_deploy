@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 readonly class WorkShopService
 {
     /**
+     * @param ValidatorInterface $validator
+     * @param UserService $userService
      * @param FixationService $fixationService
      * @param WorkShopRepository $workShopRepository
      */
@@ -28,7 +30,12 @@ readonly class WorkShopService
     ) {
     }
 
-    public function create(CreateWorkshopModel $createWorkshopModel)
+    /**
+     * @param CreateWorkshopModel $createWorkshopModel
+     *
+     * @return WorkShop
+     */
+    public function create(CreateWorkshopModel $createWorkshopModel): WorkShop
     {
         $author = $this->userService->findUserByLogin($createWorkshopModel->authorIdentifier);
         $workshop = new WorkShop();

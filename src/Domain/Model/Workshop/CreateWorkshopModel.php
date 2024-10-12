@@ -9,7 +9,7 @@ readonly class CreateWorkshopModel
     /**
      * @param string $title
      * @param string $description
-     * @param int $authorIdentifier
+     * @param string $authorIdentifier
      */
     public function __construct(
         #[Assert\Length(min: 1, max: 100)]

@@ -13,13 +13,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 readonly class Manager
 {
+    /**
+     * @param ModelFactory $modelFactory
+     * @param WorkShopService $workShopService
+     */
     public function __construct(
         private ModelFactory $modelFactory,
         private WorkShopService $workShopService,
     ) {
     }
 
-    public function createWorkshop(CreateWorkshopDTO $createWorkshopDTO, UserInterface $authUser)
+    /**
+     * @param CreateWorkshopDTO $createWorkshopDTO
+     * @param UserInterface $authUser
+     *
+     * @return CreatedWorkshopDTO
+     */
+    public function createWorkshop(CreateWorkshopDTO $createWorkshopDTO, UserInterface $authUser): CreatedWorkshopDTO
     {
         $createWorkshopModel = $this->modelFactory->makeModel(
             CreateWorkshopModel::class,
