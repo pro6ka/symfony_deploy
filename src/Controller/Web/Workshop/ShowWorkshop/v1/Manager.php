@@ -2,7 +2,7 @@
 
 namespace App\Controller\Web\Workshop\ShowWorkshop\v1;
 
-use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopAuthorDTO;
+use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ListWorkshopAuthorDTO;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTO;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTOInterface;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopForTeacherDTO;
@@ -64,7 +64,7 @@ readonly class Manager
                     description: $workshop->getDescription(),
                     createdAt: $workshop->getCreatedAt(),
                     updatedAt: $workshop->getUpdatedAt(),
-                    author: new ShowWorkshopAuthorDTO(
+                    author: new ListWorkshopAuthorDTO(
                         id: $workshop->getAuthor()->getId(),
                         firstName: $workshop->getAuthor()->getFirstName(),
                         lastName: $workshop->getAuthor()->getLastName()
@@ -78,7 +78,7 @@ readonly class Manager
                 description: $workshop->getDescription(),
                 createdAt: $workshop->getCreatedAt(),
                 updatedAt: $workshop->getUpdatedAt(),
-                author: new ShowWorkshopAuthorDTO(
+                author: new ListWorkshopAuthorDTO(
                     id: $workshop->getAuthor()->getId(),
                     firstName: $workshop->getAuthor()->getFirstName(),
                     lastName: $workshop->getAuthor()->getLastName()

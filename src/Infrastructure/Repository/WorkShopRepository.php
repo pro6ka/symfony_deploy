@@ -10,6 +10,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class WorkShopRepository extends AbstractRepository
 {
@@ -90,5 +91,23 @@ class WorkShopRepository extends AbstractRepository
     {
         return $this->entityManager->getRepository(WorkShop::class)
             ->find($id);
+    }
+
+    /**
+     * @param int $pageSize
+     * @param int $firstResult
+     *
+     * @return Paginator
+     */
+    public function getList(int $pageSize, int $firstResult = 0): Paginator
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('w')
+            ->from(WorkShop::class, 'w')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($pageSize)
+            ;
+
+        return new Paginator($queryBuilder->getQuery());
     }
 }

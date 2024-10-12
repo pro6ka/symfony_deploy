@@ -13,7 +13,7 @@ readonly class ShowWorkshopForTeacherDTO implements OutputDTOInterface, ShowWork
      * @param string $description
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
-     * @param ShowWorkshopAuthorDTO $author
+     * @param ListWorkshopAuthorDTO $author
      * @param array $students
      */
     public function __construct(
@@ -22,7 +22,7 @@ readonly class ShowWorkshopForTeacherDTO implements OutputDTOInterface, ShowWork
         public string $description,
         public DateTime $createdAt,
         public DateTime $updatedAt,
-        public ShowWorkshopAuthorDTO $author,
+        public ListWorkshopAuthorDTO $author,
         /** @var array|ShowWOrkshopStudentDTO[] */
         public array $students,
     ) {

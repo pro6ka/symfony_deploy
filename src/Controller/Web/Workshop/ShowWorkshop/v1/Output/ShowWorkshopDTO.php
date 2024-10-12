@@ -13,7 +13,7 @@ readonly class ShowWorkshopDTO implements OutputDTOInterface, ShowWorkshopDTOInt
      * @param string $description
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
-     * @param ShowWorkshopAuthorDTO $author
+     * @param ListWorkshopAuthorDTO $author
      */
     public function __construct(
         public int $id,
@@ -21,7 +21,7 @@ readonly class ShowWorkshopDTO implements OutputDTOInterface, ShowWorkshopDTOInt
         public string $description,
         public DateTime $createdAt,
         public DateTime $updatedAt,
-        public ShowWorkshopAuthorDTO $author
+        public ListWorkshopAuthorDTO $author
     ) {
     }
 }

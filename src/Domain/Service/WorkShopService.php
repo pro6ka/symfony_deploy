@@ -7,15 +7,20 @@ use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Workshop\CreateWorkshopModel;
+use App\Domain\Model\Workshop\ListWorkshopModel;
+use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class WorkShopService
 {
+    use PaginationTrait;
+
     /**
      * @param ValidatorInterface $validator
      * @param UserService $userService
@@ -107,5 +112,18 @@ readonly class WorkShopService
     public function findForUserById(int $id, User $user): ?WorkShop
     {
         return $this->workShopRepository->findForUserById($id, $user);
+    }
+
+    /**
+     * @param int $page
+     *
+     * @return Paginator
+     */
+    public function getList(int $page = 1): Paginator
+    {
+        return $this->workShopRepository->getList(
+            pageSize: ListWorkshopModel::PAGE_SIZE,
+            firstResult: $this->countPageSize(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE,)
+        );
     }
 }
