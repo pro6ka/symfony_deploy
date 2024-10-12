@@ -39,9 +39,6 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'createdWorkShops')]
     private User $author;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatedWorkShops')]
-    private Collection $students;
-
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
     private Collection $exercises;
 
@@ -214,23 +211,5 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     public function revisionableFields(): array
     {
         return ['title', 'description',];
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getStudents(): Collection
-    {
-        return $this->students;
-    }
-
-    /**
-     * @param Collection $students
-     *
-     * @return void
-     */
-    public function setStudents(Collection $students): void
-    {
-        $this->students = $students;
     }
 }
