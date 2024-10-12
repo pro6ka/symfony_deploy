@@ -176,9 +176,9 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getGroupsParticipants(): ArrayCollection
+    public function getGroupsParticipants(): Collection
     {
         return $this->groupsParticipants;
     }
@@ -188,7 +188,7 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
      *
      * @return void
      */
-    public function setGroupsParticipants(ArrayCollection $groupsParticipants): void
+    public function setGroupsParticipants(Collection $groupsParticipants): void
     {
         $this->groupsParticipants = $groupsParticipants;
     }
