@@ -20,7 +20,7 @@ readonly class Controller
     /**
      * @return JsonResponse
      */
-    #[Route(path: 'api/v1/group', name: 'group_list', requirements: ['id' => '\d+'], methods: ['GET']),]
+    #[Route(path: 'api/v1/group', name: 'group_list', methods: ['GET']),]
     public function __invoke(): JsonResponse
     {
         return new JsonResponse($this->manager->showList());
