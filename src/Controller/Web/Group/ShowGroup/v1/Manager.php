@@ -29,7 +29,7 @@ readonly class Manager
      */
     public function show(int $groupId): ShowGroupDTO
     {
-        if ($group = $this->groupService->find($groupId)) {
+        if ($group = $this->groupService->findGroupById($groupId)) {
             return new ShowGroupDTO(
                 id: $group->getId(),
                 name: $group->getName(),

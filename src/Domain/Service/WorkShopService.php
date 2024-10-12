@@ -3,6 +3,7 @@
 namespace App\Domain\Service;
 
 use App\Domain\Entity\Fixation;
+use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
@@ -98,7 +99,7 @@ readonly class WorkShopService
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findById(int $workshopId): ?WorkShop
+    public function findWorkshopById(int $workshopId): ?WorkShop
     {
         return $this->workShopRepository->findById($workshopId);
     }
@@ -165,5 +166,27 @@ readonly class WorkShopService
     public function deleteWorkshop(WorkShop $workShop): void
     {
         $this->workShopRepository->removeWorkshop($workShop);
+    }
+
+    /**
+     * @param WorkShop $workShop
+     * @param Group $group
+     *
+     * @return WorkShop
+     */
+    public function addWorkshopParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
+    {
+        return $this->workShopRepository->addParticipantsGroup($workShop, $group);
+    }
+
+    /**
+     * @param WorkShop $workshop
+     * @param Group $group
+     *
+     * @return WorkShop
+     */
+    public function removeWorkshopParticipantsGroup(WorkShop $workshop, Group $group): WorkShop
+    {
+        return $this->workShopRepository->removeParticipantsGroup($workshop, $group);
     }
 }

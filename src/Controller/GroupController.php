@@ -89,7 +89,7 @@ class GroupController extends AbstractController
     public function removeByOwner(): JsonResponse
     {
         $user = $this->userService->find(2);
-        $group = $this->groupService->find(2);
+        $group = $this->groupService->findGroupById(2);
         /**
          * start workshop
         $group = $this->groupService->find(2);
@@ -140,7 +140,7 @@ class GroupController extends AbstractController
             question: $question
         );
         */
-        $workshop = $this->workShopService->findById(3);
+        $workshop = $this->workShopService->findWorkshopById(3);
         /**
          * start sixth workshop
          *

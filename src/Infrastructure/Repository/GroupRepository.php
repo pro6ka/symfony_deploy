@@ -38,7 +38,7 @@ class GroupRepository extends AbstractRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function find(int $groupId): ?Group
+    public function findGroupById(int $groupId): ?Group
     {
         return $this->entityManager->getRepository(Group::class)->find($groupId);
     }

@@ -41,7 +41,7 @@ readonly class Manager
      */
     public function showWorkshop(int $workshopId): ShowWorkshopDTOInterface
     {
-        if ($workshop = $this->workShopService->findById($workshopId)) {
+        if ($workshop = $this->workShopService->findWorkshopById($workshopId)) {
             if ($this->security->isGranted('ROLE_TEACHER')) {
                 $studentsCollection = new ArrayCollection();
                 /** @var Group $group */

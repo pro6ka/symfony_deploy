@@ -128,4 +128,32 @@ class WorkShopRepository extends AbstractRepository
     {
         $this->remove($workshop);
     }
+
+    /**
+     * @param WorkShop $workShop
+     * @param Group $group
+     *
+     * @return WorkShop
+     */
+    public function addParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
+    {
+        $workShop->addGroupParticipant($group);
+        $this->flush();
+
+        return $workShop;
+    }
+
+    /**
+     * @param WorkShop $workShop
+     * @param Group $group
+     *
+     * @return WorkShop
+     */
+    public function removeParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
+    {
+        $workShop->removeGroupParticipant($group);
+        $this->flush();
+
+        return $workShop;
+    }
 }

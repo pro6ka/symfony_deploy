@@ -28,7 +28,7 @@ readonly class GroupBuildService
      */
     public function addParticipant(int $groupId, int $userId): ?Group
     {
-        $group = $this->groupService->find($groupId);
+        $group = $this->groupService->findGroupById($groupId);
 
         if (! $group) {
             return null;

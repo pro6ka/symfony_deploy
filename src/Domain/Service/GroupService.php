@@ -57,7 +57,7 @@ readonly class GroupService
      */
     public function activate(int $groupId): ?Group
     {
-        $group = $this->groupRepository->find($groupId);
+        $group = $this->groupRepository->findGroupById($groupId);
 
         if (!$group instanceof Group) {
             return null;
@@ -75,9 +75,9 @@ readonly class GroupService
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function find(int $groupId): ?Group
+    public function findGroupById(int $groupId): ?Group
     {
-        return $this->groupRepository->find($groupId);
+        return $this->groupRepository->findGroupById($groupId);
     }
 
     /**
@@ -129,7 +129,7 @@ readonly class GroupService
      */
     public function updateName(UpdateGroupNameModel $updateGroupNameModel): ?Group
     {
-        $group = $this->groupRepository->find($updateGroupNameModel->id);
+        $group = $this->groupRepository->findGroupById($updateGroupNameModel->id);
         $group->setName($updateGroupNameModel->name);
 
         $violations = $this->validator->validate($group);

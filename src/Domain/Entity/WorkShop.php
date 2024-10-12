@@ -206,6 +206,18 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     }
 
     /**
+     * @param Group $group
+     *
+     * @return void
+     */
+    public function removeGroupParticipant(Group $group): void
+    {
+        if ($this->groupsParticipants->contains($group)) {
+            $this->groupsParticipants->removeElement($group);
+        }
+    }
+
+    /**
      * @return array
      */
     public function revisionableFields(): array

@@ -37,7 +37,7 @@ readonly class Manager
             throw new NotFoundHttpException(sprintf('User id: %d not found.', $userId));
         }
 
-        if (! $group = $this->groupService->find($groupId)) {
+        if (! $group = $this->groupService->findGroupById($groupId)) {
             throw new NotFoundHttpException(sprintf('Group id: %d not found.', $groupId));
         }
 
