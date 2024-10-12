@@ -5,7 +5,7 @@ namespace App\Controller\Web\Workshop\ShowWorkshop\v1\Output;
 use App\Controller\DTO\OutputDTOInterface;
 use DateTime;
 
-readonly class ShowWorkshopDTO implements OutputDTOInterface, ShowWorkshopDTOInterface
+readonly class ShowWorkshopForTeacherDTO implements OutputDTOInterface, ShowWorkshopDTOInterface
 {
     /**
      * @param int $id
@@ -14,6 +14,7 @@ readonly class ShowWorkshopDTO implements OutputDTOInterface, ShowWorkshopDTOInt
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
      * @param ShowWorkshopAuthorDTO $author
+     * @param array $students
      */
     public function __construct(
         public int $id,
@@ -21,7 +22,9 @@ readonly class ShowWorkshopDTO implements OutputDTOInterface, ShowWorkshopDTOInt
         public string $description,
         public DateTime $createdAt,
         public DateTime $updatedAt,
-        public ShowWorkshopAuthorDTO $author
+        public ShowWorkshopAuthorDTO $author,
+        /** @var array|ShowWOrkshopStudentDTO[] */
+        public array $students,
     ) {
     }
 }

@@ -215,4 +215,22 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     {
         return ['title', 'description',];
     }
+
+    /**
+     * @return Collection
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    /**
+     * @param Collection $students
+     *
+     * @return void
+     */
+    public function setStudents(Collection $students): void
+    {
+        $this->students = $students;
+    }
 }

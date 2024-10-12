@@ -15,7 +15,7 @@ readonly class Controller
      * @param Manager $manager
      */
     public function __construct(
-        private Manager $manager
+        private Manager $manager,
     ) {
     }
 
