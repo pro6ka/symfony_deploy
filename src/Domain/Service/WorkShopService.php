@@ -6,10 +6,13 @@ use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use App\Domain\Model\Workshop\CreateWorkshopModel;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class WorkShopService
 {
@@ -18,9 +21,30 @@ readonly class WorkShopService
      * @param WorkShopRepository $workShopRepository
      */
     public function __construct(
+        private ValidatorInterface $validator,
+        private UserService $userService,
         private FixationService $fixationService,
         private WorkShopRepository $workShopRepository
     ) {
+    }
+
+    public function create(CreateWorkshopModel $createWorkshopModel)
+    {
+        $author = $this->userService->findUserByLogin($createWorkshopModel->authorIdentifier);
+        $workshop = new WorkShop();
+        $workshop->setTitle($createWorkshopModel->title);
+        $workshop->setDescription($createWorkshopModel->description);
+        $workshop->setAuthor($author);
+
+        $violations = $this->validator->validate($workshop);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($workshop, $violations);
+        }
+
+        $this->workShopRepository->create($workshop);
+
+        return $workshop;
     }
 
     /**

@@ -10,10 +10,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'work_shop')]
 #[ORM\Index(name: 'work_shop__author_id_idx', fields: ['author'])]
+#[ORM\UniqueConstraint(name: 'workshop__title_unique', columns: ['title'])]
+#[UniqueEntity(fields: ['title'], message: 'This value {{ value }} is already used')]
 class WorkShop implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]

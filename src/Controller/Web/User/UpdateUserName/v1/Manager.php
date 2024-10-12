@@ -47,7 +47,7 @@ readonly class Manager
         return new UpdatedUserDTO(
             id: $updatedUser->getId(),
             login: $updatedUser->getLogin(),
-            firstName: $updatedUser->getFirstname(),
+            firstName: $updatedUser->getFirstName(),
             lastName: $updatedUser->getLastName(),
             email: $updatedUser->getEmail(),
             createdAt: $updatedUser->getCreatedAt(),

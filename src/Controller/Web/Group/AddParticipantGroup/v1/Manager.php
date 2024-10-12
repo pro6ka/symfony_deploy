@@ -53,7 +53,7 @@ readonly class Manager
                 function (User $user) {
                     return new GroupParticipantDTO(
                         id: $user->getId(),
-                        firstName: $user->getFirstname(),
+                        firstName: $user->getFirstName(),
                         lastName: $user->getLastName(),
                         middleName: $user->getMiddleName()
                     );

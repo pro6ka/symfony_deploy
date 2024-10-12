@@ -45,7 +45,7 @@ readonly class Manager
 
         return new UserGroupsDTO(
             id: $user->getId(),
-            firstName: $user->getFirstname(),
+            firstName: $user->getFirstName(),
             lastName: $user->getLastName(),
             email: $user->getEmail(),
             groups: array_map(

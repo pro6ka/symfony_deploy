@@ -52,6 +52,7 @@ readonly class AuthService
         $user = $this->userService->findUserByLogin($login);
         $this->userService->updateUserToken($login);
         $tokenData = [
+            'id' => $user->getId(),
             'username' => $login,
             'roles' => $user?->getRoles() ?? [],
             'exp' => time() + $this->tokenTTL,

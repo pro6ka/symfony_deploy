@@ -24,6 +24,7 @@ use UnexpectedValueException;
 #[UniqueEntity(fields: ['login'], message: 'This value {{ value }} is already used')]
 #[ORM\UniqueConstraint(name: 'user__email_unique', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'user__login_unique', columns: ['login'])]
+#[ORM\UniqueConstraint(name: 'user__token_unique', columns: ['token'])]
 class User implements
     EntityInterface,
     HasMetaTimeStampInterface,
@@ -79,7 +80,7 @@ class User implements
     #[ORM\Column(name: 'password', type: 'string', nullable: false, options: ['default' => ''])]
     private string $password;
 
-    #[ORM\Column(name: 'token', type: 'string', length: 255, unique: true, nullable: true)]
+    #[ORM\Column(name: 'token', type: 'string', length: 32, unique: true, nullable: true)]
     private ?string $token = null;
 
     public function __construct()
@@ -128,7 +129,7 @@ class User implements
     /**
      * @return string
      */
-    public function getFirstname(): string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }

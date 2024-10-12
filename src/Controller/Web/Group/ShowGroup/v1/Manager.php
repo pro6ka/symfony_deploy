@@ -39,7 +39,7 @@ readonly class Manager
                 participants: $group->getParticipants()->map(function (User $participant) {
                     return new ShowGroupParticipantDTO(
                         id: $participant->getId(),
-                        firstName: $participant->getFirstname(),
+                        firstName: $participant->getFirstName(),
                         lastName: $participant->getLastName(),
                         middleName: $participant->getMiddleName()
                     );

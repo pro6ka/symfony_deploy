@@ -21,17 +21,18 @@ readonly class RevisionService
     /**
      * @param RevisionableInterface $entity
      * @param string $columnName
-     * @param string $contentBefore
      * @param string $contentAfter
      *
-     * @return array
+     * @param string $contentBefore
+     *
+     * @return Revision
      */
     public function create(
         RevisionableInterface $entity,
         string $columnName,
         string $contentAfter,
         string $contentBefore = '',
-    ): array {
+    ): Revision {
         $revision = new Revision();
         $revision->setEntityId($entity->getId());
         $revision->setEntityType($entity::class);
@@ -40,7 +41,7 @@ readonly class RevisionService
         $revision->setContentAfter($contentAfter);
         $this->revisionRepository->create($revision);
 
-        return $revision->toArray();
+        return $revision;
     }
 
     /**
