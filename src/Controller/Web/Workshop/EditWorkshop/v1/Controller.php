@@ -31,7 +31,7 @@ readonly class Controller
      */
     #[Route(
         path: 'api/v1/workshop/title-and-description-update',
-        name: 'workshop_title_and_description_update',
+        name: 'workshop_edit',
         methods: ['POST']
     )]
     public function __invoke(#[MapRequestPayload] EditWorkshopDTO $workshopDTO): JsonResponse
