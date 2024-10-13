@@ -8,6 +8,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
@@ -36,14 +37,16 @@ readonly class WorkshopBuildService
      * @param User $user
      * @param Group $group
      *
-     * @return array
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws RuntimeException
+     * @return WorkShop
+     * @throws ORMException|GroupIsNotWorkshopParticipantException
      */
-    public function start(WorkShop $workShop, User $user, Group $group): array
+    public function start(WorkShop $workShop, User $user, Group $group): WorkShop
     {
         $questions = [];
+
+        if (! $workShop->getGroupsParticipants()->contains($group)) {
+            throw new GroupIsNotWorkshopParticipantException($group->getId(), $workShop->getId());
+        }
 
         /** @var Exercise $exercise */
         foreach ($workShop->getExercises() as $exercise) {
@@ -102,6 +105,6 @@ readonly class WorkshopBuildService
 
         $this->workShopRepository->refresh($workShop);
 
-        return $workShop->toArray();
+        return $workShop;
     }
 }

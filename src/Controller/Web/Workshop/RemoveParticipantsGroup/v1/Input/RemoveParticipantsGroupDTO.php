@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller\Web\WorkShop\RemoveParticipantsGroup\v1\Input;
+namespace App\Controller\Web\Workshop\RemoveParticipantsGroup\v1\Input;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-readonly class AddParticipantsGroupDTO
+readonly class RemoveParticipantsGroupDTO
 {
     /**
      * @param int $groupId

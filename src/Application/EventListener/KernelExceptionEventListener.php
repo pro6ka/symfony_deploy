@@ -3,6 +3,7 @@
 namespace App\Application\EventListener;
 
 use App\Controller\Exception\HttpComplaintExceptionInterface;
+use App\Domain\Exception\WorkshopAccessExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -24,6 +25,8 @@ class KernelExceptionEventListener
 
         if ($exception instanceof HttpComplaintExceptionInterface) {
             $event->setResponse($this->getHttpResponse($exception->getHttpResponseBody(), $exception->getHttpCode()));
+        } elseif ($exception instanceof WorkshopAccessExceptionInterface) {
+            $event->setResponse($this->getWorkshopAccessResponse($exception));
         } else {
             if ($exception instanceof HttpExceptionInterface) {
                 $exception = $exception->getPrevious();
@@ -33,6 +36,16 @@ class KernelExceptionEventListener
                 $event->setResponse($this->getValidationFailedResponse($exception));
             }
         }
+    }
+
+    /**
+     * @param WorkshopAccessExceptionInterface $exception
+     *
+     * @return JsonResponse
+     */
+    private function getWorkshopAccessResponse(WorkshopAccessExceptionInterface $exception): JsonResponse
+    {
+        return new JsonResponse(['message' => $exception->getHttpResponseBody()]);
     }
 
     /**

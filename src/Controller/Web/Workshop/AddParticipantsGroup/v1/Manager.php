@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\WorkShop\AddParticipantsGroup\v1;
+namespace App\Controller\Web\Workshop\AddParticipantsGroup\v1;
 
 use App\Controller\Web\WorkShop\AddParticipantsGroup\v1\Input\AddParticipantsGroupDTO;
 use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\GroupParticipantsDTO;
@@ -41,7 +41,10 @@ readonly class Manager
             throw new NotFoundHttpException(sprintf('Workshop id: %d not found', $participantsGroupDTO->groupId));
         }
 
-        $workshop = $this->workShopService->addWorkshopParticipantsGroup($workshop, $group);
+        $workshop = $this->workShopService->addWorkshopParticipantsGroup(
+            $workshop,
+            $group
+        );
 
         return new WorkshopGroupsAddedDTO(
             id: $workshop->getId(),
