@@ -3,6 +3,9 @@
 namespace App\Controller\Web\Workshop\StartWorkshop\v1;
 
 use App\Controller\Web\Workshop\StartWorkshop\v1\Input\StartWorkshopDTO;
+use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -14,12 +17,23 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[AsController]
 readonly class Controller
 {
+    /**
+     * @param Manager $manager
+     */
     public function __construct(
         private Manager $manager,
-        private Security $security
     ) {
     }
 
+    /**
+     * @param StartWorkshopDTO $startWorkshopDTO
+     * @param $authUser
+     *
+     * @return JsonResponse
+     * @throws GroupIsNotWorkshopParticipantException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     #[Route(path: 'api/v1/workshop/start', name: 'workshop_start', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload] StartWorkshopDTO $startWorkshopDTO,
