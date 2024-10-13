@@ -35,37 +35,59 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-      # user route
-      - { route: user_leave_group, roles: [ROLE_STUDENT] }
-      - { route: user_update_name, roles: [ROLE_STUDENT, ROLE_TEACHER] }
-      - { route: user_show, roles: [ROLE_STUDENT, ROLE_TEACHER] }
-      - { route: user_list, roles: [ROLE_TEACHER] }
+      # route user
+      - { route: user_leave_group, roles: ROLE_LEAVE_GROUP }
+      - { route: user_update_name, roles: ROLE_UPDATE_NAME }
+      - { route: user_show, roles: ROLE_VIEW_PROFILE }
+      - { route: user_list, roles: ROLE_USER_LIST_VIEW }
       - { path: ^/api/v[\d]+/user, roles: ROLE_ADMIN }
-      # group route
-      - { route: group_list, roles: ROLE_STUDENT }
-      - { route: group_show, roles: ROLE_STUDENT }
-      - { route: group_add_participant, roles: ROLE_TEACHER }
-      - { path: ^/api/v[\d]+/group, roles: ROLE_METHODOLOGIST }
+      # route group
+      - { route: group_list, roles: ROLE_WORKSHOP_VIEW }
+      - { route: group_show, roles: ROLE_WORKSHOP_VIEW }
+      - { route: group_add_participant, roles: ROLE_GROUP_ADD_PARTICIPANT }
+      - { path: ^/api/v[\d]+/group, roles: ROLE_GROUP_EDITOR }
+      # route workshop
+      - { route: workshop_list, roles: ROLE_WORKSHOP_VIEW }
+      - { route: workshop_show, roles: ROLE_WORKSHOP_VIEW }
+      - { route: workshop_start, roles: ROLE_WORKSHOP_START }
+      - { path: ^/api/v[\d]+/workshop, roles: ROLE_WORKSHOP_EDITOR }
+      # route exercise
+      - { route: exercise_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: exercise_show, roles: ROLE_EXERCISE_VIEW }
+      - { path: ^/api/v[\d]+/exercise, roles: ROLE_WORKSHOP_EDITOR }
+      # route question
+      - { route: question_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: question_show, roles: ROLE_EXERCISE_VIEW }
+      - { route: question_send_answer, roles: ROLE_EXERCISE_VIEW }
+      - { path: ^/api/v[\d]+/question, roles: ROLE_WORKSHOP_EDITOR }
+      # route answer
+      - { route: answer_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: answer_show, roles: ROLE_STUDENT_VIEW }
+      - { path: ^/api/v[\d]+/question, roles: ROLE_WORKSHOP_EDITOR }
     role_hierarchy:
       ROLE_USER:
-        - ROLE_VIEW_WORKSHOP_LIST
+        - ROLE_WORKSHOP_VIEW
+        - ROLE_UPDATE_NAME
+        - ROLE_VIEW_PROFILE
       ROLE_STUDENT:
         - ROLE_USER
+        - ROLE_VIEW_GROUP
         - ROLE_LEAVE_GROUP
-        - ROLE_START_WORKSHOP
-        - ROLE_WORKSHOP_STUDENT
+        - ROLE_WORKSHOP_START
+        - ROLE_EXERCISE_VIEW
+        - ROLE_QUESTION_VIEW
       ROLE_TEACHER:
         - ROLE_USER
+        - ROLE_USER_LIST_VIEW
         - ROLE_WORKSHOP_EDITOR
+        - ROLE_WORKSHOP_START
         - ROLE_GROUP_ADD_PARTICIPANT
-        - ROLE_START_WORKSHOP
-        - ROLE_WORKSHOP_STUDENT
+        - ROLE_EXERCISE_VIEW
       ROLE_METHODOLOGIST:
         - ROLE_USER
-        - ROLE_GROUP_EDITOR
         - ROLE_TEACHER
+        - ROLE_GROUP_EDITOR
       ROLE_ADMIN:
-        - ROLE_USER
         - ROLE_STUDENT
         - ROLE_TEACHER
         - ROLE_METHODOLOGIST
