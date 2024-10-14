@@ -20,7 +20,8 @@ readonly class Manager
     public function __construct(
         private ModelFactory $modelFactory,
         private GroupService $groupService
-    ) {}
+    ) {
+    }
 
     /**
      * @param int $id

@@ -20,7 +20,7 @@ readonly class Controller
     }
 
     /**
-     * @param Group $group
+     * @param int $id
      *
      * @return JsonResponse
      */

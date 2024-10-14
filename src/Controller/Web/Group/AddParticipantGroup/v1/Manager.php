@@ -7,16 +7,30 @@ use App\Controller\Web\Group\AddParticipantGroup\v1\Output\GroupParticipantsUpda
 use App\Domain\Entity\User;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
+    /**
+     * @param GroupService $groupService
+     * @param UserService $userService
+     */
     public function __construct(
         private GroupService $groupService,
         private UserService $userService
     ) {
     }
 
+    /**
+     * @param int $groupId
+     * @param int $userId
+     *
+     * @return GroupParticipantsUpdatedDTO
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function addParticipant(int $groupId, int $userId): GroupParticipantsUpdatedDTO
     {
         if (!$user = $this->userService->find($userId)) {

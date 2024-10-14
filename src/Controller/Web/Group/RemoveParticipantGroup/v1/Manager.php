@@ -13,6 +13,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
+    /**
+     * @param GroupService $groupService
+     * @param UserService $userService
+     */
     public function __construct(
         private GroupService $groupService,
         private UserService $userService,

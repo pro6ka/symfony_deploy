@@ -5,6 +5,8 @@ namespace App\Controller\Web\User\LeaveGroup\v1;
 use App\Controller\Web\User\LeaveGroup\v1\Input\UserLeaveGroupDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -22,10 +24,11 @@ readonly class Controller
     }
 
     /**
-     * @param User $user
-     * @param Group $group
+     * @param UserLeaveGroupDTO $userLeaveGroupDTO
      *
      * @return JsonResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     #[Route(
         path: 'api/v1/user/leave-group',
