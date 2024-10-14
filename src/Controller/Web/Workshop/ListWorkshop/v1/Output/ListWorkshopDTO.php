@@ -3,6 +3,7 @@
 namespace App\Controller\Web\Workshop\ListWorkshop\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
+use App\Controller\Web\Workshop\ListWorkshop\v1\Output\Part\ListWorkshopItemDTO;
 use App\Domain\Model\PaginationModel;
 
 readonly class ListWorkshopDTO implements OutputDTOInterface

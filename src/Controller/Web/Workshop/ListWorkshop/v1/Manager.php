@@ -3,8 +3,8 @@
 namespace App\Controller\Web\Workshop\ListWorkshop\v1;
 
 use App\Controller\Web\Workshop\ListWorkshop\v1\Output\ListWorkshopDTO;
-use App\Controller\Web\Workshop\ListWorkshop\v1\Output\ListWorkshopItemDTO;
-use App\Controller\Web\Workshop\ListWorkshop\v1\Output\ListWorkshopAuthorDTO;
+use App\Controller\Web\Workshop\ListWorkshop\v1\Output\Part\ListWorkshopAuthorDTO;
+use App\Controller\Web\Workshop\ListWorkshop\v1\Output\Part\ListWorkshopItemDTO;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Model\PaginationModel;
 use App\Domain\Model\Workshop\ListWorkshopModel;

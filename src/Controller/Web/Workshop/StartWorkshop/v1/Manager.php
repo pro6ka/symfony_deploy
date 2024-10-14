@@ -3,7 +3,7 @@
 namespace App\Controller\Web\Workshop\StartWorkshop\v1;
 
 use App\Controller\Web\Workshop\StartWorkshop\v1\Input\StartWorkshopDTO;
-use App\Controller\Web\Workshop\StartWorkshop\v1\Output\StartedWorkshopExerciseDTO;
+use App\Controller\Web\Workshop\StartWorkshop\v1\Output\Part\StartedWorkshopExerciseDTO;
 use App\Controller\Web\Workshop\StartWorkshop\v1\Output\StartedWorkshopDTO;
 use App\Domain\Entity\Exercise;
 use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
@@ -13,7 +13,6 @@ use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use http\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 

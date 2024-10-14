@@ -3,7 +3,7 @@
 namespace App\Controller\Web\Workshop\AddParticipantsGroup\v1;
 
 use App\Controller\Web\WorkShop\AddParticipantsGroup\v1\Input\AddParticipantsGroupDTO;
-use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\GroupParticipantsDTO;
+use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\Part\GroupParticipantsDTO;
 use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\WorkshopGroupsAddedDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Service\GroupService;
@@ -14,6 +14,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
+    /**
+     * @param WorkShopService $workShopService
+     * @param GroupService $groupService
+     */
     public function __construct(
         private WorkShopService $workShopService,
         private GroupService $groupService

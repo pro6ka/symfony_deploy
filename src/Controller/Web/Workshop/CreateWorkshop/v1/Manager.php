@@ -4,10 +4,9 @@ namespace App\Controller\Web\Workshop\CreateWorkshop\v1;
 
 use App\Controller\Web\Workshop\CreateWorkshop\v1\Input\CreateWorkshopDTO;
 use App\Controller\Web\Workshop\CreateWorkshop\v1\Output\CreatedWorkshopDTO;
-use App\Controller\Web\Workshop\CreateWorkshop\v1\Output\WorkshopAuthorDTO;
+use App\Controller\Web\Workshop\CreateWorkshop\v1\Output\Part\WorkshopAuthorDTO;
 use App\Domain\Model\Workshop\CreateWorkshopModel;
 use App\Domain\Service\ModelFactory;
-use App\Domain\Service\UserService;
 use App\Domain\Service\WorkShopService;
 use Symfony\Component\Security\Core\User\UserInterface;
 

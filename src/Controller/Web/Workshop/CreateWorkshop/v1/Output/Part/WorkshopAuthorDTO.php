@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Workshop\CreateWorkshop\v1\Output;
+namespace App\Controller\Web\Workshop\CreateWorkshop\v1\Output\Part;
 
 readonly class WorkshopAuthorDTO
 {

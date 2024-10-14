@@ -3,7 +3,7 @@
 namespace App\Controller\Web\Workshop\RemoveParticipantsGroup\v1;
 
 use App\Controller\Web\WorkShop\AddParticipantsGroup\v1\Input\AddParticipantsGroupDTO;
-use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\GroupParticipantsDTO;
+use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\Part\GroupParticipantsDTO;
 use App\Controller\Web\Workshop\RemoveParticipantsGroup\v1\Output\WorkshopGroupsUpdatedDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Service\GroupService;

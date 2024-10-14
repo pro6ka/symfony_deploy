@@ -3,6 +3,7 @@
 namespace App\Controller\Web\Workshop\CreateWorkshop\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
+use App\Controller\Web\Workshop\CreateWorkshop\v1\Output\Part\WorkshopAuthorDTO;
 use DateTime;
 
 readonly class CreatedWorkshopDTO implements OutputDTOInterface

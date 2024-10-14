@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Workshop\RemoveParticipantsGroup\v1\Output;
+namespace App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output\Part;
 
 readonly class GroupParticipantsDTO
 {

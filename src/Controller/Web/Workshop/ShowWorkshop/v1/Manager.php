@@ -2,11 +2,11 @@
 
 namespace App\Controller\Web\Workshop\ShowWorkshop\v1;
 
-use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ListWorkshopAuthorDTO;
+use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\Part\ShowWorkshopAuthorDTO;
+use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\Part\ShowWorkshopStudentDTO;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTO;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTOInterface;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopForTeacherDTO;
-use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopStudentDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Service\WorkShopService;
@@ -64,7 +64,7 @@ readonly class Manager
                     description: $workshop->getDescription(),
                     createdAt: $workshop->getCreatedAt(),
                     updatedAt: $workshop->getUpdatedAt(),
-                    author: new ListWorkshopAuthorDTO(
+                    author: new ShowWorkshopAuthorDTO(
                         id: $workshop->getAuthor()->getId(),
                         firstName: $workshop->getAuthor()->getFirstName(),
                         lastName: $workshop->getAuthor()->getLastName()
@@ -78,7 +78,7 @@ readonly class Manager
                 description: $workshop->getDescription(),
                 createdAt: $workshop->getCreatedAt(),
                 updatedAt: $workshop->getUpdatedAt(),
-                author: new ListWorkshopAuthorDTO(
+                author: new ShowWorkshopAuthorDTO(
                     id: $workshop->getAuthor()->getId(),
                     firstName: $workshop->getAuthor()->getFirstName(),
                     lastName: $workshop->getAuthor()->getLastName()

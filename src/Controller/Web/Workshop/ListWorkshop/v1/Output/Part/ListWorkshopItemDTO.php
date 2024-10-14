@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Workshop\ListWorkshop\v1\Output;
-
-use App\Controller\Web\Workshop\ListWorkshop\v1\Output\ListWorkshopAuthorDTO;
+namespace App\Controller\Web\Workshop\ListWorkshop\v1\Output\Part;
 
 readonly class ListWorkshopItemDTO
 {
