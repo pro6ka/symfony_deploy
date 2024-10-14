@@ -3,7 +3,7 @@
 namespace App\Controller\Web\Group\AddParticipantGroup\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
-use App\Controller\Web\Group\ShowGroup\v1\Output\ShowGroupParticipantDTO;
+use App\Controller\Web\Group\ShowGroup\v1\Output\Part\ShowGroupParticipantDTO;
 use DateTime;
 
 readonly class GroupParticipantsUpdatedDTO implements OutputDTOInterface

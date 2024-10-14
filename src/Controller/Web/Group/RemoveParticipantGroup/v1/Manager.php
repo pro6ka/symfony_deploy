@@ -2,11 +2,11 @@
 
 namespace App\Controller\Web\Group\RemoveParticipantGroup\v1;
 
-use App\Controller\Web\Group\RemoveParticipantGroup\v1\Output\GroupParticipantDTO;
 use App\Controller\Web\Group\RemoveParticipantGroup\v1\Output\GroupParticipantsRemovedDTO;
+use App\Controller\Web\Group\RemoveParticipantGroup\v1\Output\Part\GroupParticipantDTO;
 use App\Domain\Entity\User;
-use App\Domain\Service\UserService;
 use App\Domain\Service\GroupService;
+use App\Domain\Service\UserService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

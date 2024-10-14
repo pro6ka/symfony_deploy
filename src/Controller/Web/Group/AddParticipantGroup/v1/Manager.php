@@ -2,8 +2,8 @@
 
 namespace App\Controller\Web\Group\AddParticipantGroup\v1;
 
-use App\Controller\Web\Group\AddParticipantGroup\v1\Output\GroupParticipantDTO;
 use App\Controller\Web\Group\AddParticipantGroup\v1\Output\GroupParticipantsUpdatedDTO;
+use App\Controller\Web\Group\AddParticipantGroup\v1\Output\Part\GroupParticipantDTO;
 use App\Domain\Entity\User;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;

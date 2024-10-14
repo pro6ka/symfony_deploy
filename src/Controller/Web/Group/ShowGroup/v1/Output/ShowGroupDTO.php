@@ -3,6 +3,7 @@
 namespace App\Controller\Web\Group\ShowGroup\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
+use App\Controller\Web\Group\ShowGroup\v1\Output\Part\ShowGroupParticipantDTO;
 use DateTime;
 
 readonly class ShowGroupDTO implements OutputDTOInterface
