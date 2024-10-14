@@ -21,7 +21,7 @@ readonly class Manager
      */
     public function showList(): array
     {
-        return array_map(
+        return ['groups' => array_map(
             function (Group $group) {
                 return new GroupListDTO(
                     id: $group->getId(),
@@ -33,6 +33,6 @@ readonly class Manager
                 );
             },
             $this->groupService->showList()
-        );
+        )];
     }
 }
