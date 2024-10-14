@@ -102,7 +102,7 @@ readonly class UserService
     {
         return $this->userRepository->getList(
             pageSize: ListUserModel::PAGE_SIZE,
-            firstResult: $this->countPageSize(page: $page, pageSize: ListUserModel::PAGE_SIZE)
+            firstResult: $this->countOffset(page: $page, pageSize: ListUserModel::PAGE_SIZE)
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Group\ShowGroup\v1\Output;
+namespace App\Controller\Web\Group\ShowGroup\v1\Output\Part;
 
 use App\Controller\DTO\OutputDTOInterface;
 

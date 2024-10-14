@@ -3,7 +3,7 @@
 namespace App\Controller\Web\User\LeaveGroup\v1;
 
 use App\Controller\Web\User\LeaveGroup\v1\Input\UserLeaveGroupDTO;
-use App\Controller\Web\User\LeaveGroup\v1\Output\GroupItemDTO;
+use App\Controller\Web\User\LeaveGroup\v1\Output\Part\GroupItemDTO;
 use App\Controller\Web\User\LeaveGroup\v1\Output\UserGroupsDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Service\GroupService;

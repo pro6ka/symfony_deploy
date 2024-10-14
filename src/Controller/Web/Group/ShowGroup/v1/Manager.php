@@ -2,8 +2,8 @@
 
 namespace App\Controller\Web\Group\ShowGroup\v1;
 
+use App\Controller\Web\Group\ShowGroup\v1\Output\Part\ShowGroupParticipantDTO;
 use App\Controller\Web\Group\ShowGroup\v1\Output\ShowGroupDTO;
-use App\Controller\Web\Group\ShowGroup\v1\Output\ShowGroupParticipantDTO;
 use App\Domain\Entity\User;
 use App\Domain\Service\GroupService;
 use Doctrine\ORM\Exception\ORMException;
