@@ -10,7 +10,7 @@ trait PaginationTrait
      *
      * @return int
      */
-    public function countPageSize(int $page, int $pageSize): int
+    public function countOffset(int $page, int $pageSize): int
     {
         return $pageSize * ($page - 1);
     }
