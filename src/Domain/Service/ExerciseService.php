@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
 use App\Domain\Entity\WorkShop;
+use App\Domain\Model\Exercise\CreateExerciseModel;
 use App\Infrastructure\Repository\ExerciseRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -24,23 +25,20 @@ readonly class ExerciseService extends AbstractFixableService
     }
 
     /**
-     * @param string $title
-     * @param string $content
-     * @param WorkShop $workShop
+     * @param CreateExerciseModel $createExerciseModel
      *
-     * @return int
+     * @return Exercise
      */
-    public function create(
-        string $title,
-        string $content,
-        WorkShop $workShop
-    ): int {
+    public function create(CreateExerciseModel $createExerciseModel): Exercise
+    {
         $exercise = new Exercise();
-        $exercise->setTitle($title);
-        $exercise->setContent($content);
-        $exercise->setWorkShop($workShop);
+        $exercise->setTitle($createExerciseModel->title);
+        $exercise->setContent($createExerciseModel->content);
+        $exercise->setWorkShop($createExerciseModel->workshop);
 
-        return $this->exerciseRepository->create($exercise);
+        $this->exerciseRepository->create($exercise);
+
+        return $exercise;
     }
 
     /**
