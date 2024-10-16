@@ -6,6 +6,7 @@ use App\Controller\Web\User\LeaveGroup\v1\Input\UserLeaveGroupDTO;
 use App\Controller\Web\User\LeaveGroup\v1\Output\Part\GroupItemDTO;
 use App\Controller\Web\User\LeaveGroup\v1\Output\UserGroupsDTO;
 use App\Domain\Entity\Group;
+use App\Domain\Service\GroupBuildService;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
 use Doctrine\ORM\Exception\ORMException;
@@ -17,10 +18,12 @@ readonly class Manager
     /**
      * @param UserService $userService
      * @param GroupService $groupService
+     * @param GroupBuildService $groupBuildService
      */
     public function __construct(
         private UserService $userService,
-        private GroupService $groupService
+        private GroupService $groupService,
+        private GroupBuildService $groupBuildService
     ) {
     }
 
@@ -41,7 +44,7 @@ readonly class Manager
             throw new NotFoundHttpException(sprintf('User with id: %d not found', $userLeaveGroupDTO->userId));
         }
 
-        $this->groupService->removeParticipant($group, $user);
+        $this->groupBuildService->removeParticipant($group, $user);
 
         return new UserGroupsDTO(
             id: $user->getId(),

@@ -3,6 +3,7 @@
 namespace App\Domain\Service;
 
 use App\Domain\Entity\Group;
+use App\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
@@ -11,10 +12,12 @@ readonly class GroupBuildService
     /**
      * @param GroupService $groupService
      * @param UserService $userService
+     * @param FixationService $fixationService
      */
     public function __construct(
         private GroupService $groupService,
-        private UserService $userService
+        private UserService $userService,
+        private FixationService $fixationService
     ) {
     }
 
@@ -22,7 +25,7 @@ readonly class GroupBuildService
      * @param int $groupId
      * @param int $userId
      *
-     * @return Group
+     * @return null|Group
      * @throws ORMException
      * @throws OptimisticLockException
      */
@@ -37,9 +40,21 @@ readonly class GroupBuildService
         $user = $this->userService->find($userId);
 
         if (! $user) {
-            return $group->toArray();
+            return $group;
         }
 
         return $this->groupService->addParticipant($group, $user);
+    }
+
+    /**
+     * @param Group $group
+     * @param User $user
+     *
+     * @return void
+     */
+    public function removeParticipant(Group $group, User $user): void
+    {
+        $this->fixationService->removeForUserByGroup($user, $group);
+        $this->groupService->removeParticipant($group, $user);
     }
 }

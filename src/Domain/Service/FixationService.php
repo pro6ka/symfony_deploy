@@ -183,4 +183,21 @@ readonly class FixationService
 
         return $fixation;
     }
+
+    /**
+     * @param User $user
+     * @param Group $group
+     * @param bool $immediate
+     *
+     * @return void
+     */
+    public function removeForUserByGroup(User $user, Group $group, bool $immediate = false): void
+    {
+        $fixations = $this->fixationRepository->findForUserByGroup($user, $group);
+
+        /** @var Fixation $fixation */
+        foreach ($fixations as $fixation) {
+            $this->fixationRepository->drop($fixation, $immediate);
+        }
+    }
 }

@@ -35,6 +35,21 @@ class FixationRepository extends AbstractRepository
     }
 
     /**
+     * @param Fixation $fixation
+     * @param bool $doFlush
+     *
+     * @return void
+     */
+    public function drop(Fixation $fixation, bool $doFlush = true): void
+    {
+        if ($doFlush) {
+            $this->remove($fixation);
+        } else {
+            $this->entityManager->remove($fixation);
+        }
+    }
+
+    /**
      * @param User $user
      * @param string $entityType
      *
@@ -219,6 +234,37 @@ SQL;
             ->setParameter('entityId', $entityId)
             ->setParameter('userId', $userId)
             ->setParameter('groupId', $groupId)
+            ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param User $user
+     * @param Group $group
+     *
+     * @return array|Fixation[]
+     */
+    public function findForUserByGroup(User $user, Group $group): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select(['f', 'fg', 'fu'])
+            ->from(Fixation::class, 'f')
+            ->innerJoin(
+                'f.group',
+                'fg',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('fg.group', ':groupId')
+            )
+            ->innerJoin(
+                'f.user',
+                'fu',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq('fu.user', ':userId')
+            )
+            ->setParameter('groupId', $group->getId())
+            ->setParameter('userId', $user->getId())
             ;
 
         return $queryBuilder->getQuery()->getResult();
