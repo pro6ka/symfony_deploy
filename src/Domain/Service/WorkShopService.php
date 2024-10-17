@@ -152,8 +152,10 @@ readonly class WorkShopService
         $violations = $this->validator->validate($workshop);
 
         if ($violations->count() > 0) {
-            $this->workShopRepository->update();
+            throw new ValidationFailedException($workshop, $violations);
         }
+
+        $this->workShopRepository->update();
 
         return $workshop;
     }
