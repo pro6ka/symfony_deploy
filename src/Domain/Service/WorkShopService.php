@@ -125,7 +125,7 @@ readonly class WorkShopService
     {
         return $this->workShopRepository->getList(
             pageSize: ListWorkshopModel::PAGE_SIZE,
-            firstResult: $this->countPageSize(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE,)
+            firstResult: $this->countOffset(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE,)
         );
     }
 
