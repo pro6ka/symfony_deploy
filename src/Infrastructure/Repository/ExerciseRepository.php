@@ -49,4 +49,14 @@ class ExerciseRepository extends AbstractRepository
 
         return new Paginator($queryBuilder->getQuery());
     }
+
+    /**
+     * @param Exercise $exercise
+     *
+     * @return void
+     */
+    public function removeExercise(Exercise $exercise): void
+    {
+        $this->remove($exercise);
+    }
 }

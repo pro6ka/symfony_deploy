@@ -136,4 +136,14 @@ readonly class ExerciseService extends AbstractFixableService
 
         return $exercise;
     }
+
+    /**
+     * @param Exercise $exercise
+     *
+     * @return void
+     */
+    public function deleteExercise(Exercise $exercise): void
+    {
+        $this->exerciseRepository->removeExercise($exercise);
+    }
 }
