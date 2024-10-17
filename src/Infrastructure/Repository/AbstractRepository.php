@@ -25,6 +25,14 @@ class AbstractRepository
     }
 
     /**
+     * @return void
+     */
+    public function update(): void
+    {
+        $this->flush();
+    }
+
+    /**
      * @param EntityInterface $entity
      *
      * @return int

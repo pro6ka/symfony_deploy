@@ -112,14 +112,6 @@ class WorkShopRepository extends AbstractRepository
     }
 
     /**
-     * @return void
-     */
-    public function update(): void
-    {
-        $this->flush();
-    }
-
-    /**
      * @param WorkShop $workshop
      *
      * @return void
