@@ -2,6 +2,8 @@
 
 namespace App\Controller\Web\Exercise\ShowExercise\v1;
 
+use App\Controller\Web\Exercise\ShowExercise\v1\Output\ShowExerciseQuestionDTO;
+use App\Domain\Entity\Question;
 use App\Domain\Service\ExerciseService;
 use App\Controller\Web\Exercise\ShowExercise\v1\Output\ShowExerciseDTO;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,6 +31,13 @@ readonly class Manager
                 id: $exercise->getId(),
                 title: $exercise->getTitle(),
                 content: $exercise->getContent(),
+                questions: $exercise->getQuestions()->map(function (Question $question) {
+                    return new ShowExerciseQuestionDTO(
+                        id: $question->getId(),
+                        title: $question->getTitle(),
+                        description: $question->getDescription()
+                    );
+                })->toArray()
             );
         }
 
