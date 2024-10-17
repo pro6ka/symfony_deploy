@@ -4,25 +4,29 @@ namespace App\Domain\Service;
 
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
-use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Exercise\CreateExerciseModel;
+use App\Domain\Model\Exercise\EditExerciseModel;
 use App\Domain\Model\Exercise\ListExerciseModel;
 use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\ExerciseRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class ExerciseService extends AbstractFixableService
 {
     use PaginationTrait;
 
     /**
+     * @param ValidatorInterface $validator
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param ExerciseRepository $exerciseRepository
      */
     public function __construct(
+        private ValidatorInterface $validator,
         private FixationService $fixationService,
         private RevisionService $revisionService,
         private ExerciseRepository $exerciseRepository
@@ -98,5 +102,38 @@ readonly class ExerciseService extends AbstractFixableService
             pageSize: ListExerciseModel::PAGE_SIZE,
             firstResult: $this->countOffset(page: $page, pageSize: ListExerciseModel::PAGE_SIZE)
         );
+    }
+
+    /**
+     * @param EditExerciseModel $editExerciseModel
+     *
+     * @return null|Exercise
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function editExercise(EditExerciseModel $editExerciseModel): ?Exercise
+    {
+        $exercise = $this->exerciseRepository->findById($editExerciseModel->id);
+
+        if (! $exercise) {
+            return null;
+        }
+
+        $exercise->setTitle($editExerciseModel->title === null ? $exercise->getTitle() : $editExerciseModel->title);
+        $exercise->setContent(
+            $editExerciseModel->content === null
+                ? $exercise->getContent()
+                : $editExerciseModel->content
+        );
+
+        $violations = $this->validator->validate($exercise);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($exercise, $violations);
+        }
+
+        $this->exerciseRepository->update();
+
+        return $exercise;
     }
 }
