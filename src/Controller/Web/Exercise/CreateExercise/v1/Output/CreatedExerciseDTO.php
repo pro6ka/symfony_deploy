@@ -3,7 +3,6 @@
 namespace App\Controller\Web\Exercise\CreateExercise\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
-use App\Controller\Web\Exercise\CreateExercise\v1\Output\Part\CreatedExerciseWorkshopDTO;
 
 readonly class CreatedExerciseDTO implements OutputDTOInterface
 {
