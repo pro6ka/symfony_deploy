@@ -5,6 +5,7 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Exercise;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class ExerciseRepository extends AbstractRepository
 {
@@ -29,5 +30,23 @@ class ExerciseRepository extends AbstractRepository
     {
         return $this->entityManager->getRepository(Exercise::class)
             ->find($id);
+    }
+
+    /**
+     * @param int $pageSize
+     * @param int $firstResult
+     *
+     * @return Paginator
+     */
+    public function getList(int $pageSize, int $firstResult): Paginator
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('e')
+            ->from(Exercise::class, 'e')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($pageSize)
+            ;
+
+        return new Paginator($queryBuilder->getQuery());
     }
 }

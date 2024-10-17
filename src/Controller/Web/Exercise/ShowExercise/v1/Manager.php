@@ -2,13 +2,13 @@
 
 namespace App\Controller\Web\Exercise\ShowExercise\v1;
 
-use App\Controller\Web\Exercise\ShowExercise\v1\Output\ShowExerciseQuestionDTO;
+use App\Controller\Web\Exercise\ShowExercise\v1\Output\Part\ShowExerciseQuestionDTO;
+use App\Controller\Web\Exercise\ShowExercise\v1\Output\ShowExerciseDTO;
 use App\Domain\Entity\Question;
 use App\Domain\Service\ExerciseService;
-use App\Controller\Web\Exercise\ShowExercise\v1\Output\ShowExerciseDTO;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use \Doctrine\ORM\Exception\ORMException;
-use \Doctrine\ORM\OptimisticLockException;
 
 readonly class Manager
 {

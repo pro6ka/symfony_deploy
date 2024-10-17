@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Exercise\ShowExercise\v1\Output;
+namespace App\Controller\Web\Exercise\ShowExercise\v1\Output\Part;
 
 readonly class ShowExerciseQuestionDTO
 {

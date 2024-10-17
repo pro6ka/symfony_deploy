@@ -6,12 +6,17 @@ use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Exercise\CreateExerciseModel;
+use App\Domain\Model\Exercise\ListExerciseModel;
+use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\ExerciseRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 readonly class ExerciseService extends AbstractFixableService
 {
+    use PaginationTrait;
+
     /**
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
@@ -80,5 +85,18 @@ readonly class ExerciseService extends AbstractFixableService
     protected function getFixationService(): FixationService
     {
         return $this->fixationService;
+    }
+
+    /**
+     * @param int $page
+     *
+     * @return Paginator
+     */
+    public function getList(int $page = 1): Paginator
+    {
+        return $this->exerciseRepository->getList(
+            pageSize: ListExerciseModel::PAGE_SIZE,
+            firstResult: $this->countOffset(page: $page, pageSize: ListExerciseModel::PAGE_SIZE)
+        );
     }
 }

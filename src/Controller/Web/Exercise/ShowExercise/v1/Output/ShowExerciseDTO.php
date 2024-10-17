@@ -2,7 +2,10 @@
 
 namespace App\Controller\Web\Exercise\ShowExercise\v1\Output;
 
-readonly class ShowExerciseDTO
+use App\Controller\DTO\OutputDTOInterface;
+use App\Controller\Web\Exercise\ShowExercise\v1\Output\Part\ShowExerciseQuestionDTO;
+
+readonly class ShowExerciseDTO implements OutputDTOInterface
 {
     /**
      * @param int $id
