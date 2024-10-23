@@ -1,16 +1,11 @@
 <?php
 
-namespace App\Domain\Model\Exercise;
+namespace App\Domain\Model\Question;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-readonly class EditExerciseModel
+readonly class EditQuestionModel
 {
-    /**
-     * @param int $id
-     * @param string $title
-     * @param string $content
-     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
@@ -23,7 +18,7 @@ readonly class EditExerciseModel
         #[Assert\NotBlank(allowNull: true, normalizer: 'trim')]
         #[Assert\Type('string')]
         #[Assert\Length(min: 1, max: 255)]
-        public string $content
+        public string $description
     ) {
     }
 }

@@ -12,15 +12,15 @@ readonly class CreateQuestionDTO
      * @param int $exerciseId
      */
     public function __construct(
-        #[Assert\NotBlank]
+        #[Assert\NotBlank(normalizer: 'trim')]
         #[Assert\Type('string')]
         #[Assert\Length(min: 1, max: 100)]
         public string $title,
-        #[Assert\NotBlank]
+        #[Assert\NotBlank(normalizer: 'trim')]
         #[Assert\Type('string')]
         #[Assert\Length(min: 1, max: 100)]
         public string $description,
-        #[Assert\NotBlank]
+        #[Assert\NotBlank()]
         #[Assert\Type('integer')]
         #[Assert\GreaterThan(0)]
         public int $exerciseId

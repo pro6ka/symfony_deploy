@@ -2,10 +2,11 @@
 
 namespace App\Controller\Web\Question\ShowQuestion\v1\Output;
 
+use App\Controller\DTO\OutputDTOInterface;
 use App\Controller\Web\Question\ShowQuestion\v1\Output\Part\ShowQuestionExerciseDTO;
 use App\Controller\Web\Question\ShowQuestion\v1\Output\Part\ShowQuestionsAnswerDTO;
 
-readonly class ShowQuestionDTO
+readonly class ShowQuestionDTO implements OutputDTOInterface
 {
     /**
      * @param int $id

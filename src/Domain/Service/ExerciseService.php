@@ -45,6 +45,12 @@ readonly class ExerciseService extends AbstractFixableService
         $exercise->setContent($createExerciseModel->content);
         $exercise->setWorkShop($createExerciseModel->workshop);
 
+        $violations = $this->validator->validate($exercise);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($violations, $exercise);
+        }
+
         $this->exerciseRepository->create($exercise);
 
         return $exercise;
@@ -119,7 +125,11 @@ readonly class ExerciseService extends AbstractFixableService
             return null;
         }
 
-        $exercise->setTitle($editExerciseModel->title === null ? $exercise->getTitle() : $editExerciseModel->title);
+        $exercise->setTitle(
+            $editExerciseModel->title === null
+                ? $exercise->getTitle()
+                : $editExerciseModel->title
+        );
         $exercise->setContent(
             $editExerciseModel->content === null
                 ? $exercise->getContent()

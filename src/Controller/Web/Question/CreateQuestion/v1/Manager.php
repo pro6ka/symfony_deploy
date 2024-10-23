@@ -55,6 +55,8 @@ readonly class Manager
             id: $question->getId(),
             title: $question->getTitle(),
             description: $question->getDescription(),
+            createdAt: $question->getCreatedAt(),
+            updatedAt: $question->getUpdatedAt(),
             exercise: new QuestionsExerciseDTO(
                 id: $question->getExercise()->getId(),
                 title: $question->getExercise()->getTitle(),

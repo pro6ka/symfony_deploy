@@ -3,21 +3,25 @@
 namespace App\Domain\Service;
 
 use App\Domain\Entity\Contracts\RevisionableInterface;
-use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Question;
 use App\Domain\Model\Question\CreateQuestionModel;
+use App\Domain\Model\Question\EditQuestionModel;
 use App\Infrastructure\Repository\QuestionRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class QuestionService extends AbstractFixableService
 {
     /**
+     * @param ValidatorInterface $validator
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param QuestionRepository $questionRepository
      */
     public function __construct(
+        private ValidatorInterface $validator,
         private FixationService $fixationService,
         private RevisionService $revisionService,
         private QuestionRepository $questionRepository
@@ -35,6 +39,12 @@ readonly class QuestionService extends AbstractFixableService
         $question->setTitle($createQuestionModel->title);
         $question->setDescription($createQuestionModel->description);
         $question->setExercise($createQuestionModel->exercise);
+
+        $violations = $this->validator->validate($question);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($question, $violations);
+        }
 
         $this->questionRepository->create($question);
 
@@ -80,5 +90,19 @@ readonly class QuestionService extends AbstractFixableService
     protected function getFixationService(): FixationService
     {
         return $this->fixationService;
+    }
+
+    public function editQuestion(Question $question, EditQuestionModel $editQuestionModel): void
+    {
+        $question->setTitle($editQuestionModel->title ?? $question->getTitle());
+        $question->setDescription($editQuestionModel->description ?? $question->getDescription());
+
+        $violations = $this->validator->validate($question);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($violations, $question);
+        }
+
+        $this->questionRepository->update();
     }
 }
