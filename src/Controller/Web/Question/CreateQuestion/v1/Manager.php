@@ -4,8 +4,8 @@ namespace App\Controller\Web\Question\CreateQuestion\v1;
 
 use App\Controller\Web\Question\CreateQuestion\v1\Input\CreateQuestionDTO;
 use App\Controller\Web\Question\CreateQuestion\v1\Output\CreatedQuestionDTO;
-use App\Controller\Web\Question\CreateQuestion\v1\Output\QuestionsAnswerDTO;
-use App\Controller\Web\Question\CreateQuestion\v1\Output\QuestionsExerciseDTO;
+use App\Controller\Web\Question\CreateQuestion\v1\Output\Part\QuestionsAnswerDTO;
+use App\Controller\Web\Question\CreateQuestion\v1\Output\Part\QuestionsExerciseDTO;
 use App\Domain\Entity\Answer;
 use App\Domain\Model\Question\CreateQuestionModel;
 use App\Domain\Service\ExerciseService;

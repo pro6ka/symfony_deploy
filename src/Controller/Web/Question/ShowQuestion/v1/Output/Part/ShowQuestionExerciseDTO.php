@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Web\Question\CreateQuestion\v1\Output\Part;
+namespace App\Controller\Web\Question\ShowQuestion\v1\Output\Part;
 
-readonly class QuestionsExerciseDTO
+readonly class ShowQuestionExerciseDTO
 {
     /**
      * @param int $id
