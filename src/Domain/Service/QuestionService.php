@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Question;
+use App\Domain\Model\Question\CreateQuestionModel;
 use App\Infrastructure\Repository\QuestionRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -24,18 +25,16 @@ readonly class QuestionService extends AbstractFixableService
     }
 
     /**
-     * @param string $title
-     * @param string $description
-     * @param Exercise $exercise
+     * @param CreateQuestionModel $createQuestionModel
      *
      * @return Question
      */
-    public function create(string $title, string $description, Exercise $exercise): Question
+    public function create(CreateQuestionModel $createQuestionModel): Question
     {
         $question = new Question();
-        $question->setTitle($title);
-        $question->setDescription($description);
-        $question->setExercise($exercise);
+        $question->setTitle($createQuestionModel->title);
+        $question->setDescription($createQuestionModel->description);
+        $question->setExercise($createQuestionModel->exercise);
 
         $this->questionRepository->create($question);
 
