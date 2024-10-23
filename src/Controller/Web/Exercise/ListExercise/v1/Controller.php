@@ -23,7 +23,7 @@ readonly class Controller
      *
      * @return JsonResponse
      */
-    #[Route(path: 'api/v1/exercise/{page}', name: 'exercise_list', methods: ['GET'])]
+    #[Route(path: 'api/v1/exercise/list/{page}', name: 'exercise_list', requirements: ['page' => '\d+'], methods: ['GET'])]
     public function __invoke(int $page = 1): JsonResponse
     {
         return new JsonResponse(['exercises' => $this->manager->getListExercises($page)]);

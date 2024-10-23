@@ -22,7 +22,12 @@ readonly class Controller
      *
      * @return JsonResponse
      */
-    #[Route(path: 'api/v1/workshop/{page}', name: 'workshop_list', requirements: ['page' => '\d+'], methods: ['GET'])]
+    #[Route(
+        path: 'api/v1/workshop/list/{page}',
+        name: 'workshop_list',
+        requirements: ['page' => '\d+'],
+        methods: ['GET']
+    )]
     public function __invoke(int $page = 1): JsonResponse
     {
         return new JsonResponse($this->manager->showList($page));

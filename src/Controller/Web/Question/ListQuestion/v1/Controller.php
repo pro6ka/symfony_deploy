@@ -10,13 +10,18 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsController]
 readonly class Controller
 {
+    public function __construct(
+        private Manager $manager
+    ) {
+    }
+
     /**
      * @return JsonResponse
      * @throws NotImplementedException
      */
-    #[Route(path: 'api/v1/question/', name: 'question_list', methods: ['GET'])]
-    public function __invoke(): JsonResponse
+    #[Route(path: 'api/v1/question/list/{page}', name: 'question_list', methods: ['GET'])]
+    public function __invoke(int $page =1): JsonResponse
     {
-        throw new NotImplementedException();
+        return new JsonResponse($this->manager->getListQuestion());
     }
 }
