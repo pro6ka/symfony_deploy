@@ -6,14 +6,19 @@ use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Question;
 use App\Domain\Model\Question\CreateQuestionModel;
 use App\Domain\Model\Question\EditQuestionModel;
+use App\Domain\Model\Question\ListQuestionModel;
+use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\QuestionRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class QuestionService extends AbstractFixableService
 {
+    use PaginationTrait;
+
     /**
      * @param ValidatorInterface $validator
      * @param FixationService $fixationService
@@ -92,6 +97,12 @@ readonly class QuestionService extends AbstractFixableService
         return $this->fixationService;
     }
 
+    /**
+     * @param Question $question
+     * @param EditQuestionModel $editQuestionModel
+     *
+     * @return void
+     */
     public function editQuestion(Question $question, EditQuestionModel $editQuestionModel): void
     {
         $question->setTitle($editQuestionModel->title ?? $question->getTitle());
@@ -104,5 +115,18 @@ readonly class QuestionService extends AbstractFixableService
         }
 
         $this->questionRepository->update();
+    }
+
+    /**
+     * @param int $page
+     *
+     * @return Paginator
+     */
+    public function getList(int $page): Paginator
+    {
+        return $this->questionRepository->getList(
+            pageSize: ListQuestionModel::PAGE_SIZE,
+            firstResult: $this->countOffset(page: $page, pageSize: ListQuestionModel::PAGE_SIZE)
+        );
     }
 }

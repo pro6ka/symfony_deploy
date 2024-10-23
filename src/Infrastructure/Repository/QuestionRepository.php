@@ -5,6 +5,7 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Entity\Question;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class QuestionRepository extends AbstractRepository
 {
@@ -29,5 +30,23 @@ class QuestionRepository extends AbstractRepository
     {
         return $this->entityManager->getRepository(Question::class)
             ->find($id);
+    }
+
+    /**
+     * @param int $pageSize
+     * @param int $firstResult
+     *
+     * @return Paginator
+     */
+    public function getList(int $pageSize, int $firstResult): Paginator
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('q')
+            ->from(Question::class, 'q')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($pageSize)
+            ;
+
+        return new Paginator($queryBuilder->getQuery());
     }
 }
