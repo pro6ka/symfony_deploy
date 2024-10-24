@@ -3,6 +3,7 @@
 namespace App\Controller\Web\Question\ListQuestion\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
+use App\Controller\Web\Question\ListQuestion\v1\Output\Part\ListQuestionItemDTO;
 use App\Domain\Model\PaginationModel;
 
 readonly class ListQuestionDTO implements OutputDTOInterface
