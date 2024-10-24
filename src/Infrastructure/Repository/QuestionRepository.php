@@ -49,4 +49,14 @@ class QuestionRepository extends AbstractRepository
 
         return new Paginator($queryBuilder->getQuery());
     }
+
+    /**
+     * @param Question $question
+     *
+     * @return void
+     */
+    public function removeQuestion(Question $question): void
+    {
+        $this->remove($question);
+    }
 }
