@@ -34,6 +34,19 @@ services:
       - ./docker/data/dump:/app/dump
       - ./docker/data/postgresql:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:4-management
+    working_dir: /app
+    hostname: rabbit-mq
+    container_name: ${PROJECT_NAME:-otus}_rabbit-mq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+
 volumes:
   dump:
   postgresql:
