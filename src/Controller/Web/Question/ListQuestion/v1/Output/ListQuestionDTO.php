@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Web\Question\ListQuestion\v1\Output\Part;
+namespace App\Controller\Web\Question\ListQuestion\v1\Output;
 
 use App\Controller\DTO\OutputDTOInterface;
 use App\Domain\Model\PaginationModel;

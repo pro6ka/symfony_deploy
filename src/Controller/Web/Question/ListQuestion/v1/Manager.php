@@ -2,7 +2,7 @@
 
 namespace App\Controller\Web\Question\ListQuestion\v1;
 
-use App\Controller\Web\Question\ListQuestion\v1\Output\Part\ListQuestionDTO;
+use App\Controller\Web\Question\ListQuestion\v1\Output\ListQuestionDTO;
 use App\Controller\Web\Question\ListQuestion\v1\Output\Part\ListQuestionItemDTO;
 use App\Controller\Web\Question\ListQuestion\v1\Output\Part\ListQuestionsAnswerItemDTO;
 use App\Domain\Entity\Answer;
