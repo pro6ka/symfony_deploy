@@ -16,8 +16,16 @@ abstract class AbstractConsumer implements ConsumerInterface
     private readonly ValidatorInterface $validator;
     private readonly SerializerInterface $serializer;
 
+    /**
+     * @return string
+     */
     abstract protected function getMessageClass(): string;
 
+    /**
+     * @param $message
+     *
+     * @return int
+     */
     abstract protected function handle($message): int;
 
     /**
@@ -40,6 +48,18 @@ abstract class AbstractConsumer implements ConsumerInterface
     {
         $this->validator = $validtor;
     }
+
+    /**
+     * @param SerializerInterface $serializer
+     *
+     * @return void
+     */
+    #[Required]
+    public function setSerializer(SerializerInterface $serializer): void
+    {
+        $this->serializer = $serializer;
+    }
+
 
     /**
      * @param AMQPMessage $msg

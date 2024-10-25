@@ -7,9 +7,14 @@ old_sound_rabbit_mq:
             connection:       default
             exchange_options: { name: 'old_sound_rabbit_mq.start_workshop', type: direct }
     consumers:
-        task:
+        start:
             connection:       default
             exchange_options: { name: 'old_sound_rabbit_mq.start_workshop', type: direct }
             queue_options:    { name: 'old_sound_rabbit_mq.start_workshop'}
-            callback:         App\Consumer\TaskConsumer
-
+            callback:         App\Controller\Amqp\StartWorkShop\Consumer
+            idle_timeout: 300
+            idle_timeout_exit_code: 0
+            graceful_max_execution:
+              timeout: 1800
+              exit_code: 0
+            qos_options: {prefetch_size: 0, prefetch_count: 1, global: false}
