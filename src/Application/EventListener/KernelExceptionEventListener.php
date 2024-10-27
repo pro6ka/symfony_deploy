@@ -29,7 +29,10 @@ class KernelExceptionEventListener
             $event->setResponse($this->getWorkshopAccessResponse($exception));
         } else {
             if ($exception instanceof HttpExceptionInterface) {
-                $exception = $exception->getPrevious();
+                $event->setResponse($this->getHttpResponse(
+                    $exception->getMessage(),
+                    $exception->getStatusCode()
+                ));
             }
 
             if ($exception instanceof ValidationFailedException) {

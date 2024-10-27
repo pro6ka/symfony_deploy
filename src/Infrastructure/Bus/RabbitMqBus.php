@@ -6,29 +6,32 @@ use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-readonly class RabbitMqBus
+class RabbitMqBus
 {
     /** @var array<string, ProducerInterface> */
-    private array $producers;
+    private array $producers = [];
 
+    /**
+     * @param SerializerInterface $serializer
+     */
     public function __construct(
         private SerializerInterface $serializer
     ) {
     }
 
     /**
-     * @param AmqpQueueEnum $exchange
+     * @param AmqpExchangeEnum $exchange
      * @param ProducerInterface $producer
      *
      * @return void
      */
-    public function registerProducer(AmqpQueueEnum $exchange, ProducerInterface $producer): void
+    public function registerProducer(AmqpExchangeEnum $exchange, ProducerInterface $producer): void
     {
         $this->producers[$exchange->value] = $producer;
     }
 
     /**
-     * @param AmqpQueueEnum $exchange
+     * @param AmqpExchangeEnum $exchange
      * @param $message
      * @param null|string $routingKey
      * @param null|array $additionalProperties
@@ -36,7 +39,7 @@ readonly class RabbitMqBus
      * @return bool
      */
     public function publishToExchange(
-        AmqpQueueEnum $exchange,
+        AmqpExchangeEnum $exchange,
         $message,
         ?string $routingKey = null,
         ?array $additionalProperties = null
@@ -60,7 +63,7 @@ readonly class RabbitMqBus
     }
 
     /**
-     * @param AmqpQueueEnum $exchange
+     * @param AmqpExchangeEnum $exchange
      * @param array $messages
      * @param null|string $routingKey
      * @param null|array $additionalProperties
@@ -68,7 +71,7 @@ readonly class RabbitMqBus
      * @return bool
      */
     public function publishMultipleExchange(
-        AmqpQueueEnum $exchange,
+        AmqpExchangeEnum $exchange,
         array $messages,
         ?string $routingKey = null,
         ?array $additionalProperties = null

@@ -126,6 +126,7 @@ class WorkShopRepository extends AbstractRepository
      * @param Group $group
      *
      * @return WorkShop
+     * @throws ORMException
      */
     public function addParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
     {

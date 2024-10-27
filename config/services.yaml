@@ -33,3 +33,7 @@ services:
     App\Application\Security\AuthService:
       arguments:
         $tokenTTL: '%env(JWT_TTL_SEC)%'
+
+    App\Infrastructure\Bus\RabbitMqBus:
+      calls:
+        - [ 'registerProducer', [!php/enum App\Infrastructure\Bus\AmqpExchangeEnum::START_WORKSHOP, '@old_sound_rabbit_mq.start_workshop_producer'] ]

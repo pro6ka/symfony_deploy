@@ -29,8 +29,8 @@ readonly class Controller
      * @throws OptimisticLockException
      */
     #[Route(
-        path: 'api/v1/workshop/add-participants-group',
-        name: 'workshop_add_participants_group',
+        path: 'api/v1/workshop/remove-participants-group',
+        name: 'workshop_remove_participants_group',
         methods: ['POST']
     )]
     public function __invoke(#[MapRequestPayload] AddParticipantsGroupDTO $participantsGroupDTO): JsonResponse

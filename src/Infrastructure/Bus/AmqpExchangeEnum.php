@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Bus;
 
-enum AmqpQueueEnum: string
+enum AmqpExchangeEnum: string
 {
     case START_WORKSHOP = 'start_workshop';
 }

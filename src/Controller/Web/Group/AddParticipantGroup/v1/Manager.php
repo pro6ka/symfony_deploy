@@ -9,6 +9,7 @@ use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
@@ -34,11 +35,11 @@ readonly class Manager
     public function addParticipant(int $groupId, int $userId): GroupParticipantsUpdatedDTO
     {
         if (!$user = $this->userService->find($userId)) {
-            throw new NotFoundHttpException(sprintf('User id: %d not found.', $userId));
+            throw new BadRequestHttpException(sprintf('User id: %d not found.', $userId));
         }
 
         if (!$group = $this->groupService->findGroupById($groupId)) {
-            throw new NotFoundHttpException(sprintf('Group id: %d not found.', $groupId));
+            throw new BadRequestHttpException(sprintf('Group id: %d not found.', $groupId));
         }
 
         $group = $this->groupService->addParticipant($group, $user);

@@ -10,6 +10,7 @@ use App\Domain\Service\GroupService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
@@ -36,13 +37,13 @@ readonly class Manager
         $group = $this->groupService->findGroupById($participantsGroupDTO->groupId);
 
         if (! $group) {
-            throw new NotFoundHttpException(sprintf('Group id: %d not found', $participantsGroupDTO->groupId));
+            throw new BadRequestHttpException(sprintf('Group id: %d not found', $participantsGroupDTO->groupId));
         }
 
         $workshop = $this->workShopService->findWorkshopById($participantsGroupDTO->workshopId);
 
         if (! $workshop) {
-            throw new NotFoundHttpException(sprintf('Workshop id: %d not found', $participantsGroupDTO->groupId));
+            throw new BadRequestHttpException(sprintf('Workshop id: %d not found', $participantsGroupDTO->groupId));
         }
 
         $workshop = $this->workShopService->addWorkshopParticipantsGroup(

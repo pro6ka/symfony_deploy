@@ -42,7 +42,7 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     #[ORM\OneToMany(targetEntity: Exercise::class, mappedBy: 'workShop')]
     private Collection $exercises;
 
-    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'workshops')]
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'workshops')]
     private Collection $groupsParticipants;
 
     public function __construct()

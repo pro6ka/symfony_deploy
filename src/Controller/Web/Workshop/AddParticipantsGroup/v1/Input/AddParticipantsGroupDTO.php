@@ -13,11 +13,11 @@ readonly class AddParticipantsGroupDTO
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
-        #[Assert\GreaterThan(1)]
+        #[Assert\GreaterThan(0)]
         public int $groupId,
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
-        #[Assert\GreaterThan(1)]
+        #[Assert\GreaterThan(0)]
         public int $workshopId
     ) {
     }

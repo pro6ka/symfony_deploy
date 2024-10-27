@@ -40,13 +40,14 @@ abstract class AbstractConsumer implements ConsumerInterface
     }
 
     /**
-     * @param ValidatorInterface $validtor
+     * @param ValidatorInterface $validator
      *
      * @return void
      */
-    public function setValidator(ValidatorInterface $validtor): void
+    #[Required]
+    public function setValidator(ValidatorInterface $validator): void
     {
-        $this->validator = $validtor;
+        $this->validator = $validator;
     }
 
     /**
@@ -73,12 +74,14 @@ abstract class AbstractConsumer implements ConsumerInterface
             $errors = $this->validator->validate($message);
 
             if ($errors->count() > 0) {
-                $this->reject((string) $errors);
+                return $this->reject((string) $errors);
             }
 
             return $this->handle($message);
         } catch (Throwable $e) {
-            $this->reject($e->getMessage());
+            var_dump($e->getMessage());
+            die;
+            return $this->reject($e->getMessage());
         } finally {
             $this->entityManager->clear();
             $this->entityManager->getConnection()->close();

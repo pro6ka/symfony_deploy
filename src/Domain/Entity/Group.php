@@ -52,7 +52,7 @@ class Group implements
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
     private Collection $participants;
 
-    #[ORM\ManyToMany(targetEntity: WorkShop::class, inversedBy: 'groupsParticipants')]
+    #[ORM\ManyToMany(targetEntity: WorkShop::class, mappedBy: 'groupsParticipants')]
     private Collection $workshops;
 
     public function __construct()
@@ -191,7 +191,7 @@ class Group implements
      */
     public function addParticipant(User $participant): void
     {
-        if (!$this->participants->contains($participant)) {
+        if (! $this->participants->contains($participant)) {
             $this->participants->add($participant);
         }
     }

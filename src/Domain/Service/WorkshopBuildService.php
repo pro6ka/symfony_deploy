@@ -2,6 +2,8 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\StartWorkshopBusInterface;
+use App\Domain\DTO\StartWorkShopDTO;
 use App\Domain\Entity\Answer;
 use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Group;
@@ -28,8 +30,25 @@ readonly class WorkshopBuildService
         private RevisionBuildService $revisionBuildService,
         private FixationUserService $fixationUserService,
         private FixationGroupService $fixationGroupService,
+        private StartWorkshopBusInterface $startWorkshopBus,
         private WorkShopRepository $workShopRepository
     ) {
+    }
+
+    /**
+     * @param WorkShop $workShop
+     * @param User $user
+     * @param Group $group
+     *
+     * @return void
+     */
+    public function startAsync(WorkShop $workShop, User $user, Group $group): void
+    {
+        $this->startWorkshopBus->sendStartWorkShopMessage(new StartWorkShopDTO(
+            workShopId: $workShop->getId(),
+            userId: $user->getId(),
+            groupId: $group->getId(),
+        ));
     }
 
     /**
