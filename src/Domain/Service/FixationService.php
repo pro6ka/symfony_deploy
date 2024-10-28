@@ -58,6 +58,16 @@ readonly class FixationService
 
     /**
      * @param FixableInterface $entity
+     *
+     * @return null|array
+     */
+    public function findByEntity(FixableInterface $entity): ?array
+    {
+        return $this->fixationRepository->findByEntity($entity);
+    }
+
+    /**
+     * @param FixableInterface $entity
      * @param FixationUser $fixationUser
      * @param Revision $revision
      * @param FixationGroup $fixationGroup

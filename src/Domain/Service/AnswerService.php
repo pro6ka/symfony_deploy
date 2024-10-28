@@ -5,6 +5,7 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Answer;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Question;
+use App\Domain\Exception\EntityHasFixationsException;
 use App\Infrastructure\Repository\AnswerRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -72,6 +73,15 @@ readonly class AnswerService extends AbstractFixableService
         );
 
         return $this->revisionService->applyToEntity($answer, $revisions);
+    }
+
+    public function deleteAnswer(Answer $answer)
+    {
+        if ($this->fixationService->findByEntity($answer)) {
+            throw new EntityHasFixationsException($answer);
+        }
+        /** todo: remove revisions */
+        /** todo: remove answer */
     }
 
     /**

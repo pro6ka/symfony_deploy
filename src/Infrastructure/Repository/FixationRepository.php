@@ -269,4 +269,23 @@ SQL;
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @param FixableInterface $entity
+     *
+     * @return null|array
+     */
+    public function findByEntity(FixableInterface $entity): ?array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select(['f'])
+            ->from(Fixation::class, 'f')
+            ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
+            ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
+            ->setParameter('entityId', $entity->getId())
+            ->setParameter('entityType', $entity::class);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
