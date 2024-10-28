@@ -126,4 +126,19 @@ readonly class WorkshopBuildService
 
         return $workShop;
     }
+
+    /**
+     * @param WorkShop $workshop
+     *
+     * @return bool
+     */
+    public function isWorkShopReadyToStart(WorkShop $workshop): bool
+    {
+        return (int) $workshop?->getExercises()
+            ->map(function (Exercise $exercise) {
+                return $exercise->getQuestions()->map(function (Question $question) {
+                    return $question->getAnswers()->count();
+                });
+            })->count() > 0;
+    }
 }
