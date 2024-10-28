@@ -16,6 +16,9 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -27,12 +30,14 @@ readonly class WorkShopService
      * @param ValidatorInterface $validator
      * @param UserService $userService
      * @param FixationService $fixationService
+     * @param Security $security
      * @param WorkShopRepository $workShopRepository
      */
     public function __construct(
         private ValidatorInterface $validator,
         private UserService $userService,
         private FixationService $fixationService,
+        private Security $security,
         private WorkShopRepository $workShopRepository
     ) {
     }
@@ -98,9 +103,22 @@ readonly class WorkShopService
      * @return null|WorkShop
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function findWorkshopById(int $workshopId): ?WorkShop
     {
+        if ($this->security->isGranted('ROLE_STUDENT')) {
+            $fixated = $this->findForUserById(
+                $workshopId,
+                $this->userService->findUserByLogin($this->security->getUser()->getUserIdentifier())
+            );
+
+            if ($fixated) {
+                return $fixated;
+            }
+        }
+
         return $this->workShopRepository->findById($workshopId);
     }
 
