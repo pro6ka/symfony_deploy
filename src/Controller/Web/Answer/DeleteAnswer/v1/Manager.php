@@ -7,13 +7,21 @@ use App\Domain\Service\AnswerService;
 
 readonly class Manager
 {
+    /**
+     * @param AnswerService $answerService
+     */
     public function __construct(
         private AnswerService $answerService
     ) {
     }
 
-    public function deleteAnswer(Answer $answer)
+    /**
+     * @param Answer $answer
+     *
+     * @return null
+     */
+    public function deleteAnswer(Answer $answer): null
     {
-        return $this->answerService->deleteAnswer($answer);
+        $this->answerService->deleteAnswerAsync($answer);
     }
 }

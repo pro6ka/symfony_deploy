@@ -30,4 +30,14 @@ class AnswerRepository extends AbstractRepository
         return $this->entityManager->getRepository(Answer::class)
             ->find($id);
     }
+
+    /**
+     * @param Answer $answer
+     *
+     * @return void
+     */
+    public function removeAnswer(Answer $answer): void
+    {
+        $this->remove($answer);
+    }
 }

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'answer')]
 #[ORM\Index(name: 'answer__question_id__idx', columns: ['question_id'])]
-class Answer implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface
+class Answer implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface, \App\Domain\Entity\Contracts\HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]

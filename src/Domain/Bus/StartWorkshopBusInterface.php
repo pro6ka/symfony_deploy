@@ -9,7 +9,7 @@ interface StartWorkshopBusInterface
     /**
      * @param StartWorkShopDTO $startWorkShopDTO
      *
-     * @return mixed
+     * @return void
      */
-    public function sendStartWorkShopMessage(StartWorkShopDTO $startWorkShopDTO);
+    public function sendStartWorkShopMessage(StartWorkShopDTO $startWorkShopDTO): void;
 }

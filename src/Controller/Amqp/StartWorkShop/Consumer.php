@@ -14,6 +14,8 @@ use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class Consumer extends AbstractConsumer
 {
@@ -43,8 +45,11 @@ class Consumer extends AbstractConsumer
      * @param Message $message
      *
      * @return int
+     * @throws GroupIsNotWorkshopParticipantException
      * @throws ORMException
-     * @throws OptimisticLockException|GroupIsNotWorkshopParticipantException
+     * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function handle($message): int
     {

@@ -2,12 +2,11 @@
 
 namespace App\Infrastructure\Bus\Adapter;
 
-use App\Domain\Bus\StartWorkshopBusInterface;
-use App\Domain\DTO\StartWorkShopDTO;
+use App\Domain\Bus\DeleteAnswerBusInterface;
 use App\Infrastructure\Bus\AmqpExchangeEnum;
 use App\Infrastructure\Bus\RabbitMqBus;
 
-readonly class StartWorkShopRabbitMqBus implements StartWorkshopBusInterface
+readonly class DeleteAnswerRabbitMqBus implements DeleteAnswerBusInterface
 {
     /**
      * @param RabbitMqBus $rabbitMqBus
@@ -20,11 +19,11 @@ readonly class StartWorkShopRabbitMqBus implements StartWorkshopBusInterface
     /**
      * @inheritDoc
      */
-    public function sendStartWorkShopMessage(StartWorkShopDTO $startWorkShopDTO): void
+    public function sendDeleteAnswerMessage(int $answerId): void
     {
         $this->rabbitMqBus->publishToExchange(
-            AmqpExchangeEnum::START_WORKSHOP,
-            $startWorkShopDTO
+            AmqpExchangeEnum::DELETE_ANSWER,
+            $answerId
         );
     }
 }

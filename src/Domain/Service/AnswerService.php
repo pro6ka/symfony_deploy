@@ -6,6 +6,7 @@ use App\Domain\Entity\Answer;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Question;
 use App\Domain\Exception\EntityHasFixationsException;
+use App\Infrastructure\Bus\Adapter\DeleteAnswerRabbitMqBus;
 use App\Infrastructure\Repository\AnswerRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -16,11 +17,13 @@ readonly class AnswerService extends AbstractFixableService
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param AnswerRepository $answerRepository
+     * @param DeleteAnswerRabbitMqBus $deleteAnswerRabbitMqBus
      */
     public function __construct(
         private FixationService $fixationService,
         private RevisionService $revisionService,
-        private AnswerRepository $answerRepository
+        private AnswerRepository $answerRepository,
+        private DeleteAnswerRabbitMqBus $deleteAnswerRabbitMqBus
     ) {
     }
 
@@ -75,13 +78,30 @@ readonly class AnswerService extends AbstractFixableService
         return $this->revisionService->applyToEntity($answer, $revisions);
     }
 
-    public function deleteAnswer(Answer $answer)
+    /**
+     * @param Answer $answer
+     *
+     * @return void
+     */
+    public function deleteAnswerAsync(Answer $answer): void
+    {
+        $this->deleteAnswerRabbitMqBus->sendDeleteAnswerMessage($answer->getId());
+    }
+
+    /**
+     * @param Answer $answer
+     *
+     * @return void
+     * @throws EntityHasFixationsException
+     */
+    public function deleteAnswer(Answer $answer): void
     {
         if ($this->fixationService->findByEntity($answer)) {
             throw new EntityHasFixationsException($answer);
         }
-        /** todo: remove revisions */
-        /** todo: remove answer */
+
+        $this->revisionService->removeByOwner($answer);
+        $this->answerRepository->removeAnswer($answer);
     }
 
     /**
