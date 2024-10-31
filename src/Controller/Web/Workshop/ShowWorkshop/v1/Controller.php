@@ -4,6 +4,8 @@ namespace App\Controller\Web\Workshop\ShowWorkshop\v1;
 
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,6 +27,8 @@ readonly class Controller
      * @return JsonResponse
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[Route(
         path: 'api/v1/workshop/{id}',

@@ -10,6 +10,8 @@ use App\Domain\Service\GroupService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
@@ -30,6 +32,8 @@ readonly class Manager
      * @return WorkshopGroupsUpdatedDTO
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function removeParticipantsGroup(AddParticipantsGroupDTO $participantsGroupDTO): WorkshopGroupsUpdatedDTO
     {

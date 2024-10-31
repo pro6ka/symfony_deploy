@@ -2,12 +2,14 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\DeleteRevisionableBusInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Question;
 use App\Domain\Model\Question\CreateQuestionModel;
 use App\Domain\Model\Question\EditQuestionModel;
 use App\Domain\Model\Question\ListQuestionModel;
 use App\Domain\Trait\PaginationTrait;
+use App\Domain\Trait\RevisionableTrait;
 use App\Infrastructure\Repository\QuestionRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -18,18 +20,21 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 readonly class QuestionService extends AbstractFixableService
 {
     use PaginationTrait;
+    use RevisionableTrait;
 
     /**
      * @param ValidatorInterface $validator
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param QuestionRepository $questionRepository
+     * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
         private ValidatorInterface $validator,
         private FixationService $fixationService,
         private RevisionService $revisionService,
-        private QuestionRepository $questionRepository
+        private QuestionRepository $questionRepository,
+        private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
 

@@ -10,6 +10,8 @@ use App\Domain\Service\ModelFactory;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 readonly class Manager
@@ -32,10 +34,12 @@ readonly class Manager
      * @return CreatedExerciseDTO
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function createExercise(CreateExerciseDTO $createExerciseDTO): CreatedExerciseDTO
     {
-        $workshop = $this->workShopService->findWorkshopById($createExerciseDTO->workshopId);
+        $workshop = $this->workShopService->findWorkShopById($createExerciseDTO->workshopId);
 
         if (! $workshop) {
             throw new BadRequestHttpException(sprintf('Workshop id: %d not found', $createExerciseDTO->workshopId));

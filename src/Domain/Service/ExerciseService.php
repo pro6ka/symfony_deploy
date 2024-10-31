@@ -2,12 +2,14 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\DeleteRevisionableBusInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Exercise;
 use App\Domain\Model\Exercise\CreateExerciseModel;
 use App\Domain\Model\Exercise\EditExerciseModel;
 use App\Domain\Model\Exercise\ListExerciseModel;
 use App\Domain\Trait\PaginationTrait;
+use App\Domain\Trait\RevisionableTrait;
 use App\Infrastructure\Repository\ExerciseRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -18,18 +20,21 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 readonly class ExerciseService extends AbstractFixableService
 {
     use PaginationTrait;
+    use RevisionableTrait;
 
     /**
      * @param ValidatorInterface $validator
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param ExerciseRepository $exerciseRepository
+     * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
         private ValidatorInterface $validator,
         private FixationService $fixationService,
         private RevisionService $revisionService,
-        private ExerciseRepository $exerciseRepository
+        private ExerciseRepository $exerciseRepository,
+        private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
 

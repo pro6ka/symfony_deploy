@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Controller\Amqp\DeleteAnswer;
+namespace App\Controller\Amqp\DeleteExercise;
 
 use App\Application\RabbitMQ\AbstractConsumer;
-use App\Controller\Amqp\DeleteAnswer\Input\Message;
+use App\Controller\Amqp\DeleteExercise\Input\Message;
 use App\Domain\Exception\EntityHasFixationsException;
-use App\Domain\Service\AnswerService;
+use App\Domain\Service\ExerciseService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
 class Consumer extends AbstractConsumer
 {
+    /**
+     * @param ExerciseService $exerciseService
+     */
     public function __construct(
-        private AnswerService $answerService
+        private readonly ExerciseService $exerciseService
     ) {
     }
 
@@ -34,11 +37,11 @@ class Consumer extends AbstractConsumer
      */
     protected function handle($message): int
     {
-        if (! $answer = $this->answerService->findById($message->entityId)) {
-            return $this->reject(sprintf('Answer ID %d was not found', $message->entityId));
+        if (! $exercise = $this->exerciseService->findById($message->exerciseId)) {
+            $this->reject(sprintf('Exercise ID %d was not found', $message->exerciseId));
         }
 
-        $this->answerService->deleteRevisionable($answer);
+        $this->exerciseService->deleteRevisionable($exercise);
 
         return self::MSG_ACK;
     }

@@ -2,28 +2,30 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\DeleteRevisionableBusInterface;
 use App\Domain\Entity\Answer;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Question;
-use App\Domain\Exception\EntityHasFixationsException;
-use App\Infrastructure\Bus\Adapter\DeleteAnswerRabbitMqBus;
+use App\Domain\Trait\RevisionableTrait;
 use App\Infrastructure\Repository\AnswerRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
 readonly class AnswerService extends AbstractFixableService
 {
+    use RevisionableTrait;
+
     /**
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param AnswerRepository $answerRepository
-     * @param DeleteAnswerRabbitMqBus $deleteAnswerRabbitMqBus
+     * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
         private FixationService $fixationService,
         private RevisionService $revisionService,
         private AnswerRepository $answerRepository,
-        private DeleteAnswerRabbitMqBus $deleteAnswerRabbitMqBus
+        private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
 
@@ -46,15 +48,15 @@ readonly class AnswerService extends AbstractFixableService
     }
 
     /**
-     * @param int $answerId
+     * @param int $entityId
      *
      * @return null|Answer
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findById(int $answerId): ?Answer
+    public function findById(int $entityId): ?Answer
     {
-        return $this->answerRepository->findById($answerId);
+        return $this->answerRepository->findById($entityId);
     }
 
     /**
@@ -76,32 +78,6 @@ readonly class AnswerService extends AbstractFixableService
         );
 
         return $this->revisionService->applyToEntity($answer, $revisions);
-    }
-
-    /**
-     * @param Answer $answer
-     *
-     * @return void
-     */
-    public function deleteAnswerAsync(Answer $answer): void
-    {
-        $this->deleteAnswerRabbitMqBus->sendDeleteAnswerMessage($answer->getId());
-    }
-
-    /**
-     * @param Answer $answer
-     *
-     * @return void
-     * @throws EntityHasFixationsException
-     */
-    public function deleteAnswer(Answer $answer): void
-    {
-        if ($this->fixationService->findByEntity($answer)) {
-            throw new EntityHasFixationsException($answer);
-        }
-
-        $this->revisionService->removeByOwner($answer);
-        $this->answerRepository->removeAnswer($answer);
     }
 
     /**

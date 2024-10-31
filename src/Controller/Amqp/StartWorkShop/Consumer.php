@@ -45,11 +45,11 @@ class Consumer extends AbstractConsumer
      * @param Message $message
      *
      * @return int
+     * @throws ContainerExceptionInterface
      * @throws GroupIsNotWorkshopParticipantException
+     * @throws NotFoundExceptionInterface
      * @throws ORMException
      * @throws OptimisticLockException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function handle($message): int
     {

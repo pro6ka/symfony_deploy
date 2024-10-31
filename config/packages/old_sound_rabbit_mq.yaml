@@ -6,9 +6,9 @@ old_sound_rabbit_mq:
     start_workshop:
       connection: default
       exchange_options: { name: 'old_sound_rabbit_mq.start_workshop', type: direct }
-    delete_answer:
+    delete_revisionable:
       connection: default
-      exchange_options: { name: 'old_sound_rabbit_mq.delete_answer', type: direct }
+      exchange_options: { name: 'old_sound_rabbit_mq.delete_revisionable', type: direct }
   consumers:
     start_workshop:
       connection: default
@@ -21,14 +21,34 @@ old_sound_rabbit_mq:
         timeout: 1800
         exit_code: 0
       qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }
-    delete_answer:
+  multiple_consumers:
+    delete_revisionable:
       connection: default
-      exchange_options: { name: 'old_sound_rabbit_mq.delete_answer', type: direct }
-      queue_options: { name: 'old_sound_rabbit_mq.delete_answer' }
-      callback: App\Controller\Amqp\DeleteAnswer\Consumer
+      exchange_options: { name: 'old_sound_rabbit_mq.delete_revisionable', type: direct }
       idle_timeout: 300
       idle_timeout_exit_code: 0
       graceful_max_execution:
         timeout: 1800
         exit_code: 0
       qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }
+      queues:
+        delete_answer:
+          name: delete_answer
+          callback: App\Controller\Amqp\DeleteAnswer\Consumer
+          routing_keys:
+            - answer
+        delete_question:
+          name: delete_question
+          callback: App\Controller\Amqp\DeleteQuestion\Consumer
+          routing_keys:
+            - question
+        delete_exercise:
+          name: delete_exercise
+          callback: App\Controller\Amqp\DeleteExercise\Consumer
+          routing_keys:
+            - exercise
+        delete_workshop:
+          name: delete_workshop
+          callback: App\Controller\Amqp\DeleteWorkShop\Consumer
+          routing_keys:
+            - workshop

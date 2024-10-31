@@ -13,8 +13,6 @@ use App\Domain\Entity\WorkShop;
 use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\NonUniqueResultException;
-use RuntimeException;
 
 readonly class WorkshopBuildService
 {
@@ -23,6 +21,7 @@ readonly class WorkshopBuildService
      * @param RevisionBuildService $revisionBuildService
      * @param FixationUserService $fixationUserService
      * @param FixationGroupService $fixationGroupService
+     * @param StartWorkshopBusInterface $startWorkshopBus
      * @param WorkShopRepository $workShopRepository
      */
     public function __construct(

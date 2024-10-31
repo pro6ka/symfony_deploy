@@ -2,6 +2,8 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\DeleteRevisionableBusInterface;
+use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
@@ -11,6 +13,7 @@ use App\Domain\Model\Workshop\CreateWorkshopModel;
 use App\Domain\Model\Workshop\EditWorkshopModel;
 use App\Domain\Model\Workshop\ListWorkshopModel;
 use App\Domain\Trait\PaginationTrait;
+use App\Domain\Trait\RevisionableTrait;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
@@ -25,6 +28,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 readonly class WorkShopService
 {
     use PaginationTrait;
+    use RevisionableTrait;
 
     /**
      * @param ValidatorInterface $validator
@@ -32,13 +36,15 @@ readonly class WorkShopService
      * @param FixationService $fixationService
      * @param Security $security
      * @param WorkShopRepository $workShopRepository
+     * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
         private ValidatorInterface $validator,
         private UserService $userService,
         private FixationService $fixationService,
         private Security $security,
-        private WorkShopRepository $workShopRepository
+        private WorkShopRepository $workShopRepository,
+        private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
 
@@ -95,6 +101,18 @@ readonly class WorkShopService
         }
 
         return $workShopList;
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return null|RevisionableInterface
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findById(int $entityId): ?RevisionableInterface
+    {
+        return $this->workShopRepository->findById($entityId);
     }
 
     /**
@@ -193,6 +211,7 @@ readonly class WorkShopService
      * @param Group $group
      *
      * @return WorkShop
+     * @throws ORMException
      */
     public function addWorkshopParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
     {

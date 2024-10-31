@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'answer')]
 #[ORM\Index(name: 'answer__question_id__idx', columns: ['question_id'])]
-class Answer implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface, \App\Domain\Entity\Contracts\HasRevisionsInterface
+class Answer implements
+    EntityInterface,
+    HasMetaTimeStampInterface,
+    RevisionableInterface,
+    FixableInterface,
+    HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint')]
     #[ORM\Id]

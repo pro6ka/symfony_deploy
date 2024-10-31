@@ -15,7 +15,7 @@ class RabbitMqBus
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        private SerializerInterface $serializer
+        private readonly SerializerInterface $serializer
     ) {
     }
 

@@ -18,10 +18,10 @@ readonly class Manager
     /**
      * @param Answer $answer
      *
-     * @return null
+     * @return void
      */
-    public function deleteAnswer(Answer $answer): null
+    public function deleteAnswer(Answer $answer): void
     {
-        $this->answerService->deleteAnswerAsync($answer);
+        $this->answerService->deleteAsync($answer);
     }
 }

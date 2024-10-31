@@ -9,6 +9,8 @@ use App\Domain\Service\WorkshopBuildService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,6 +37,8 @@ readonly class Manager
      * @return bool
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function startWorkshop(StartWorkshopDTO $startWorkshopDTO, UserInterface $authUser): bool
     {

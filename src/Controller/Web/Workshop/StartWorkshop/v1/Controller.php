@@ -30,7 +30,6 @@ readonly class Controller
      * @param $authUser
      *
      * @return JsonResponse
-     * @throws GroupIsNotWorkshopParticipantException
      * @throws ORMException
      * @throws OptimisticLockException
      */

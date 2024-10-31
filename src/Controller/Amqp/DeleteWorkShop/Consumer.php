@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Controller\Amqp\DeleteAnswer;
+namespace App\Controller\Amqp\DeleteWorkShop;
 
 use App\Application\RabbitMQ\AbstractConsumer;
-use App\Controller\Amqp\DeleteAnswer\Input\Message;
+use App\Controller\Amqp\DeleteWorkShop\Input\Message;
 use App\Domain\Exception\EntityHasFixationsException;
-use App\Domain\Service\AnswerService;
+use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
 class Consumer extends AbstractConsumer
 {
+    /**
+     * @param WorkShopService $workShopService
+     */
     public function __construct(
-        private AnswerService $answerService
+        private readonly WorkShopService $workShopService
     ) {
     }
 
@@ -34,11 +37,11 @@ class Consumer extends AbstractConsumer
      */
     protected function handle($message): int
     {
-        if (! $answer = $this->answerService->findById($message->entityId)) {
-            return $this->reject(sprintf('Answer ID %d was not found', $message->entityId));
+        if (! $question = $this->workShopService->findById($message->workShopId)) {
+            $this->reject(sprintf('WorkShop ID %d was not found', $message->workShopId));
         }
 
-        $this->answerService->deleteRevisionable($answer);
+        $this->workShopService->deleteRevisionable($question);
 
         return self::MSG_ACK;
     }
