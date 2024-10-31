@@ -48,7 +48,7 @@ services:
 
   supervisor:
     build: docker/supervisor
-    container_name: ${PRODUCT_NAE:-otus}_supervisor
+    container_name: ${PRODUCT_NAME:-otus}_supervisor
     volumes:
       - ./:/app
       - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
