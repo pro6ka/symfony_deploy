@@ -55,6 +55,11 @@ services:
     working_dir: /app
     command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
 
+  redis:
+    container_name: 'redis'
+    image: redis:alpine
+    ports:
+      - 6379:6379
 
 
 volumes:
