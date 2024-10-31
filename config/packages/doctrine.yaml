@@ -43,6 +43,24 @@ doctrine:
             parameters:
               checkIsActive: true
 
+services:
+  doctrine_redis_provider:
+    class: Redis
+    factory: Symfony\Component\Cache\Adapter\RedisAdapter::createConnection
+    arguments:
+      - '%env(REDIS_DSN)%'
+      - PREFIX_KEY: '%env(PROJECT_NAME)%'
+
+framework:
+  cache:
+    pools:
+      doctrine.result_cache_pool:
+        adapter: cache.adapter.redis
+        provider: doctrine_redis_provider
+      doctrine.system_cache_pool:
+        adapter: cache.adapter.redis
+        provider: doctrine_redis_provider
+
 when@test:
     doctrine:
         dbal:
