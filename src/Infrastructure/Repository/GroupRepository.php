@@ -7,6 +7,7 @@ use App\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use RuntimeException;
+use Doctrine\ORM\Query\Expr;
 
 class GroupRepository extends AbstractRepository
 {
@@ -83,11 +84,35 @@ class GroupRepository extends AbstractRepository
     }
 
     /**
+     * @param bool $ignoreIsActiveFilter
+     *
      * @return array
      */
-    public function getList(): array
+    public function getList(bool $ignoreIsActiveFilter = false): array
     {
+        if ($ignoreIsActiveFilter) {
+            $this->ignoreIsActiveFilter();
+        }
+
         return $this->entityManager->getRepository(Group::class)->findAll();
+    }
+
+    public function getListWithIsParticipant(bool $ignoreIsActiveFilter = false): array
+    {
+        if ($ignoreIsActiveFilter) {
+            $this->ignoreIsActiveFilter();
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select(['g'])
+            ->from(Group::class, 'g')
+            ->join(
+                'g.participants',
+                'p',
+                Expr\Join::WITH,
+                $queryBuilder->expr()->eq()
+            );
+
     }
 
     /**
@@ -97,11 +122,8 @@ class GroupRepository extends AbstractRepository
      */
     public function delete(int $id): void
     {
-        $filters = $this->entityManager->getFilters();
+        $this->ignoreIsActiveFilter();
 
-        if ($filters->isEnabled('is_active_filter')) {
-            $filters->disable('is_active_filter');
-        }
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->delete(Group::class, 'g')
             ->where($queryBuilder->expr()->eq('g.id', ':id'))
@@ -116,5 +138,17 @@ class GroupRepository extends AbstractRepository
     public function update(): void
     {
         $this->flush();
+    }
+
+    /**
+     * @return void
+     */
+    private function ignoreIsActiveFilter(): void
+    {
+        $filters = $this->entityManager->getFilters();
+
+        if ($filters->isEnabled('is_active_filter')) {
+            $filters->disable('is_active_filter');
+        }
     }
 }
