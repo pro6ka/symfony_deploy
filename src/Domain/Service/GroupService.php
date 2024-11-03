@@ -103,25 +103,33 @@ readonly class GroupService
     }
 
     /**
+     * @param int $userId
      * @param bool $ignoreIsActiveFilter
      * @param bool $isWithIsParticipant
      *
      * @return array
      */
     public function showList(
+        int $userId,
         bool $ignoreIsActiveFilter = false,
         bool $isWithIsParticipant = true
     ): array {
         if ($isWithIsParticipant) {
-            return $this->showListWithIsParticipant($ignoreIsActiveFilter);
+            return $this->showListWithIsParticipant($userId, $ignoreIsActiveFilter);
         }
 
         return $this->groupRepository->getList($ignoreIsActiveFilter);
     }
 
-    public function showListWithIsParticipant($ignoreIsActiveFilter = false)
+    /**
+     * @param int $userId
+     * @param bool $ignoreIsActiveFilter
+     *
+     * @return array
+     */
+    public function showListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false): array
     {
-        return $this->groupRepository->getListWithIsParticipant($ignoreIsActiveFilter);
+        return $this->groupRepository->getListWithIsParticipant($userId, $ignoreIsActiveFilter);
     }
 
     /**

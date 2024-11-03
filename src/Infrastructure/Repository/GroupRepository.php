@@ -97,7 +97,13 @@ class GroupRepository extends AbstractRepository
         return $this->entityManager->getRepository(Group::class)->findAll();
     }
 
-    public function getListWithIsParticipant(bool $ignoreIsActiveFilter = false): array
+    /**
+     * @param int $userId
+     * @param bool $ignoreIsActiveFilter
+     *
+     * @return array
+     */
+    public function getListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false): array
     {
         if ($ignoreIsActiveFilter) {
             $this->ignoreIsActiveFilter();
@@ -105,14 +111,15 @@ class GroupRepository extends AbstractRepository
 
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['g'])
+            ->addSelect('CASE WhEN gp.id=:userId THEN true ELSE false END as HIDDEN isParticipant')
             ->from(Group::class, 'g')
-            ->join(
-                'g.participants',
-                'p',
-                Expr\Join::WITH,
-                $queryBuilder->expr()->eq()
-            );
+            ->leftJoin('g.participants', 'gp')
+            ->setParameter(':userId', $userId)
+            ->orderBy('isParticipant', 'DESC')
+            ->addOrderBy('g.id', 'DESC')
+            ;
 
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

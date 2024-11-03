@@ -163,8 +163,7 @@ SQL;
         Group $group
     ): ?Fixation {
         if (!$entity->getId()) {
-            dump($entity);
-            die;
+            return null;
         }
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['f', 'u', 'r'])
