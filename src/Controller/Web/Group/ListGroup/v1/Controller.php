@@ -22,15 +22,16 @@ readonly class Controller
     }
 
     /**
+     * @param int $page
      * @param AuthUser $currentUser
      *
      * @return JsonResponse
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    #[Route(path: 'api/v1/group', name: 'group_list', methods: ['GET']),]
-    public function __invoke(#[CurrentUser] AuthUser $currentUser): JsonResponse
+    #[Route(path: 'api/v1/group/{page}', name: 'group_list', methods: ['GET']),]
+    public function __invoke(#[CurrentUser] AuthUser $currentUser, int $page = 1): JsonResponse
     {
-        return new JsonResponse($this->manager->showList($currentUser));
+        return new JsonResponse($this->manager->showList($page, $currentUser));
     }
 }

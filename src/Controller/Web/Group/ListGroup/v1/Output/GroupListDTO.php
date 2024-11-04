@@ -2,25 +2,18 @@
 
 namespace App\Controller\Web\Group\ListGroup\v1\Output;
 
-use DateTime;
+use App\Controller\Web\Group\ListGroup\v1\Output\Part\GroupListItemDTO;
+use App\Domain\Model\PaginationModel;
 
 readonly class GroupListDTO
 {
     /**
-     * @param int $id
-     * @param string $name
-     * @param bool $isActive
-     * @param DateTime $createdAt
-     * @param DateTime $updatedAt
-     * @param int $participants
+     * @param array|GroupListItemDTO[] $groupList
+     * @param PaginationModel $pagination
      */
     public function __construct(
-        public int $id,
-        public string $name,
-        public bool $isActive,
-        public DateTime $createdAt,
-        public DateTime $updatedAt,
-        public int $participants = 0
+        public array $groupList,
+        public PaginationModel $pagination
     ) {
     }
 }

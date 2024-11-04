@@ -88,7 +88,7 @@ class GroupRepository extends AbstractRepository
      *
      * @return array
      */
-    public function getList(bool $ignoreIsActiveFilter = false): array
+    public function getList( bool $ignoreIsActiveFilter = false): array
     {
         if ($ignoreIsActiveFilter) {
             $this->ignoreIsActiveFilter();
@@ -100,10 +100,11 @@ class GroupRepository extends AbstractRepository
     /**
      * @param int $userId
      * @param bool $ignoreIsActiveFilter
+     * @param int $page
      *
      * @return array
      */
-    public function getListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false): array
+    public function getListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false, int $page = 1): array
     {
         if ($ignoreIsActiveFilter) {
             $this->ignoreIsActiveFilter();

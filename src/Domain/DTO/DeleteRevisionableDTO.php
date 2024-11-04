@@ -6,6 +6,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 readonly class DeleteRevisionableDTO
 {
+    /**
+     * @param int $entityId
+     * @param string $routingKey
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]

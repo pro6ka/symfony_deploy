@@ -2,6 +2,7 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\DTO\Group\GroupListInputDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\CreateGroupModel;
@@ -103,33 +104,31 @@ readonly class GroupService
     }
 
     /**
-     * @param int $userId
-     * @param bool $ignoreIsActiveFilter
-     * @param bool $isWithIsParticipant
+     * @param GroupListInputDTO $groupListInputDTO
      *
      * @return array
      */
-    public function showList(
-        int $userId,
-        bool $ignoreIsActiveFilter = false,
-        bool $isWithIsParticipant = true
-    ): array {
-        if ($isWithIsParticipant) {
-            return $this->showListWithIsParticipant($userId, $ignoreIsActiveFilter);
+    public function showList(GroupListInputDTO $groupListInputDTO): array
+    {
+        if ($groupListInputDTO->isWithParticipant) {
+            return $this->showListWithIsParticipant($groupListInputDTO);
         }
 
-        return $this->groupRepository->getList($ignoreIsActiveFilter);
+        return $this->groupRepository->getList($groupListInputDTO->ignoreIsActiveFilter);
     }
 
     /**
-     * @param int $userId
-     * @param bool $ignoreIsActiveFilter
+     * @param GroupListInputDTO $groupListInputDTO
      *
      * @return array
      */
-    public function showListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false): array
+    public function showListWithIsParticipant(GroupListInputDTO $groupListInputDTO): array
     {
-        return $this->groupRepository->getListWithIsParticipant($userId, $ignoreIsActiveFilter);
+        return $this->groupRepository->getListWithIsParticipant(
+            $groupListInputDTO->userId,
+            $groupListInputDTO->ignoreIsActiveFilter,
+            $groupListInputDTO->page
+        );
     }
 
     /**
