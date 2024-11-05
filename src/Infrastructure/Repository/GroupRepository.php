@@ -5,13 +5,12 @@ namespace App\Infrastructure\Repository;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Repository\GroupRepositoryInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use RuntimeException;
-use Doctrine\ORM\Query\Expr;
 
-class GroupRepository extends AbstractRepository
+class GroupRepository extends AbstractRepository implements GroupRepositoryInterface
 {
     /**
      * @param Group $group
@@ -21,17 +20,6 @@ class GroupRepository extends AbstractRepository
     public function create(Group $group): int
     {
         return $this->store($group);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Group|null
-     * @throws RuntimeException
-     */
-    public function findByName(string $name): ?Group
-    {
-        return $this->entityManager->getRepository(Group::class)->findOneBy(['name' => $name]);
     }
 
     /**
