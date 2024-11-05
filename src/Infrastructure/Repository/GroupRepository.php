@@ -2,10 +2,12 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use RuntimeException;
 use Doctrine\ORM\Query\Expr;
 
@@ -84,28 +86,38 @@ class GroupRepository extends AbstractRepository
     }
 
     /**
+     * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return array
+     * @return Paginator
      */
-    public function getList( bool $ignoreIsActiveFilter = false): array
+    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter = false): Paginator
     {
         if ($ignoreIsActiveFilter) {
             $this->ignoreIsActiveFilter();
         }
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->select('g')
+            ->from(Group::class, 'g')
+            ->setFirstResult($paginationDTO->firstResult)
+            ->setMaxResults($paginationDTO->pageSize)
+            ;
 
-        return $this->entityManager->getRepository(Group::class)->findAll();
+        return new Paginator($queryBuilder->getQuery());
     }
 
     /**
      * @param int $userId
+     * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
-     * @param int $page
      *
-     * @return array
+     * @return Paginator
      */
-    public function getListWithIsParticipant(int $userId, bool $ignoreIsActiveFilter = false, int $page = 1): array
-    {
+    public function getListWithIsParticipant(
+        int $userId,
+        PaginationDTO $paginationDTO,
+        bool $ignoreIsActiveFilter = false
+    ): Paginator {
         if ($ignoreIsActiveFilter) {
             $this->ignoreIsActiveFilter();
         }
@@ -118,9 +130,11 @@ class GroupRepository extends AbstractRepository
             ->setParameter(':userId', $userId)
             ->orderBy('isParticipant', 'DESC')
             ->addOrderBy('g.id', 'DESC')
+            ->setFirstResult($paginationDTO->firstResult)
+            ->setMaxResults($paginationDTO->pageSize)
             ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return new Paginator($queryBuilder->getQuery());
     }
 
     /**

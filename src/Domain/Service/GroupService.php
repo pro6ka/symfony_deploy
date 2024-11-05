@@ -2,19 +2,29 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\DTO\Group\GroupListOutputDTO;
+use App\Domain\DTO\Group\GroupListRepositoryDTO;
 use App\Domain\DTO\Group\GroupListInputDTO;
+use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\CreateGroupModel;
+use App\Domain\Model\Group\ListGroupModel;
 use App\Domain\Model\Group\UpdateGroupNameModel;
+use App\Domain\Model\PaginationModel;
+use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 readonly class GroupService
 {
+    use PaginationTrait;
+
     /**
      * @param GroupRepository $groupRepository
      * @param ValidatorInterface $validator
@@ -106,28 +116,62 @@ readonly class GroupService
     /**
      * @param GroupListInputDTO $groupListInputDTO
      *
-     * @return array
+     * @return GroupListOutputDTO
+     * @throws Exception
      */
-    public function showList(GroupListInputDTO $groupListInputDTO): array
+    public function showList(GroupListInputDTO $groupListInputDTO): GroupListOutputDTO
     {
-        if ($groupListInputDTO->isWithParticipant) {
-            return $this->showListWithIsParticipant($groupListInputDTO);
+        $paginationDTO = new PaginationDTO(
+            pageSize: ListGroupModel::PAGE_SIZE,
+            firstResult: $this->countOffset($groupListInputDTO->page, ListGroupModel::PAGE_SIZE),
+        );
+
+        $violations = $this->validator->validate($paginationDTO);
+
+        if ($violations->count() > 0) {
+            throw new ValidationFailedException($paginationDTO, $violations);
         }
 
-        return $this->groupRepository->getList($groupListInputDTO->ignoreIsActiveFilter);
+        if ($groupListInputDTO->isWithParticipant) {
+            return $this->showListWithIsParticipant($paginationDTO, $groupListInputDTO);
+        }
+
+        $paginator = $this->groupRepository->getList($paginationDTO, $groupListInputDTO->ignoreIsActiveFilter);
+
+        return new GroupListOutputDTO(
+            groupList: array_map(fn (Group $group) => $group, (array) $paginator->getIterator()),
+            pagination: new PaginationModel(
+                total: $paginator->count(),
+                page: $groupListInputDTO->page,
+                pageSize: ListGroupModel::PAGE_SIZE
+            )
+        );
     }
 
     /**
+     * @param PaginationDTO $paginationDTO
      * @param GroupListInputDTO $groupListInputDTO
      *
-     * @return array
+     * @return GroupListOutputDTO
+     * @throws Exception
      */
-    public function showListWithIsParticipant(GroupListInputDTO $groupListInputDTO): array
-    {
-        return $this->groupRepository->getListWithIsParticipant(
+    public function showListWithIsParticipant(
+        PaginationDTO $paginationDTO,
+        GroupListInputDTO $groupListInputDTO
+    ): GroupListOutputDTO {
+        $paginator = $this->groupRepository->getListWithIsParticipant(
             $groupListInputDTO->userId,
-            $groupListInputDTO->ignoreIsActiveFilter,
-            $groupListInputDTO->page
+            $paginationDTO,
+            $groupListInputDTO->ignoreIsActiveFilter
+        );
+
+        return new GroupListOutputDTO(
+            groupList: array_map(fn (Group $group) => $group, (array) $paginator->getIterator()),
+            pagination: new PaginationModel(
+                total: $paginator->count(),
+                page: $groupListInputDTO->page,
+                pageSize: ListGroupModel::PAGE_SIZE
+            )
         );
     }
 

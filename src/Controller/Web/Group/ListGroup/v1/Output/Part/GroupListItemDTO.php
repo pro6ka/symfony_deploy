@@ -13,6 +13,7 @@ class GroupListItemDTO
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
      * @param int $participants
+     * @param bool $isParticipant
      */
     public function __construct(
         public int $id,
@@ -20,7 +21,8 @@ class GroupListItemDTO
         public bool $isActive,
         public DateTime $createdAt,
         public DateTime $updatedAt,
-        public int $participants = 0
+        public int $participants = 0,
+        public bool $isParticipant = false
     ) {
     }
 }
