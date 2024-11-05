@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Domain\Repository;
+namespace App\Domain\Repository\Group;
 
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-interface GroupRepositoryInterface
+interface GroupRepositoryCacheInterface
 {
     /**
      * @param Group $group
@@ -15,13 +15,6 @@ interface GroupRepositoryInterface
      * @return int
      */
     public function create(Group $group): int;
-
-    /**
-     * @param int $groupId
-     *
-     * @return null|Group
-     */
-    public function findGroupById(int $groupId): ?Group;
 
     /**
      * @param Group $group
@@ -68,14 +61,9 @@ interface GroupRepositoryInterface
     ): Paginator;
 
     /**
-     * @param int $id
+     * @param int $groupId
      *
      * @return void
      */
-    public function delete(int $id): void;
-
-    /**
-     * @return void
-     */
-    public function update(): void;
+    public function delete(int $groupId): void;
 }

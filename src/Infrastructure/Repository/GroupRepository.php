@@ -5,7 +5,7 @@ namespace App\Infrastructure\Repository;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use App\Domain\Repository\GroupRepositoryInterface;
+use App\Domain\Repository\Group\GroupRepositoryInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
