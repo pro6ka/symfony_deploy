@@ -5,10 +5,16 @@ namespace App\Domain\Repository\Group;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 interface GroupRepositoryCacheInterface
 {
+    /**
+     * @param int $groupId
+     *
+     * @return null|Group
+     */
+    public function findGroupById(int $groupId): ?Group;
+
     /**
      * @param Group $group
      *
@@ -43,22 +49,22 @@ interface GroupRepositoryCacheInterface
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return Paginator
+     * @return array
      */
-    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): Paginator;
+    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): array;
 
     /**
      * @param int $userId
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return Paginator
+     * @return array
      */
     public function getListWithIsParticipant(
         int $userId,
         PaginationDTO $paginationDTO,
         bool $ignoreIsActiveFilter = false
-    ): Paginator;
+    ): array;
 
     /**
      * @param int $groupId
@@ -66,4 +72,9 @@ interface GroupRepositoryCacheInterface
      * @return void
      */
     public function delete(int $groupId): void;
+
+    /**
+     * @return void
+     */
+    public function update(): void;
 }

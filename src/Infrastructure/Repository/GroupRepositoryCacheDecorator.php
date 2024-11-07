@@ -5,18 +5,23 @@ namespace App\Infrastructure\Repository;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\ListGroupModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Psr\Cache\CacheItemPoolInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInterface
 {
+    /**
+     * @param GroupRepository $groupRepository
+     * @param TagAwareCacheInterface $tagAwareCache
+     */
     public function __construct(
         private GroupRepository $groupRepository,
-        private CacheItemPoolInterface $cacheItemPool,
-        private TagAwareCacheInterface $tagAwareCache
+        private TagAwareCacheInterface $tagAwareCache,
     ) {
     }
 
@@ -68,7 +73,7 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
     public function addParticipant(Group $group, User $user): Group
     {
         $result = $this->groupRepository->addParticipant($group, $user);
-        $this->cacheItemPool->deleteItem($this->getCacheKey($user->getId()));
+        $this->tagAwareCache->invalidateTags([$this->getCacheTag($user->getId())]);
 
         return $result;
     }
@@ -83,45 +88,122 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
     public function removeParticipant(Group $group, User $user): Group
     {
         $result = $this->groupRepository->removeParticipant($group, $user);
-        $this->cacheItemPool->deleteItem($this->getCacheKey($user->getId()));
+        $this->tagAwareCache->invalidateTags([$this->getCacheTag($user->getId())]);
 
         return $result;
     }
 
     /**
-     * @inheritDoc
+     * @param PaginationDTO $paginationDTO
+     * @param bool $ignoreIsActiveFilter
+     *
+     * @return array|ListGroupModel[]
+     * @throws InvalidArgumentException
      */
-    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): Paginator
+    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): array
     {
-//        return $this->cacheItemPool->
+        return $this->tagAwareCache->get(
+            $this->getCacheKey($paginationDTO->firstResult),
+            function (ItemInterface $item) use ($paginationDTO, $ignoreIsActiveFilter) {
+                $paginator = $this->groupRepository->getList($paginationDTO, $ignoreIsActiveFilter);
+                $groupModels = array_map(fn (Group $group) => new ListGroupModel(
+                    id: $group->getId(),
+                    name: $group->getName(),
+                    isActive: $group->getIsActive(),
+                    workingFrom: $group->getWorkingFrom(),
+                    workingTo: $group->getWorkingTo(),
+                    createdAt: $group->getCreatedAt(),
+                    updatedAt: $group->getUpdatedAt()
+                ), (array) $paginator->getIterator());
+                $item->set($groupModels);
+                $item->tag($this->getCacheTag());
+
+                return $groupModels;
+            }
+        );
     }
 
     /**
-     * @inheritDoc
+     * @param int $userId
+     * @param PaginationDTO $paginationDTO
+     * @param bool $ignoreIsActiveFilter
+     *
+     * @return array|ListGroupModel[]
+     * @throws InvalidArgumentException
      */
     public function getListWithIsParticipant(
         int $userId,
         PaginationDTO $paginationDTO,
         bool $ignoreIsActiveFilter = false
-    ): Paginator {
-        // TODO: Implement getListWithIsParticipant() method.
+    ): array {
+        return $this->tagAwareCache->get(
+            $this->getCacheKey($paginationDTO->firstResult, $userId),
+            function (ItemInterface $item) use ($userId, $paginationDTO, $ignoreIsActiveFilter) {
+                $groups = $this->groupRepository->getListWithIsParticipant(
+                    $userId,
+                    $paginationDTO,
+                    $ignoreIsActiveFilter
+                );
+                $groupModels = array_map(
+                    static fn(Group $group) => new ListGroupModel(
+                        id: $group->getId(),
+                        name: $group->getName(),
+                        isActive: $group->getIsActive(),
+                        workingFrom: $group->getWorkingFrom(),
+                        workingTo: $group->getWorkingTo(),
+                        createdAt: $group->getCreatedAt(),
+                        updatedAt: $group->getUpdatedAt()
+                    ),
+                    (array)$groups->getIterator()
+                );
+                $item->set($groupModels);
+                $item->tag($this->getCacheTag($userId));
+
+                return $groupModels;
+            }
+        );
     }
 
     /**
-     * @return string
-     */
-    private function getCacheTag(): string
-    {
-        return 'group_list';
-    }
-
-    /**
-     * @param int $userId
+     * @param null|int $userId
      *
      * @return string
      */
-    private function getCacheKey(int $userId): string
+    private function getCacheTag(?int $userId = null): string
     {
-        return 'group_list_' . $userId;
+        return 'group_list' . $userId ? '_user_' . $userId : '';
+    }
+
+    /**
+     * @param int $firstResult
+     * @param null|int $userId
+     *
+     * @return string
+     */
+    private function getCacheKey(int $firstResult, ?int $userId = null): string
+    {
+        return 'group_list_page' . $firstResult . $userId ? '_user_' . $userId : '';
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function update(): void
+    {
+        $this->groupRepository->update();
+        $this->tagAwareCache->invalidateTags([$this->getCacheTag()]);
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return null|Group
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findGroupById(int $groupId): ?Group
+    {
+        return $this->groupRepository->findGroupById($groupId);
     }
 }
