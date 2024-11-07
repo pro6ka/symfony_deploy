@@ -9,13 +9,6 @@ use App\Domain\Entity\User;
 interface GroupRepositoryCacheInterface
 {
     /**
-     * @param int $groupId
-     *
-     * @return null|Group
-     */
-    public function findGroupById(int $groupId): ?Group;
-
-    /**
      * @param Group $group
      *
      * @return int

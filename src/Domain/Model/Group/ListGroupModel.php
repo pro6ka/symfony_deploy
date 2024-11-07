@@ -13,7 +13,7 @@ readonly class ListGroupModel
      * @param string $name
      * @param bool $isActive
      * @param DateTime $workingFrom
-     * @param DateTime $workingTo
+     * @param DateTime|null $workingTo
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
      */
@@ -22,7 +22,7 @@ readonly class ListGroupModel
         public string $name,
         public bool $isActive,
         public DateTime $workingFrom,
-        public DateTime $workingTo,
+        public ?DateTime $workingTo,
         public DateTime $createdAt,
         public DateTime $updatedAt,
     ) {

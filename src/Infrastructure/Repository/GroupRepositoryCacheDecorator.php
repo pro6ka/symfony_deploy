@@ -7,6 +7,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\ListGroupModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
+use App\Domain\Repository\Group\GroupRepositoryInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Cache\InvalidArgumentException;
@@ -16,11 +17,11 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInterface
 {
     /**
-     * @param GroupRepository $groupRepository
+     * @param GroupRepositoryInterface $groupRepository
      * @param TagAwareCacheInterface $tagAwareCache
      */
     public function __construct(
-        private GroupRepository $groupRepository,
+        private GroupRepositoryInterface $groupRepository,
         private TagAwareCacheInterface $tagAwareCache,
     ) {
     }

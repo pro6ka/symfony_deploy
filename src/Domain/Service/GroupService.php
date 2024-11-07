@@ -3,7 +3,6 @@
 namespace App\Domain\Service;
 
 use App\Domain\DTO\Group\GroupListOutputDTO;
-use App\Domain\DTO\Group\GroupListRepositoryDTO;
 use App\Domain\DTO\Group\GroupListInputDTO;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
@@ -12,11 +11,12 @@ use App\Domain\Model\Group\CreateGroupModel;
 use App\Domain\Model\Group\ListGroupModel;
 use App\Domain\Model\Group\UpdateGroupNameModel;
 use App\Domain\Model\PaginationModel;
+use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
+use App\Domain\Repository\Group\GroupRepositoryInterface;
 use App\Domain\Trait\PaginationTrait;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,10 +27,12 @@ readonly class GroupService
 
     /**
      * @param GroupRepository $groupRepository
+     * @param GroupRepositoryCacheInterface $groupRepositoryCache
      * @param ValidatorInterface $validator
      */
     public function __construct(
-        private GroupRepository $groupRepository,
+        private GroupRepositoryInterface $groupRepository,
+        private GroupRepositoryCacheInterface $groupRepositoryCache,
         private ValidatorInterface $validator
     ) {
     }
@@ -159,14 +161,14 @@ readonly class GroupService
         PaginationDTO $paginationDTO,
         GroupListInputDTO $groupListInputDTO
     ): GroupListOutputDTO {
-        $paginator = $this->groupRepository->getListWithIsParticipant(
+        $paginator = $this->groupRepositoryCache->getListWithIsParticipant(
             $groupListInputDTO->userId,
             $paginationDTO,
             $groupListInputDTO->ignoreIsActiveFilter
         );
 
         return new GroupListOutputDTO(
-            groupList: array_map(fn (Group $group) => $group, (array) $paginator->getIterator()),
+            groupList: array_map(fn (ListGroupModel $group) => $group, $paginator),
             pagination: new PaginationModel(
                 total: $paginator->count(),
                 page: $groupListInputDTO->page,
