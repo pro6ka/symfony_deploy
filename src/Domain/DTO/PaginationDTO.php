@@ -17,6 +17,10 @@ readonly class PaginationDTO
         public int $pageSize,
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
+        #[Assert\GreaterThan(0)]
+        public int $page,
+        #[Assert\NotBlank]
+        #[Assert\Type('integer')]
         #[Assert\GreaterThanOrEqual(0)]
         public int $firstResult = 0
     ) {

@@ -4,10 +4,8 @@ namespace App\Domain\Model\Group;
 
 use DateTime;
 
-readonly class ListGroupModel
+readonly class GroupModel
 {
-    public const int PAGE_SIZE = 10;
-
     /**
      * @param int $id
      * @param string $name

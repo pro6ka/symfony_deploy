@@ -5,6 +5,7 @@ namespace App\Domain\Repository\Group;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\GroupListModel;
 
 interface GroupRepositoryCacheInterface
 {
@@ -42,22 +43,22 @@ interface GroupRepositoryCacheInterface
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return array
+     * @return GroupListModel
      */
-    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): array;
+    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): GroupListModel;
 
     /**
      * @param int $userId
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return array
+     * @return GroupListModel
      */
     public function getListWithIsParticipant(
         int $userId,
         PaginationDTO $paginationDTO,
         bool $ignoreIsActiveFilter = false
-    ): array;
+    ): GroupListModel;
 
     /**
      * @param int $groupId

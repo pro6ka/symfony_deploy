@@ -4,7 +4,7 @@ namespace App\Domain\Model\Group;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UpdateGroupNameModel
+readonly class UpdateGroupNameModel
 {
     /**
      * @param int $id

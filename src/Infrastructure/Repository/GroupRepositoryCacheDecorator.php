@@ -5,9 +5,10 @@ namespace App\Infrastructure\Repository;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use App\Domain\Model\Group\ListGroupModel;
+use App\Domain\Model\Group\GroupListModel;
+use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\PaginationModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
-use App\Domain\Repository\Group\GroupRepositoryInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Cache\InvalidArgumentException;
@@ -17,11 +18,11 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInterface
 {
     /**
-     * @param GroupRepositoryInterface $groupRepository
+     * @param GroupRepository $groupRepository
      * @param TagAwareCacheInterface $tagAwareCache
      */
     public function __construct(
-        private GroupRepositoryInterface $groupRepository,
+        private GroupRepository $groupRepository,
         private TagAwareCacheInterface $tagAwareCache,
     ) {
     }
@@ -38,6 +39,18 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
         $this->tagAwareCache->invalidateTags([$this->getCacheTag()]);
 
         return $result;
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return null|Group
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findGroupById(int $groupId): ?Group
+    {
+        return $this->groupRepository->findGroupById($groupId);
     }
 
     /**
@@ -98,28 +111,38 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return array|ListGroupModel[]
+     * @return GroupListModel
      * @throws InvalidArgumentException
      */
-    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): array
+    public function getList(PaginationDTO $paginationDTO, bool $ignoreIsActiveFilter): GroupListModel
     {
         return $this->tagAwareCache->get(
             $this->getCacheKey($paginationDTO->firstResult),
             function (ItemInterface $item) use ($paginationDTO, $ignoreIsActiveFilter) {
                 $paginator = $this->groupRepository->getList($paginationDTO, $ignoreIsActiveFilter);
-                $groupModels = array_map(fn (Group $group) => new ListGroupModel(
-                    id: $group->getId(),
-                    name: $group->getName(),
-                    isActive: $group->getIsActive(),
-                    workingFrom: $group->getWorkingFrom(),
-                    workingTo: $group->getWorkingTo(),
-                    createdAt: $group->getCreatedAt(),
-                    updatedAt: $group->getUpdatedAt()
-                ), (array) $paginator->getIterator());
-                $item->set($groupModels);
+                $groupListModel = new GroupListModel(
+                    groups: array_map(
+                        static fn(Group $group) => new GroupModel(
+                            id: $group->getId(),
+                            name: $group->getName(),
+                            isActive: $group->getIsActive(),
+                            workingFrom: $group->getWorkingFrom(),
+                            workingTo: $group->getWorkingTo(),
+                            createdAt: $group->getCreatedAt(),
+                            updatedAt: $group->getUpdatedAt()
+                        ),
+                        (array) $paginator->getIterator()
+                    ),
+                    pagination: new PaginationModel(
+                        total: $paginator->count(),
+                        page: $paginationDTO->page,
+                        pageSize: $paginationDTO->pageSize
+                    )
+                );
+                $item->set($groupListModel);
                 $item->tag($this->getCacheTag());
 
-                return $groupModels;
+                return $groupListModel;
             }
         );
     }
@@ -129,38 +152,48 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
      * @param PaginationDTO $paginationDTO
      * @param bool $ignoreIsActiveFilter
      *
-     * @return array|ListGroupModel[]
+     * @return GroupListModel
      * @throws InvalidArgumentException
      */
     public function getListWithIsParticipant(
         int $userId,
         PaginationDTO $paginationDTO,
         bool $ignoreIsActiveFilter = false
-    ): array {
+    ): GroupListModel {
         return $this->tagAwareCache->get(
             $this->getCacheKey($paginationDTO->firstResult, $userId),
             function (ItemInterface $item) use ($userId, $paginationDTO, $ignoreIsActiveFilter) {
-                $groups = $this->groupRepository->getListWithIsParticipant(
+                $paginator = $this->groupRepository->getListWithIsParticipant(
                     $userId,
                     $paginationDTO,
                     $ignoreIsActiveFilter
                 );
-                $groupModels = array_map(
-                    static fn(Group $group) => new ListGroupModel(
-                        id: $group->getId(),
-                        name: $group->getName(),
-                        isActive: $group->getIsActive(),
-                        workingFrom: $group->getWorkingFrom(),
-                        workingTo: $group->getWorkingTo(),
-                        createdAt: $group->getCreatedAt(),
-                        updatedAt: $group->getUpdatedAt()
+                $groupListModel = new GroupListModel(
+                    groups: array_map(
+                        static fn(Group $group) => new GroupModel(
+                            id: $group->getId(),
+                            name: $group->getName(),
+                            isActive: $group->getIsActive(),
+                            workingFrom: $group->getWorkingFrom(),
+                            workingTo: $group->getWorkingTo(),
+                            createdAt: $group->getCreatedAt(),
+                            updatedAt: $group->getUpdatedAt()
+                        ),
+                        (array) $paginator->getIterator()
                     ),
-                    (array)$groups->getIterator()
+                    pagination: new PaginationModel(
+                        total: $paginator->count(),
+                        page: $paginationDTO->page,
+                        pageSize: $paginationDTO->pageSize
+                    )
                 );
-                $item->set($groupModels);
+                $item->set($groupListModel);
                 $item->tag($this->getCacheTag($userId));
+                echo "repository===\n";
+                dump($groupListModel);
+                die;
 
-                return $groupModels;
+                return $groupListModel;
             }
         );
     }
@@ -194,17 +227,5 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
     {
         $this->groupRepository->update();
         $this->tagAwareCache->invalidateTags([$this->getCacheTag()]);
-    }
-
-    /**
-     * @param int $groupId
-     *
-     * @return null|Group
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    public function findGroupById(int $groupId): ?Group
-    {
-        return $this->groupRepository->findGroupById($groupId);
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class GroupRepository extends AbstractRepository implements GroupRepositoryInterface
+class GroupRepository extends AbstractRepository
 {
     /**
      * @param Group $group

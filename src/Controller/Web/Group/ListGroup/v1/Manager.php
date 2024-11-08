@@ -8,7 +8,7 @@ use App\Controller\Web\Group\ListGroup\v1\Output\Part\GroupListItemDTO;
 use App\Domain\DTO\Group\GroupListInputDTO;
 use App\Domain\DTO\Group\GroupListOutputDTO;
 use App\Domain\Entity\Group;
-use App\Domain\Model\Group\ListGroupModel;
+use App\Domain\Model\Group\GroupListModel;
 use App\Domain\Model\PaginationModel;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
@@ -63,18 +63,7 @@ readonly class Manager
         $groupList = $this->groupService->showList($groupListServiceDTO);
 
         return new GroupListDTO(
-            groupList: array_map(
-                fn(Group $group) => new GroupListItemDTO(
-                    id: $group->getId(),
-                    name: $group->getName(),
-                    isActive: $group->getIsActive(),
-                    createdAt: $group->getCreatedAt(),
-                    updatedAt: $group->getUpdatedAt(),
-                    participants: $group->getParticipants()->count(),
-                    isParticipant: $groupListServiceDTO->isWithParticipant && $group->getParticipants()->contains($user)
-                ),
-                $groupList->groupList
-            ),
+            groupList: $groupList->groups,
             pagination: $groupList->pagination
         );
     }
