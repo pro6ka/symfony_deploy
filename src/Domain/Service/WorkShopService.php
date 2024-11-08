@@ -12,6 +12,7 @@ use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Workshop\CreateWorkshopModel;
 use App\Domain\Model\Workshop\EditWorkshopModel;
 use App\Domain\Model\Workshop\ListWorkshopModel;
+use App\Domain\Repository\WorkShop\WorkShopRepositoryCacheInterface;
 use App\Domain\Trait\PaginationTrait;
 use App\Domain\Trait\RevisionableTrait;
 use App\Infrastructure\Repository\WorkShopRepository;
@@ -35,7 +36,7 @@ readonly class WorkShopService
      * @param UserService $userService
      * @param FixationService $fixationService
      * @param Security $security
-     * @param WorkShopRepository $workShopRepository
+     * @param WorkShopRepositoryCacheInterface $workShopRepository
      * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
@@ -43,7 +44,7 @@ readonly class WorkShopService
         private UserService $userService,
         private FixationService $fixationService,
         private Security $security,
-        private WorkShopRepository $workShopRepository,
+        private WorkShopRepositoryCacheInterface $workShopRepository,
         private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
@@ -107,8 +108,6 @@ readonly class WorkShopService
      * @param int $entityId
      *
      * @return null|RevisionableInterface
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function findById(int $entityId): ?RevisionableInterface
     {
@@ -120,7 +119,6 @@ readonly class WorkShopService
      *
      * @return null|WorkShop
      * @throws ORMException
-     * @throws OptimisticLockException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
