@@ -32,8 +32,6 @@ class Consumer extends AbstractConsumer
      *
      * @return int
      * @throws EntityHasFixationsException
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     protected function handle($message): int
     {

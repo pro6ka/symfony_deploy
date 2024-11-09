@@ -8,6 +8,10 @@ use App\Domain\Model\PaginationModel;
 
 readonly class ListWorkshopDTO implements OutputDTOInterface
 {
+    /**
+     * @param array $workshopList
+     * @param PaginationModel $pagination
+     */
     public function __construct(
         /** @var ListWorkshopItemDTO[] */
         public array $workshopList,

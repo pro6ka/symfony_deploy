@@ -11,8 +11,11 @@ use Doctrine\ORM\OptimisticLockException;
 
 class Consumer extends AbstractConsumer
 {
+    /**
+     * @param AnswerService $answerService
+     */
     public function __construct(
-        private AnswerService $answerService
+        private readonly AnswerService $answerService
     ) {
     }
 

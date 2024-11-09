@@ -79,8 +79,6 @@ abstract class AbstractConsumer implements ConsumerInterface
 
             return $this->handle($message);
         } catch (Throwable $e) {
-            var_dump($e->getMessage());
-            die;
             return $this->reject($e->getMessage());
         } finally {
             $this->entityManager->clear();

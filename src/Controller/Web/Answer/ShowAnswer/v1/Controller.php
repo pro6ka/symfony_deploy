@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 readonly class Controller
 {
-
     /**
      * @return JsonResponse
      * @throws NotImplementedException

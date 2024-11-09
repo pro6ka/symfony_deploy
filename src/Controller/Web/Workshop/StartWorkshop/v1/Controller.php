@@ -3,15 +3,14 @@
 namespace App\Controller\Web\Workshop\StartWorkshop\v1;
 
 use App\Controller\Web\Workshop\StartWorkshop\v1\Input\StartWorkshopDTO;
-use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[AsController]
@@ -30,6 +29,8 @@ readonly class Controller
      * @param $authUser
      *
      * @return JsonResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws ORMException
      * @throws OptimisticLockException
      */

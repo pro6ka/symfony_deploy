@@ -2,7 +2,7 @@
 
 namespace App\Controller\Web\Workshop\AddParticipantsGroup\v1\Output;
 
-use App\Controller\Web\Group\AddParticipantGroup\v1\Output\GroupParticipantDTO;
+use App\Controller\Web\Group\RemoveParticipantGroup\v1\Output\Part\GroupParticipantDTO;
 use DateTime;
 
 readonly class WorkshopGroupsAddedDTO

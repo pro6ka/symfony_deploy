@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class Manager
 {
+    /**
+     * @param ExerciseService $exerciseService
+     */
     public function __construct(
         private ExerciseService $exerciseService
     ) {
@@ -44,4 +47,3 @@ readonly class Manager
         throw new NotFoundHttpException(sprintf('Exercise id: %d not found', $exerciseId));
     }
 }
-

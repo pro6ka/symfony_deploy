@@ -6,6 +6,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 readonly class EditQuestionModel
 {
+    /**
+     * @param int $id
+     * @param string $title
+     * @param string $description
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Type('integer')]

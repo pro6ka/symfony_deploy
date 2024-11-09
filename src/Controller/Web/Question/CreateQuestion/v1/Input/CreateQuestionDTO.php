@@ -20,7 +20,7 @@ readonly class CreateQuestionDTO
         #[Assert\Type('string')]
         #[Assert\Length(min: 1, max: 100)]
         public string $description,
-        #[Assert\NotBlank()]
+        #[Assert\NotBlank]
         #[Assert\Type('integer')]
         #[Assert\GreaterThan(0)]
         public int $exerciseId

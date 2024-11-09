@@ -2,14 +2,10 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Factory\WorkShopModelFactory;
-use App\Domain\Model\Exercise\ExerciseModel;
-use App\Domain\Model\Group\GroupModel;
-use App\Domain\Model\User\WorkShopAuthorModel;
 use App\Domain\Model\Workshop\WorkShopModel;
 use App\Domain\Repository\WorkShop\WorkShopRepositoryCacheInterface;
 use Doctrine\ORM\Exception\ORMException;
@@ -23,7 +19,7 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     /**
      * @param CacheItemPoolInterface $cacheItemPool
      * @param WorkShopRepository $workShopRepository
-     * @param WorkShopModelFactory $workShopRepository
+     * @param WorkShopModelFactory $workShopModelFactory
      */
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,

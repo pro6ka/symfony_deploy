@@ -11,7 +11,6 @@ readonly class RemoveParticipantsGroupDTO
      * @param int $workshopId
      */
     public function __construct(
-
         #[Assert\NotBlank]
         #[Assert\Type('integer')]
         #[Assert\GreaterThan(1)]

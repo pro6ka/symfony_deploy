@@ -149,13 +149,12 @@ SQL;
     }
 
     /**
-     * @param FixableInterface $entity
+     * @param FixableInterface|FixableModelInterface $entity
      * @param User $user
      * @param Revision $revision
      * @param Group $group
      *
      * @return null|Fixation
-     * @throws RuntimeException
      */
     public function findByFullCriteria(
         FixableInterface|FixableModelInterface $entity,

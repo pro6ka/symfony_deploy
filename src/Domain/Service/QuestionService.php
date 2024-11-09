@@ -62,15 +62,15 @@ readonly class QuestionService extends AbstractFixableService
     }
 
     /**
-     * @param int $questionId
+     * @param int $entityId
      *
      * @return null|Question
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findById(int $questionId): ?Question
+    public function findById(int $entityId): ?Question
     {
-        return $this->questionRepository->findById($questionId);
+        return $this->questionRepository->findById($entityId);
     }
 
     /**

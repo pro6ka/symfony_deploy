@@ -159,7 +159,7 @@ readonly class WorkShopService
     {
         return $this->workShopRepository->getList(
             pageSize: ListWorkshopModel::PAGE_SIZE,
-            firstResult: $this->countOffset(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE,)
+            firstResult: $this->countOffset(page: $page, pageSize: ListWorkshopModel::PAGE_SIZE)
         );
     }
 
@@ -209,7 +209,6 @@ readonly class WorkShopService
      * @param Group $group
      *
      * @return WorkShop
-     * @throws ORMException
      */
     public function addWorkshopParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
     {

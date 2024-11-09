@@ -7,7 +7,6 @@ readonly class GroupParticipantsDTO
     /**
      * @param int $id
      * @param string $name
-     * @param string $description
      * @param int $participants
      */
     public function __construct(

@@ -69,13 +69,12 @@ readonly class FixationService
     }
 
     /**
-     * @param FixableInterface $entity
+     * @param FixableModelInterface|FixableInterface $entity
      * @param FixationUser $fixationUser
      * @param Revision $revision
      * @param FixationGroup $fixationGroup
      *
      * @return Fixation
-     * @throws RuntimeException
      */
     public function build(
         FixableModelInterface|FixableInterface $entity,
@@ -124,13 +123,12 @@ readonly class FixationService
     }
 
     /**
-     * @param FixableInterface $entity
+     * @param FixableInterface|FixableModelInterface $entity
      * @param FixationUser $fixationUser
      * @param Revision $revision
      * @param FixationGroup $fixationGroup
      *
      * @return Fixation
-     * @throws RuntimeException
      */
     public function create(
         FixableInterface|FixableModelInterface $entity,
@@ -173,7 +171,7 @@ readonly class FixationService
     }
 
     /**
-     * @param FixableInterface $entity
+     * @param FixableInterface|FixableModelInterface $entity
      * @param FixationUser $user
      * @param Revision $revision
      * @param FixationGroup $group

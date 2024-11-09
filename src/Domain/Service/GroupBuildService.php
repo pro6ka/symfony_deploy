@@ -4,6 +4,8 @@ namespace App\Domain\Service;
 
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\User\UserModel;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 
@@ -25,11 +27,11 @@ readonly class GroupBuildService
      * @param int $groupId
      * @param int $userId
      *
-     * @return null|Group
+     * @return null|GroupModel
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function addParticipant(int $groupId, int $userId): ?Group
+    public function addParticipant(int $groupId, int $userId): ?GroupModel
     {
         $group = $this->groupService->findGroupById($groupId);
 
@@ -43,7 +45,23 @@ readonly class GroupBuildService
             return $group;
         }
 
-        return $this->groupService->addParticipant($group, $user);
+        $groupEntity = $this->groupService->findEntityById($groupId);
+        $result = $this->groupService->addParticipant($groupEntity, $user);
+
+        return new GroupModel(
+            id: $result->getId(),
+            name: $result->getName(),
+            isActive: $result->getIsActive(),
+            workingFrom: $result->getWorkingFrom(),
+            workingTo: $result->getWorkingTo(),
+            createdAt: $result->getCreatedAt(),
+            updatedAt: $result->getUpdatedAt(),
+            participants: $result->getParticipants()->map(fn (User $user) => [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+            ])->toArray()
+        );
     }
 
     /**

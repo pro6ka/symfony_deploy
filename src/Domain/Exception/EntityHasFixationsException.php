@@ -3,9 +3,10 @@
 namespace App\Domain\Exception;
 
 use App\Domain\Entity\Contracts\FixableInterface;
+use Exception;
 use Throwable;
 
-class EntityHasFixationsException extends \Exception
+class EntityHasFixationsException extends Exception
 {
     /**
      * @param FixableInterface $entity

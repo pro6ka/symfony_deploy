@@ -22,4 +22,3 @@ readonly class ShowExerciseDTO implements OutputDTOInterface
     ) {
     }
 }
-

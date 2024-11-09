@@ -5,6 +5,8 @@ namespace App\Controller\Web\Workshop\AddParticipantsGroup\v1;
 use App\Controller\Web\Workshop\AddParticipantsGroup\v1\Input\AddParticipantsGroupDTO;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -27,6 +29,8 @@ readonly class Controller
      * @return JsonResponse
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[Route(
         path: 'api/v1/workshop/add-participants-group',

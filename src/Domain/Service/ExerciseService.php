@@ -27,6 +27,7 @@ readonly class ExerciseService extends AbstractFixableService
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      * @param ExerciseRepository $exerciseRepository
+     * @param WorkShopService $workShopService
      * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
@@ -64,15 +65,15 @@ readonly class ExerciseService extends AbstractFixableService
     }
 
     /**
-     * @param int $exerciseId
+     * @param int $entityId
      *
      * @return null|Exercise
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findById(int $exerciseId): ?Exercise
+    public function findById(int $entityId): ?Exercise
     {
-        return $this->exerciseRepository->findById($exerciseId);
+        return $this->exerciseRepository->findById($entityId);
     }
 
     /**

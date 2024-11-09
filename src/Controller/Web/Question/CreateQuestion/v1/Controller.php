@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 readonly class Controller
 {
+    /**
+     * @param Manager $manager
+     */
     public function __construct(
         private Manager $manager
     ) {

@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NotImplementedException extends Exception implements HttpComplaintExceptionInterface
 {
-
     /**
      * @inheritDoc
      */

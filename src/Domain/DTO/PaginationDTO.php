@@ -8,6 +8,7 @@ readonly class PaginationDTO
 {
     /**
      * @param int $pageSize
+     * @param int $page
      * @param int $firstResult
      */
     public function __construct(

@@ -5,8 +5,8 @@ namespace App\Controller\Web\Exercise\ShowExercise\v1;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
-use \Doctrine\ORM\Exception\ORMException;
-use \Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 
 #[AsController]
 readonly class Controller

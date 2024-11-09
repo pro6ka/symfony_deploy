@@ -4,6 +4,7 @@ namespace App\Domain\Model\Question;
 
 use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Exercise;
+use App\Domain\Model\Answer\AnswerModel;
 
 readonly class QuestionModel implements FixableModelInterface
 {
