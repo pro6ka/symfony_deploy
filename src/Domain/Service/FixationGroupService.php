@@ -5,28 +5,32 @@ namespace App\Domain\Service;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\FixationGroup;
 use App\Domain\Entity\Group;
+use App\Domain\Model\Group\GroupModel;
 use App\Infrastructure\Repository\FixationGroupRepository;
 
 readonly class FixationGroupService
 {
     /**
+     * @param GroupService $groupService
      * @param FixationGroupRepository $fixationGroupRepository
      */
     public function __construct(
+        private GroupService $groupService,
         private FixationGroupRepository $fixationGroupRepository
     ) {
     }
 
     /**
-     * @param Group $group
+     * @param GroupModel $group
      * @param null|Fixation $fixation
      *
      * @return FixationGroup
      */
-    public function build(Group $group, ?Fixation $fixation = null): FixationGroup
+    public function build(GroupModel $group, ?Fixation $fixation = null): FixationGroup
     {
+        $groupEntity = $this->groupService->findEntityById($group->id);
         $fixationGroup = new FixationGroup();
-        $fixationGroup->setGroup($group);
+        $fixationGroup->setGroup($groupEntity);
         $fixationGroup->setFixation($fixation);
 
         return $this->fixationGroupRepository->create($fixationGroup, false);

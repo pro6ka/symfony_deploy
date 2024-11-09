@@ -117,7 +117,7 @@ readonly class WorkShopService
     /**
      * @param int $workshopId
      *
-     * @return null|WorkShop
+     * @return null|WorkShopModel
      * @throws ORMException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -225,5 +225,15 @@ readonly class WorkShopService
     public function removeWorkshopParticipantsGroup(WorkShop $workshop, Group $group): WorkShop
     {
         return $this->workShopRepository->removeParticipantsGroup($workshop, $group);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return null|WorkShopModel
+     */
+    public function findEntityById(int $id): ?WorkShop
+    {
+        return $this->workShopRepository->findEntityById($id);
     }
 }

@@ -23,9 +23,9 @@ readonly class DeleteRevisionableRabbitMqBus implements DeleteRevisionableBusInt
     public function sendDeleteRevisionableMessage(DeleteRevisionableDTO $deleteRevisionableDTO): void
     {
         $this->rabbitMqBus->publishToExchange(
-            AmqpExchangeEnum::DELETE_REVISIONABLE,
-            $deleteRevisionableDTO,
-            strtolower(
+            exchange: AmqpExchangeEnum::DELETE_REVISIONABLE,
+            message: $deleteRevisionableDTO,
+            routingKey: strtolower(
                 preg_replace(
                     '~(.*)\\\([^\\\]+)$~',
                     '$2',

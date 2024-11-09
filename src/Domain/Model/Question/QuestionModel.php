@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Domain\Model\Exercise;
+namespace App\Domain\Model\Question;
 
 use App\Domain\Contract\FixableModelInterface;
-use App\Domain\Model\Question\QuestionModel;
+use App\Domain\Entity\Exercise;
 
-readonly class ExerciseModel implements FixableModelInterface
+readonly class QuestionModel implements FixableModelInterface
 {
     /**
      * @param int $id
      * @param string $title
-     * @param string $content
-     * @param array|QuestionModel[] $questions
+     * @param string $description
+     * @param array|AnswerModel[] $answers
      */
     public function __construct(
         public int $id,
         public string $title,
-        public string $content,
-        public array $questions = []
+        public string $description,
+        public array $answers
     ) {
     }
 

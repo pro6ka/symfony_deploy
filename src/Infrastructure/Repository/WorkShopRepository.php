@@ -24,8 +24,7 @@ class WorkShopRepository extends AbstractRepository
         $userGroupsList = array_map(
             fn (Group $group) => $group->getId(),
             $user->getGroups()->toArray()
-        );
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        ); $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['w', 'g'])
             ->from(WorkShop::class, 'w')
             ->join(

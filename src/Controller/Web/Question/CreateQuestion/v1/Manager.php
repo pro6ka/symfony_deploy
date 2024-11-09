@@ -60,7 +60,7 @@ readonly class Manager
             exercise: new QuestionsExerciseDTO(
                 id: $question->getExercise()->getId(),
                 title: $question->getExercise()->getTitle(),
-                content: $question->getExercise()->getDescription(),
+                content: $question->getExercise()->getContent(),
             ),
             answers: $question->getAnswers()->map(function (Answer $answer) {
                 return new QuestionsAnswerDTO(

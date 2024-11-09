@@ -5,7 +5,7 @@ namespace App\Infrastructure\Repository;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
-use App\Domain\Repository\Group\GroupRepositoryInterface;
+use App\Domain\Model\Group\GroupModel;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -29,9 +29,33 @@ class GroupRepository extends AbstractRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findGroupById(int $groupId): ?Group
+    public function findById(int $groupId): ?Group
     {
         return $this->entityManager->getRepository(Group::class)->find($groupId);
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return null|GroupModel
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function findGroupById(int $groupId): ?GroupModel
+    {
+        $group = $this->entityManager->getRepository(Group::class)->find($groupId);
+        return $group
+            ? new GroupModel(
+                id: $group->getId(),
+                name: $group->getName(),
+                isActive: $group->getIsActive(),
+                workingFrom: $group->getWorkingFrom(),
+                workingTo: $group->getWorkingTo(),
+                createdAt: $group->getCreatedAt(),
+                updatedAt: $group->getUpdatedAt(),
+                participants: $group->getParticipants()->toArray()
+            )
+            : null;
     }
 
     /**
@@ -88,8 +112,7 @@ class GroupRepository extends AbstractRepository
         $queryBuilder->select('g')
             ->from(Group::class, 'g')
             ->setFirstResult($paginationDTO->firstResult)
-            ->setMaxResults($paginationDTO->pageSize)
-            ;
+            ->setMaxResults($paginationDTO->pageSize);
 
         return new Paginator($queryBuilder->getQuery());
     }
@@ -119,8 +142,7 @@ class GroupRepository extends AbstractRepository
             ->orderBy('isParticipant', 'DESC')
             ->addOrderBy('g.id', 'DESC')
             ->setFirstResult($paginationDTO->firstResult)
-            ->setMaxResults($paginationDTO->pageSize)
-            ;
+            ->setMaxResults($paginationDTO->pageSize);
 
         return new Paginator($queryBuilder->getQuery());
     }

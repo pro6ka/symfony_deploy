@@ -2,10 +2,12 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Fixation;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
+use App\Domain\Model\Group\GroupModel;
 
 readonly class RevisionBuildService
 {
@@ -20,12 +22,12 @@ readonly class RevisionBuildService
     }
 
     /**
-     * @param Group $group
-     * @param FixableInterface $entity
+     * @param GroupModel $group
+     * @param FixableModelInterface $entity
      *
      * @return array|Revision[]
      */
-    public function buildRevisions(Group $group, FixableInterface $entity): array
+    public function buildRevisions(GroupModel $group, FixableModelInterface $entity): array
     {
         if ($groupFixation = $this->fixationService->hasGroupFixation($group, $entity)) {
             return array_map(

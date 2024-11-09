@@ -2,12 +2,14 @@
 
 namespace App\Domain\Model\Workshop;
 
+use App\Domain\Contract\FixableModelInterface;
+use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Model\Exercise\ExerciseModel;
 use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\User\WorkShopAuthorModel;
 use DateTime;
 
-readonly class WorkShopModel
+readonly class WorkShopModel implements FixableModelInterface
 {
     /**
      * @param int $id
@@ -29,5 +31,13 @@ readonly class WorkShopModel
         public array $exercises = [],
         public array $groupParticipants = [],
     ) {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

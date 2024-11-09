@@ -50,9 +50,11 @@ readonly class Manager
             throw new BadRequestHttpException(sprintf('Workshop id: %d not found', $startWorkshopDTO->workshopId));
         }
 
+        /*
         if (! $this->workshopBuildService->isWorkShopReadyToStart($workshop)) {
             throw new BadRequestHttpException(sprintf('Workshop id: %d is not ready', $startWorkshopDTO->workshopId));
         }
+        */
 
         $user = $this->userService->findUserByLogin($authUser->getUserIdentifier());
 

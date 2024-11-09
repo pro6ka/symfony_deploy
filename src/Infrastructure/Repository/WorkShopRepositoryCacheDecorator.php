@@ -6,6 +6,7 @@ use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use App\Domain\Factory\WorkShopModelFactory;
 use App\Domain\Model\Exercise\ExerciseModel;
 use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\User\WorkShopAuthorModel;
@@ -22,10 +23,12 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     /**
      * @param CacheItemPoolInterface $cacheItemPool
      * @param WorkShopRepository $workShopRepository
+     * @param WorkShopModelFactory $workShopRepository
      */
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
-        private WorkShopRepository $workShopRepository
+        private WorkShopRepository $workShopRepository,
+        private WorkShopModelFactory $workShopModelFactory
     ) {
     }
 
@@ -63,41 +66,7 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
             if (! $workshop) {
                 return null;
             }
-            $workShopItem->set(new WorkShopModel(
-                id: $workshop->getId(),
-                title: $workshop->getTitle(),
-                description: $workshop->getDescription(),
-                createdAt: $workshop->getCreatedAt(),
-                updatedAt: $workshop->getUpdatedAt(),
-                author: new WorkShopAuthorModel(
-                    id: $workshop->getAuthor()->getId(),
-                    firstName: $workshop->getAuthor()->getFirstName(),
-                    lastName: $workshop->getAuthor()->getLastName(),
-                    middleName: $workshop->getAuthor()->getMiddleName()
-                ),
-                exercises: array_map(
-                    fn (Exercise $exercise) => new ExerciseModel(
-                        id: $exercise->getId(),
-                        title: $exercise->getTitle(),
-                        content: $exercise->getContent(),
-                        questions: $exercise->getQuestions()->count()
-                    ),
-                    $workshop->getExercises()->toArray()
-                ),
-                groupParticipants: array_map(
-                    fn (Group $group) => new GroupModel(
-                        id: $group->getId(),
-                        name: $group->getName(),
-                        isActive: $group->getIsActive(),
-                        workingFrom: $group->getWorkingFrom(),
-                        workingTo: $group->getWorkingTo(),
-                        createdAt: $group->getCreatedAt(),
-                        updatedAt: $group->getUpdatedAt(),
-                        participants: $group->getParticipants()->toArray()
-                    ),
-                    $workshop->getGroupsParticipants()->toArray()
-                )
-            ));
+            $workShopItem->set($this->workShopModelFactory->fromEntity($workshop));
             $this->cacheItemPool->save($workShopItem);
         }
 
@@ -107,11 +76,22 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     /**
      * @param int $id
      *
-     * @return null|WorkShop
+     * @return null|WorkShopModel
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findById(int $id): ?WorkShop
+    public function findById(int $id): ?WorkShopModel
+    {
+        return $this->workShopRepository->findById($id)
+            ? $this->workShopModelFactory->fromEntity($this->workShopRepository->findById($id))
+            : null;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public function findEntityById(int $id): ?WorkShop
     {
         return $this->workShopRepository->findById($id);
     }
@@ -146,6 +126,15 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     public function removeParticipantsGroup(WorkShop $workShop, Group $group): WorkShop
     {
         return $this->workShopRepository->removeParticipantsGroup($workShop, $group);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws InvalidArgumentException
+     */
+    public function flushForStartedCache($workShopId, $userId): void
+    {
+        $this->cacheItemPool->deleteItem($this->getCacheKey($workShopId, $userId));
     }
 
     /**

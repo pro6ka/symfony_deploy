@@ -42,13 +42,22 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
     }
 
     /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public function findById(int $groupId): Group
+    {
+        return $this->groupRepository->findById($groupId);
+    }
+
+    /**
      * @param int $groupId
      *
-     * @return null|Group
+     * @return null|GroupModel
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findGroupById(int $groupId): ?Group
+    public function findGroupById(int $groupId): ?GroupModel
     {
         return $this->groupRepository->findGroupById($groupId);
     }
@@ -189,9 +198,6 @@ readonly class GroupRepositoryCacheDecorator implements GroupRepositoryCacheInte
                 );
                 $item->set($groupListModel);
                 $item->tag($this->getCacheTag($userId));
-                echo "repository===\n";
-                dump($groupListModel);
-                die;
 
                 return $groupListModel;
             }

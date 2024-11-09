@@ -2,7 +2,7 @@
 
 namespace App\Domain\Model\Exercise;
 
-use App\Domain\Entity\WorkShop;
+use App\Domain\Model\Workshop\WorkShopModel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 readonly class CreateExerciseModel
@@ -10,7 +10,7 @@ readonly class CreateExerciseModel
     /**
      * @param string $title
      * @param string $content
-     * @param WorkShop $workshop
+     * @param WorkShopModel $workshop
      */
     public function __construct(
         #[Assert\NotBlank]
@@ -21,7 +21,7 @@ readonly class CreateExerciseModel
         #[Assert\Type('string')]
         #[Assert\Length(min: 1, max: 255)]
         public string $content,
-        public WorkShop $workshop
+        public WorkShopModel $workshop
     ) {
     }
 }

@@ -3,7 +3,8 @@
 namespace App\Domain\Service;
 
 use App\Domain\Bus\StartWorkshopBusInterface;
-use App\Domain\DTO\StartWorkShopDTO;
+use App\Domain\DTO\WorkShop\FlushWorkShopCacheDTO;
+use App\Domain\DTO\WorkShop\StartWorkShopDTO;
 use App\Domain\Entity\Answer;
 use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Group;
@@ -11,6 +12,8 @@ use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
+use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Workshop\WorkShopModel;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 
@@ -35,67 +38,83 @@ readonly class WorkshopBuildService
     }
 
     /**
-     * @param WorkShop $workShop
+     * @param WorkShopModel $workShop
      * @param User $user
-     * @param Group $group
+     * @param GroupModel $group
      *
      * @return void
      */
-    public function startAsync(WorkShop $workShop, User $user, Group $group): void
+    public function startAsync(WorkShopModel $workShop, User $user, GroupModel $group): void
     {
         $this->startWorkshopBus->sendStartWorkShopMessage(new StartWorkShopDTO(
-            workShopId: $workShop->getId(),
+            workShopId: $workShop->id,
             userId: $user->getId(),
-            groupId: $group->getId(),
+            groupId: $group->id,
         ));
     }
 
     /**
-     * @param WorkShop $workShop
+     * @param int $userId
+     * @param int $workShopId
+     *
+     * @return void
+     */
+    public function flushCacheAsync(int $userId, int $workShopId): void
+    {
+        $this->startWorkshopBus->sendFlushWorkShopCacheMessage(new FlushWorkShopCacheDTO(
+            userId: $userId,
+            workShopId: $workShopId,
+        ));
+    }
+
+    /**
+     * @param WorkShopModel $workShop
      * @param User $user
-     * @param Group $group
+     * @param GroupModel $group
      *
      * @return WorkShop
      * @throws ORMException|GroupIsNotWorkshopParticipantException
      */
-    public function start(WorkShop $workShop, User $user, Group $group): WorkShop
-    {
-        $questions = [];
-
-        if (! $workShop->getGroupsParticipants()->contains($group)) {
-            throw new GroupIsNotWorkshopParticipantException($group->getId(), $workShop->getId());
+    public function start(
+        WorkShopModel $workShop,
+        User $user,
+        GroupModel $group
+    ): WorkShop {
+        if (! in_array($group, $workShop->groupParticipants)) {
+            throw new GroupIsNotWorkshopParticipantException($group->id, $workShop->getId());
         }
 
+        $questions = [];
+
         /** @var Exercise $exercise */
-        foreach ($workShop->getExercises() as $exercise) {
+        foreach ($workShop->exercises as $exercise) {
             $exerciseRevisions = $this->revisionBuildService
                 ->buildRevisions($group, $exercise);
             foreach ($exerciseRevisions as $exerciseRevision) {
                 $this->fixationService->build(
-                    $exercise,
-                    $this->fixationUserService->build($user),
-                    $exerciseRevision,
-                    $this->fixationGroupService->build($group),
+                    entity: $exercise,
+                    fixationUser: $this->fixationUserService->build($user),
+                    revision: $exerciseRevision,
+                    fixationGroup: $this->fixationGroupService->build($group),
                 );
             }
-            $questions = array_merge($questions, $exercise->getQuestions()->toArray());
+            $questions = array_merge($questions, $exercise->questions);
         }
-
 
         $answers = [];
 
         /** @var Question $question */
-        foreach ($questions as $question) {
+        foreach ($exercise->questions as $question) {
             $questionRevisions = $this->revisionBuildService->buildRevisions($group, $question);
             foreach ($questionRevisions as $questionRevision) {
                 $this->fixationService->build(
-                    $question,
-                    $this->fixationUserService->build($user),
-                    $questionRevision,
-                    $this->fixationGroupService->build($group)
+                    entity: $question,
+                    fixationUser: $this->fixationUserService->build($user),
+                    revision: $questionRevision,
+                    fixationGroup: $this->fixationGroupService->build($group)
                 );
             }
-            $answers = array_merge($answers, $question->getAnswers()->toArray());
+            $answers = array_merge($answers, $question->answers);
         }
 
         /** @var Answer $answer */
@@ -103,41 +122,47 @@ readonly class WorkshopBuildService
             $answerRevisions = $this->revisionBuildService->buildRevisions($group, $answer);
             foreach ($answerRevisions as $answerRevision) {
                 $this->fixationService->build(
-                    $answer,
-                    $this->fixationUserService->build($user),
-                    $answerRevision,
-                    $this->fixationGroupService->build($group)
+                    entity: $answer,
+                    fixationUser: $this->fixationUserService->build($user),
+                    revision: $answerRevision,
+                    fixationGroup: $this->fixationGroupService->build($group)
                 );
             }
         }
 
-        $workshopRevisions = $this->revisionBuildService->buildRevisions($group, $workShop);
+        $workshopRevisions = $this->revisionBuildService
+            ->buildRevisions($group, $workShop);
+        $workShopEntity = $this->workShopRepository->findById($workShop->id);
+
         foreach ($workshopRevisions as $workshopRevision) {
             $this->fixationService->create(
-                $workShop,
+                $workShopEntity,
                 $this->fixationUserService->build($user),
                 $workshopRevision,
                 $this->fixationGroupService->build($group)
             );
         }
 
-        $this->workShopRepository->refresh($workShop);
+        $this->workShopRepository->refresh($workShopEntity);
+        $this->flushCacheAsync($user->getId(), $workShopEntity->getId());
 
-        return $workShop;
+        return $workShopEntity;
     }
 
     /**
-     * @param WorkShop $workshop
+     * @param WorkShopModel $workshop
      *
      * @return bool
      */
-    public function isWorkShopReadyToStart(WorkShop $workshop): bool
+    public function isWorkShopReadyToStart(WorkShopModel $workshop): bool
     {
-        return (int) $workshop?->getExercises()
-            ->map(function (Exercise $exercise) {
+        return count(array_map(
+            function (Exercise $exercise) {
                 return $exercise->getQuestions()->map(function (Question $question) {
                     return $question->getAnswers()->count();
                 });
-            })->count() > 0;
+            },
+            $workshop->exercises
+        )) > 0;
     }
 }

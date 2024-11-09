@@ -71,4 +71,11 @@ interface GroupRepositoryCacheInterface
      * @return void
      */
     public function update(): void;
+
+    /**
+     * @param int $groupId
+     *
+     * @return Group
+     */
+    public function findById(int $groupId): Group;
 }

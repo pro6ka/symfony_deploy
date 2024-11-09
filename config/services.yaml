@@ -36,5 +36,5 @@ services:
 
     App\Infrastructure\Bus\RabbitMqBus:
       calls:
-        - [ 'registerProducer', [!php/enum App\Infrastructure\Bus\AmqpExchangeEnum::START_WORKSHOP, '@old_sound_rabbit_mq.start_workshop_producer'] ]
+        - [ 'registerProducer', [!php/enum App\Infrastructure\Bus\AmqpExchangeEnum::WORKSHOP, '@old_sound_rabbit_mq.workshop_producer'] ]
         - [ 'registerProducer', [!php/enum App\Infrastructure\Bus\AmqpExchangeEnum::DELETE_REVISIONABLE, '@old_sound_rabbit_mq.delete_revisionable_producer'] ]

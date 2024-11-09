@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
@@ -37,11 +38,11 @@ class RevisionRepository extends AbstractRepository
     }
 
     /**
-     * @param RevisionableInterface $entity
+     * @param FixableModelInterface $entity
      *
      * @return array|Revision[]
      */
-    public function findLastForEntity(RevisionableInterface $entity): array
+    public function findLastForEntity(FixableModelInterface $entity): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select('r')

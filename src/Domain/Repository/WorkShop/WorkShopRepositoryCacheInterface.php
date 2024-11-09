@@ -35,9 +35,16 @@ interface WorkShopRepositoryCacheInterface
     /**
      * @param int $id
      *
+     * @return null|WorkShopModel
+     */
+    public function findById(int $id): ?WorkShopModel;
+
+    /**
+     * @param int $id
+     *
      * @return null|WorkShop
      */
-    public function findById(int $id): ?WorkShop;
+    public function findEntityById(int $id): ?WorkShop;
 
 
     /**
@@ -71,4 +78,12 @@ interface WorkShopRepositoryCacheInterface
      * @return WorkShop
      */
     public function removeParticipantsGroup(WorkShop $workShop, Group $group): WorkShop;
+
+    /**
+     * @param $workShopId
+     * @param $userId
+     *
+     * @return void
+     */
+    public function flushForStartedCache($workShopId, $userId): void;
 }

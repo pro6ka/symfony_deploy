@@ -10,7 +10,7 @@ readonly class CreateQuestionModel
     /**
      * @param string $title
      * @param string $description
-     * @param int $exerciseId
+     * @param Exercise $exercise
      */
     public function __construct(
         #[Assert\NotBlank(normalizer: 'trim')]

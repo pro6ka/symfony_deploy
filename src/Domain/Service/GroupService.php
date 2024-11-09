@@ -9,6 +9,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\CreateGroupModel;
 use App\Domain\Model\Group\GroupListModel;
+use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\Group\UpdateGroupNameModel;
 use App\Domain\Model\PaginationModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
@@ -80,11 +81,11 @@ readonly class GroupService
     /**
      * @param int $groupId
      *
-     * @return null|Group
+     * @return null|GroupModel
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function findGroupById(int $groupId): ?Group
+    public function findGroupById(int $groupId): ?GroupModel
     {
         return $this->groupRepository->findGroupById($groupId);
     }
@@ -187,5 +188,15 @@ readonly class GroupService
         $this->groupRepository->update();
 
         return $group;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Group
+     */
+    public function findEntityById(int $id)
+    {
+        return $this->groupRepository->findById($id);
     }
 }

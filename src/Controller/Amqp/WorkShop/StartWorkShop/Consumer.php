@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Controller\Amqp\StartWorkShop;
+namespace App\Controller\Amqp\WorkShop\StartWorkShop;
 
 use App\Application\RabbitMQ\AbstractConsumer;
-use App\Controller\Amqp\StartWorkShop\Input\Message;
+use App\Controller\Amqp\WorkShop\StartWorkShop\Input\Message;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
+use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Workshop\WorkShopModel;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
 use App\Domain\Service\WorkshopBuildService;
@@ -53,9 +55,9 @@ class Consumer extends AbstractConsumer
      */
     public function handle($message): int
     {
-        $workshop = $this->workShopService->findWorkshopById($message->workShopId);
+        $workshop = $this->workShopService->findWorkShopById($message->workShopId);
 
-        if (! ($workshop instanceof WorkShop)) {
+        if (! ($workshop instanceof WorkShopModel)) {
             $this->reject(sprintf('Workshop ID %d was not found', $message->workShopId));
         }
 
@@ -67,11 +69,11 @@ class Consumer extends AbstractConsumer
 
         $group = $this->groupService->findGroupById($message->groupId);
 
-        if (! ($group instanceof Group)) {
+        if (! ($group instanceof GroupModel)) {
             $this->reject(sprintf('Group ID %d was not found', $message->groupId));
         }
 
-        $this->workshopBuildService->start($workshop, $user, $group);
+        $result = $this->workshopBuildService->start($workshop, $user, $group);
 
         return self::MSG_ACK;
     }

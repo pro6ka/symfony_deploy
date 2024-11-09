@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\DTO;
+namespace App\Domain\DTO\WorkShop;
 
 readonly class StartWorkShopDTO
 {

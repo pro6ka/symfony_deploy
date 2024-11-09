@@ -2,6 +2,7 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Fixation;
@@ -10,6 +11,7 @@ use App\Domain\Entity\FixationUser;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\GroupModel;
 use App\Infrastructure\Repository\FixationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
@@ -46,14 +48,14 @@ readonly class FixationService
     }
 
     /**
-     * @param Group $group
-     * @param FixableInterface $entity
+     * @param GroupModel $group
+     * @param FixableModelInterface $entity
      *
      * @return array
      */
-    public function hasGroupFixation(Group $group, FixableInterface $entity): array
+    public function hasGroupFixation(GroupModel $group, FixableModelInterface $entity): array
     {
-        return $this->fixationRepository->hasGroupFixation($group, $entity);
+        return $this->fixationRepository->hasGroupFixation($group->id, $entity);
     }
 
     /**
@@ -76,7 +78,7 @@ readonly class FixationService
      * @throws RuntimeException
      */
     public function build(
-        FixableInterface $entity,
+        FixableModelInterface|FixableInterface $entity,
         FixationUser $fixationUser,
         Revision $revision,
         FixationGroup $fixationGroup
@@ -99,7 +101,7 @@ readonly class FixationService
     }
 
     /**
-     * @param FixableInterface $entity
+     * @param FixableInterface|FixableModelInterface $entity
      * @param User $user
      * @param Revision $revision
      * @param Group $group
@@ -108,7 +110,7 @@ readonly class FixationService
      * @throws RuntimeException
      */
     public function findByFullCriteria(
-        FixableInterface $entity,
+        FixableInterface|FixableModelInterface $entity,
         User $user,
         Revision $revision,
         Group $group
@@ -131,7 +133,7 @@ readonly class FixationService
      * @throws RuntimeException
      */
     public function create(
-        FixableInterface $entity,
+        FixableInterface|FixableModelInterface $entity,
         FixationUser $fixationUser,
         Revision $revision,
         FixationGroup $fixationGroup
@@ -179,7 +181,7 @@ readonly class FixationService
      * @return Fixation
      */
     protected function make(
-        FixableInterface $entity,
+        FixableInterface|FixableModelInterface $entity,
         FixationUser $user,
         Revision $revision,
         FixationGroup $group

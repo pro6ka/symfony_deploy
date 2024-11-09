@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
+use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
@@ -73,12 +74,12 @@ class FixationRepository extends AbstractRepository
     }
 
     /**
-     * @param Group $group
-     * @param FixableInterface $entity
+     * @param int $groupId
+     * @param FixableModelInterface $entity
      *
      * @return array|Fixation[]
      */
-    public function hasGroupFixation(Group $group, FixableInterface $entity): array
+    public function hasGroupFixation(int $groupId, FixableModelInterface $entity): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['f', 'g'])
@@ -91,7 +92,7 @@ class FixationRepository extends AbstractRepository
             )
             ->andWhere($queryBuilder->expr()->eq('f.entityId', ':entityId'))
             ->andWhere($queryBuilder->expr()->eq('f.entityType', ':entityType'))
-            ->setParameter('groupId', $group->getId())
+            ->setParameter('groupId', $groupId)
             ->setParameter('entityId', $entity->getId())
             ->setParameter('entityType', $entity::class);
 
@@ -157,7 +158,7 @@ SQL;
      * @throws RuntimeException
      */
     public function findByFullCriteria(
-        FixableInterface $entity,
+        FixableInterface|FixableModelInterface $entity,
         User $user,
         Revision $revision,
         Group $group

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Amqp\StartWorkShop\Input;
+namespace App\Controller\Amqp\WorkShop\StartWorkShop\Input;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

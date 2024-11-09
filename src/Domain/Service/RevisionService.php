@@ -2,6 +2,7 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Contract\FixableModelInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
@@ -80,11 +81,11 @@ readonly class RevisionService
     }
 
     /**
-     * @param RevisionableInterface $entity
+     * @param FixableModelInterface $entity
      *
      * @return array|Revision[]
      */
-    public function findLastForEntity(RevisionableInterface $entity): array
+    public function findLastForEntity(FixableModelInterface $entity): array
     {
         return $this->revisionRepository->findLastForEntity($entity);
     }

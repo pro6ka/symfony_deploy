@@ -34,6 +34,7 @@ readonly class ExerciseService extends AbstractFixableService
         private FixationService $fixationService,
         private RevisionService $revisionService,
         private ExerciseRepository $exerciseRepository,
+        private WorkShopService $workShopService,
         private DeleteRevisionableBusInterface $deleteRevisionableBus
     ) {
     }
@@ -45,10 +46,11 @@ readonly class ExerciseService extends AbstractFixableService
      */
     public function create(CreateExerciseModel $createExerciseModel): Exercise
     {
+        $workShop = $this->workShopService->findEntityById($createExerciseModel->workshop->id);
         $exercise = new Exercise();
         $exercise->setTitle($createExerciseModel->title);
         $exercise->setContent($createExerciseModel->content);
-        $exercise->setWorkShop($createExerciseModel->workshop);
+        $exercise->setWorkShop($workShop);
 
         $violations = $this->validator->validate($exercise);
 
