@@ -7,6 +7,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Exercise\ExerciseModel;
+use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\User\WorkShopAuthorModel;
 use App\Domain\Model\Workshop\WorkShopModel;
 use App\Domain\Repository\WorkShop\WorkShopRepositoryCacheInterface;
@@ -14,6 +15,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 
 readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCacheInterface
 {
@@ -44,9 +46,13 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     }
 
     /**
-     * @inheritDoc
+     * @param int $id
+     * @param User $user
+     *
+     * @return null|WorkShopModel
+     * @throws InvalidArgumentException
      */
-    public function findForUserById(int $id, User $user): ?WorkShop
+    public function findForUserById(int $id, User $user): ?WorkShopModel
     {
         $workShopItem = $this->cacheItemPool->getItem(
             $this->getCacheKey($id, $user->getId())
@@ -54,6 +60,9 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
 
         if (! $workShopItem->isHit()) {
             $workshop = $this->workShopRepository->findForUserById($id, $user);
+            if (! $workshop) {
+                return null;
+            }
             $workShopItem->set(new WorkShopModel(
                 id: $workshop->getId(),
                 title: $workshop->getTitle(),
@@ -74,6 +83,19 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
                         questions: $exercise->getQuestions()->count()
                     ),
                     $workshop->getExercises()->toArray()
+                ),
+                groupParticipants: array_map(
+                    fn (Group $group) => new GroupModel(
+                        id: $group->getId(),
+                        name: $group->getName(),
+                        isActive: $group->getIsActive(),
+                        workingFrom: $group->getWorkingFrom(),
+                        workingTo: $group->getWorkingTo(),
+                        createdAt: $group->getCreatedAt(),
+                        updatedAt: $group->getUpdatedAt(),
+                        participants: $group->getParticipants()->toArray()
+                    ),
+                    $workshop->getGroupsParticipants()->toArray()
                 )
             ));
             $this->cacheItemPool->save($workShopItem);

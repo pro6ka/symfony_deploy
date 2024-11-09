@@ -9,6 +9,8 @@ use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTOInterface;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopForTeacherDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
+use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Workshop\WorkShopModel;
 use App\Domain\Service\WorkShopService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Exception\ORMException;
@@ -41,13 +43,14 @@ readonly class Manager
      */
     public function showWorkshop(int $workshopId): ShowWorkshopDTOInterface
     {
+        /** @var WorkShopModel $workshop */
         if ($workshop = $this->workShopService->findWorkshopById($workshopId)) {
             if ($this->security->isGranted('ROLE_TEACHER')) {
                 $studentsCollection = new ArrayCollection();
-                /** @var Group $group */
-                foreach ($workshop->getGroupsParticipants() as $group) {
+                /** @var GroupModel $group */
+                foreach ($workshop->groupParticipants as $group) {
                     /** @var User $participant */
-                    foreach ($group->getParticipants() as $participant) {
+                    foreach ($group->participants as $participant) {
                         if (! $studentsCollection->containsKey($participant->getId())) {
                             $studentsCollection->set($participant->getId(), new ShowWorkshopStudentDTO(
                                 id: $participant->getId(),
@@ -59,33 +62,33 @@ readonly class Manager
                 }
 
                 return new ShowWorkshopForTeacherDTO(
-                    id: $workshop->getId(),
-                    title: $workshop->getTitle(),
-                    description: $workshop->getDescription(),
-                    createdAt: $workshop->getCreatedAt(),
-                    updatedAt: $workshop->getUpdatedAt(),
+                    id: $workshop->id,
+                    title: $workshop->title,
+                    description: $workshop->description,
+                    createdAt: $workshop->createdAt,
+                    updatedAt: $workshop->updatedAt,
                     author: new ShowWorkshopAuthorDTO(
-                        id: $workshop->getAuthor()->getId(),
-                        firstName: $workshop->getAuthor()->getFirstName(),
-                        lastName: $workshop->getAuthor()->getLastName()
+                        id: $workshop->author->id,
+                        firstName: $workshop->author->firstName,
+                        lastName: $workshop->author->lastName
                     ),
                     students: $studentsCollection->toArray()
                 );
             }
             return new ShowWorkshopDTO(
-                id: $workshop->getId(),
-                title: $workshop->getTitle(),
-                description: $workshop->getDescription(),
-                createdAt: $workshop->getCreatedAt(),
-                updatedAt: $workshop->getUpdatedAt(),
+                id: $workshop->id,
+                title: $workshop->title,
+                description: $workshop->description,
+                createdAt: $workshop->createdAt,
+                updatedAt: $workshop->updatedAt,
                 author: new ShowWorkshopAuthorDTO(
-                    id: $workshop->getAuthor()->getId(),
-                    firstName: $workshop->getAuthor()->getFirstName(),
-                    lastName: $workshop->getAuthor()->getLastName()
+                    id: $workshop->author->id,
+                    firstName: $workshop->author->firstName,
+                    lastName: $workshop->author->lastName
                 )
             );
         }
 
-        throw new NotFoundHttpException(sprintf('Workshop id: %d not found', $workshopId));
+        throw new NotFoundHttpException(sprintf('Workshop id: %d was not found', $workshopId));
     }
 }

@@ -10,7 +10,7 @@ readonly class ListUserModel
     public const int PAGE_SIZE = 5;
 
     /**
-     * @param array|ListUserItemDTO[] $userList
+     * @param array|UserModel[] $userList
      * @param PaginationModel $pagination
      */
     public function __construct(

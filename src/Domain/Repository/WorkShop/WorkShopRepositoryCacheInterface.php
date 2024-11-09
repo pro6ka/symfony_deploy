@@ -5,6 +5,7 @@ namespace App\Domain\Repository\WorkShop;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
+use App\Domain\Model\Workshop\WorkShopModel;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 interface WorkShopRepositoryCacheInterface
@@ -29,7 +30,7 @@ interface WorkShopRepositoryCacheInterface
      *
      * @return null|WorkShop
      */
-    public function findForUserById(int $id, User $user): ?WorkShop;
+    public function findForUserById(int $id, User $user): ?WorkShopModel;
 
     /**
      * @param int $id

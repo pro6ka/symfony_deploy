@@ -2,6 +2,7 @@
 
 namespace App\Domain\Model\Group;
 
+use App\Domain\Model\User\UserModel;
 use DateTime;
 
 readonly class GroupModel
@@ -14,6 +15,7 @@ readonly class GroupModel
      * @param DateTime|null $workingTo
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
+     * @param array|UserModel[] $participants
      */
     public function __construct(
         public int $id,
@@ -23,6 +25,7 @@ readonly class GroupModel
         public ?DateTime $workingTo,
         public DateTime $createdAt,
         public DateTime $updatedAt,
+        public array $participants = [],
     ) {
     }
 }

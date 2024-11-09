@@ -12,10 +12,10 @@ use App\Domain\Entity\WorkShop;
 use App\Domain\Model\Workshop\CreateWorkshopModel;
 use App\Domain\Model\Workshop\EditWorkshopModel;
 use App\Domain\Model\Workshop\ListWorkshopModel;
+use App\Domain\Model\Workshop\WorkShopModel;
 use App\Domain\Repository\WorkShop\WorkShopRepositoryCacheInterface;
 use App\Domain\Trait\PaginationTrait;
 use App\Domain\Trait\RevisionableTrait;
-use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -122,7 +122,7 @@ readonly class WorkShopService
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function findWorkshopById(int $workshopId): ?WorkShop
+    public function findWorkshopById(int $workshopId): ?WorkShopModel
     {
         if ($this->security->isGranted('ROLE_STUDENT')) {
             $fixated = $this->findForUserById(
@@ -145,7 +145,7 @@ readonly class WorkShopService
      * @return null|WorkShop
      * @throws NonUniqueResultException
      */
-    public function findForUserById(int $id, User $user): ?WorkShop
+    public function findForUserById(int $id, User $user): ?WorkShopModel
     {
         return $this->workShopRepository->findForUserById($id, $user);
     }
