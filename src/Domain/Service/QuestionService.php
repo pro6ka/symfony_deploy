@@ -116,7 +116,7 @@ readonly class QuestionService extends AbstractFixableService
         $violations = $this->validator->validate($question);
 
         if ($violations->count() > 0) {
-            throw new ValidationFailedException($violations, $question);
+            throw new ValidationFailedException($question, $violations);
         }
 
         $this->questionRepository->update();

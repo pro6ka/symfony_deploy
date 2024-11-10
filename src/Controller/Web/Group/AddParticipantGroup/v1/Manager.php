@@ -38,7 +38,7 @@ readonly class Manager
             throw new BadRequestHttpException(sprintf('User id: %d not found.', $userId));
         }
 
-        if (!$group = $this->groupService->findGroupById($groupId)) {
+        if (!$group = $this->groupService->findEntityById($groupId)) {
             throw new BadRequestHttpException(sprintf('Group id: %d not found.', $groupId));
         }
 

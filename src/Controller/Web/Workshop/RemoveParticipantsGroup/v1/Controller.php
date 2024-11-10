@@ -27,10 +27,6 @@ readonly class Controller
      * @param AddParticipantsGroupDTO $participantsGroupDTO
      *
      * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     #[Route(
         path: 'api/v1/workshop/remove-participants-group',

@@ -86,4 +86,9 @@ interface WorkShopRepositoryCacheInterface
      * @return void
      */
     public function flushForStartedCache($workShopId, $userId): void;
+
+    /**
+     * @return void
+     */
+    public function update(): void;
 }

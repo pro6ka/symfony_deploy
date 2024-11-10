@@ -56,7 +56,7 @@ readonly class ExerciseService extends AbstractFixableService
         $violations = $this->validator->validate($exercise);
 
         if ($violations->count() > 0) {
-            throw new ValidationFailedException($violations, $exercise);
+            throw new ValidationFailedException($exercise, $violations);
         }
 
         $this->exerciseRepository->create($exercise);

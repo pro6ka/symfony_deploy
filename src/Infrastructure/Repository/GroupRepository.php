@@ -6,6 +6,7 @@ use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Group\UpdateGroupNameModel;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;

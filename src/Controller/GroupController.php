@@ -8,7 +8,6 @@ use App\Domain\Service\QuestionService;
 use App\Domain\Service\UserService;
 use App\Domain\Service\WorkShopService;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Container\ContainerExceptionInterface;
@@ -81,7 +80,8 @@ class GroupController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @throws NonUniqueResultException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws ORMException
      * @throws OptimisticLockException
      */

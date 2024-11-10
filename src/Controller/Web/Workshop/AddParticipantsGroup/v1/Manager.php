@@ -31,20 +31,16 @@ readonly class Manager
      * @param AddParticipantsGroupDTO $participantsGroupDTO
      *
      * @return WorkshopGroupsAddedDTO
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function addParticipantsGroup(AddParticipantsGroupDTO $participantsGroupDTO): WorkshopGroupsAddedDTO
     {
-        $group = $this->groupService->findGroupById($participantsGroupDTO->groupId);
+        $group = $this->groupService->findEntityById($participantsGroupDTO->groupId);
 
         if (! $group) {
             throw new BadRequestHttpException(sprintf('Group id: %d not found', $participantsGroupDTO->groupId));
         }
 
-        $workshop = $this->workShopService->findWorkshopById($participantsGroupDTO->workshopId);
+        $workshop = $this->workShopService->findEntityById($participantsGroupDTO->workshopId);
 
         if (! $workshop) {
             throw new BadRequestHttpException(sprintf('Workshop id: %d not found', $participantsGroupDTO->groupId));

@@ -8,7 +8,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
 readonly class Controller
@@ -26,8 +26,6 @@ readonly class Controller
      * @param EditWorkshopDTO $workshopDTO
      *
      * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     #[Route(
         path: 'api/v1/workshop/title-and-description-update',

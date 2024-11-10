@@ -2,7 +2,6 @@
 
 namespace App\Domain\Service;
 
-use App\Domain\DTO\Group\GroupListOutputDTO;
 use App\Domain\DTO\Group\GroupListInputDTO;
 use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
@@ -11,7 +10,6 @@ use App\Domain\Model\Group\CreateGroupModel;
 use App\Domain\Model\Group\GroupListModel;
 use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\Group\UpdateGroupNameModel;
-use App\Domain\Model\PaginationModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
 use App\Domain\Trait\PaginationTrait;
 use Doctrine\ORM\Exception\ORMException;
@@ -171,12 +169,10 @@ readonly class GroupService
      * @param UpdateGroupNameModel $updateGroupNameModel
      *
      * @return Group|null
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function updateName(UpdateGroupNameModel $updateGroupNameModel): ?Group
     {
-        $group = $this->groupRepository->findGroupById($updateGroupNameModel->id);
+        $group = $this->groupRepository->findById($updateGroupNameModel->id);
         $group->setName($updateGroupNameModel->name);
 
         $violations = $this->validator->validate($group);
@@ -193,9 +189,9 @@ readonly class GroupService
     /**
      * @param int $id
      *
-     * @return Group
+     * @return null|Group
      */
-    public function findEntityById(int $id)
+    public function findEntityById(int $id): ?Group
     {
         return $this->groupRepository->findById($id);
     }

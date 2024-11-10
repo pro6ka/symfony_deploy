@@ -85,8 +85,9 @@ readonly class WorkShopService
         $revisions = array_reduce(
             $fixations->toArray(),
             function ($carry, Fixation $fixation) {
-                $carry[$fixation->getRevisions()->getEntityId()] = $fixation->getRevision();
-                return $carry;
+                return $fixation->getRevisions()->map(static function (Revision $revision) use ($fixation) {
+                    return [$revision->getEntityId() => $fixation->getRevisions()];
+                });
             },
         );
 
@@ -167,12 +168,10 @@ readonly class WorkShopService
      * @param EditWorkshopModel $editWorkshopModel
      *
      * @return null|WorkShop
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function editWorkshop(EditWorkshopModel $editWorkshopModel): ?WorkShop
     {
-        $workshop = $this->workShopRepository->findById($editWorkshopModel->id);
+        $workshop = $this->workShopRepository->findEntityById($editWorkshopModel->id);
 
         if (! $workshop) {
             return null;

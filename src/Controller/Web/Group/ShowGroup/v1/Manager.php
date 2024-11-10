@@ -31,19 +31,22 @@ readonly class Manager
     {
         if ($group = $this->groupService->findGroupById($groupId)) {
             return new ShowGroupDTO(
-                id: $group->getId(),
-                name: $group->getName(),
-                isActive: $group->getIsActive(),
-                createdAt: $group->getCreatedAt(),
-                updatedAt: $group->getUpdatedAt(),
-                participants: $group->getParticipants()->map(function (User $participant) {
-                    return new ShowGroupParticipantDTO(
-                        id: $participant->getId(),
-                        firstName: $participant->getFirstName(),
-                        lastName: $participant->getLastName(),
-                        middleName: $participant->getMiddleName()
-                    );
-                })->toArray()
+                id: $group->id,
+                name: $group->name,
+                isActive: $group->isActive,
+                createdAt: $group->createdAt,
+                updatedAt: $group->updatedAt,
+                participants: array_map(
+                    function (User $participant) {
+                        return new ShowGroupParticipantDTO(
+                            id: $participant->getId(),
+                            firstName: $participant->getFirstName(),
+                            lastName: $participant->getLastName(),
+                            middleName: $participant->getMiddleName()
+                        );
+                    },
+                    $group->participants
+                )
             );
         }
 

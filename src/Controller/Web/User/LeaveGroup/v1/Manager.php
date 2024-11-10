@@ -36,7 +36,7 @@ readonly class Manager
      */
     public function leaveGroup(UserLeaveGroupDTO $userLeaveGroupDTO): UserGroupsDTO
     {
-        if (! $group = $this->groupService->findGroupById($userLeaveGroupDTO->groupId)) {
+        if (! $group = $this->groupService->findEntityById($userLeaveGroupDTO->groupId)) {
             throw new NotFoundHttpException(sprintf('Group with id: %d not found', $userLeaveGroupDTO->groupId));
         }
 

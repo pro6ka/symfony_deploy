@@ -134,6 +134,14 @@ readonly class WorkShopRepositoryCacheDecorator implements WorkShopRepositoryCac
     }
 
     /**
+     * @inheritDoc
+     */
+    public function update(): void
+    {
+        $this->workShopRepository->update();
+    }
+
+    /**
      * @param int $workShopId
      * @param int $userId
      *

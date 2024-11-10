@@ -27,8 +27,6 @@ readonly class Manager
      * @param EditWorkshopDTO $workshopDTO
      *
      * @return EditedWorkshopDTO
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     public function editWorkshop(EditWorkshopDTO $workshopDTO): EditedWorkshopDTO
     {

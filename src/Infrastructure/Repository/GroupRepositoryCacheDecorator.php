@@ -7,6 +7,7 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\GroupListModel;
 use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Group\UpdateGroupNameModel;
 use App\Domain\Model\PaginationModel;
 use App\Domain\Repository\Group\GroupRepositoryCacheInterface;
 use Doctrine\ORM\Exception\ORMException;

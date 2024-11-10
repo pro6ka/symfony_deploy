@@ -2,10 +2,9 @@
 
 namespace App\Controller\Web\Question\ListQuestion\v1;
 
-use App\Controller\Exception\NotImplementedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
 readonly class Controller

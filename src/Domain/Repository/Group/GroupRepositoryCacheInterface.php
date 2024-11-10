@@ -6,6 +6,7 @@ use App\Domain\DTO\PaginationDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Model\Group\GroupListModel;
+use App\Domain\Model\Group\UpdateGroupNameModel;
 
 interface GroupRepositoryCacheInterface
 {

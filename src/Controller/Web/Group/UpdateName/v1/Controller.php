@@ -26,8 +26,6 @@ readonly class Controller
      * @param UpdateGroupNameDTO $updateGroupNameDTO
      *
      * @return JsonResponse
-     * @throws ORMException
-     * @throws OptimisticLockException
      */
     #[Route(path: 'api/v1/group/{id}/update-name', name: 'group_update_name', methods: ['POST'])]
     public function __invoke(int $id, #[MapRequestPayload] UpdateGroupNameDTO $updateGroupNameDTO): JsonResponse
