@@ -42,7 +42,7 @@ trait RevisionableTrait
      * @throws EntityHasFixationsException
      */
     public function deleteRevisionable(
-        FixableInterface|RevisionableInterface|HasRevisionsInterface|Answer $entity
+        FixableInterface|RevisionableInterface|HasRevisionsInterface $entity
     ): void {
         if ($this->fixationService->findByEntity($entity)) {
             throw new EntityHasFixationsException($entity);
