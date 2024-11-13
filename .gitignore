@@ -24,3 +24,8 @@ docker/data
 ###< lexik/jwt-authentication-bundle ###
 
 .phpactor.json
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
