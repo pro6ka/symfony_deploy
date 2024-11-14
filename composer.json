@@ -43,7 +43,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "App\\Tests\\": "tests/"
+      "Tests\\Unit\\": "tests/Unit"
     }
   },
   "replace": {
@@ -87,6 +87,7 @@
     "codeception/module-phpbrowser": "^3.0",
     "codeception/module-rest": "^3.4",
     "codeception/module-symfony": "^3.4",
+    "mockery/mockery": "^1.6",
     "opsway/psr12-strict-coding-standard": "*",
     "squizlabs/php_codesniffer": "3.*"
   }
