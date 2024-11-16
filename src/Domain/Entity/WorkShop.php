@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 use App\Domain\Entity\Contracts\EntityInterface;
 use App\Domain\Entity\Contracts\FixableInterface;
 use App\Domain\Entity\Contracts\HasMetaTimeStampInterface;
+use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,7 +18,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Index(name: 'work_shop__author_id_idx', fields: ['author'])]
 #[ORM\UniqueConstraint(name: 'workshop__title_unique', columns: ['title'])]
 #[UniqueEntity(fields: ['title'], message: 'This value {{ value }} is already used')]
-class WorkShop implements EntityInterface, HasMetaTimeStampInterface, RevisionableInterface, FixableInterface
+class WorkShop implements
+    EntityInterface,
+    HasMetaTimeStampInterface,
+    RevisionableInterface,
+    FixableInterface,
+    HasRevisionsInterface
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
     #[ORM\Id]
@@ -49,6 +55,16 @@ class WorkShop implements EntityInterface, HasMetaTimeStampInterface, Revisionab
     {
         $this->exercises = new ArrayCollection();
         $this->groupsParticipants = new ArrayCollection();
+    }
+
+    /**
+     * @param null|int $id
+     *
+     * @return void
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     /**

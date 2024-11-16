@@ -18,7 +18,6 @@ use App\Domain\Trait\PaginationTrait;
 use App\Domain\Trait\RevisionableTrait;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -26,7 +25,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class WorkShopService
+class WorkShopService
 {
     use PaginationTrait;
     use RevisionableTrait;
@@ -40,12 +39,13 @@ readonly class WorkShopService
      * @param DeleteRevisionableBusInterface $deleteRevisionableBus
      */
     public function __construct(
-        private ValidatorInterface $validator,
-        private UserService $userService,
-        private FixationService $fixationService,
-        private Security $security,
-        private WorkShopRepositoryCacheInterface $workShopRepository,
-        private DeleteRevisionableBusInterface $deleteRevisionableBus
+        private readonly ValidatorInterface $validator,
+        private readonly UserService $userService,
+        private readonly FixationService $fixationService,
+        private readonly Security $security,
+        private readonly WorkShopRepositoryCacheInterface $workShopRepository,
+        private readonly DeleteRevisionableBusInterface $deleteRevisionableBus,
+        private readonly RevisionService $revisionService
     ) {
     }
 
@@ -233,5 +233,13 @@ readonly class WorkShopService
     public function findEntityById(int $id): ?WorkShop
     {
         return $this->workShopRepository->findEntityById($id);
+    }
+
+    /**
+     * @return RevisionService
+     */
+    protected function getRevisionService(): RevisionService
+    {
+        return $this->revisionService;
     }
 }

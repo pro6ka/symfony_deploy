@@ -8,13 +8,13 @@ use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Entity\Revision;
 use App\Infrastructure\Repository\RevisionRepository;
 
-readonly class RevisionService
+class RevisionService
 {
     /**
      * @param RevisionRepository $revisionRepository
      */
     public function __construct(
-        private RevisionRepository $revisionRepository
+        private readonly RevisionRepository $revisionRepository
     ) {
     }
 

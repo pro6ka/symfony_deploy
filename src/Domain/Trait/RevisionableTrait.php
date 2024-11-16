@@ -10,6 +10,7 @@ use App\Domain\Entity\Contracts\HasFixationsInterface;
 use App\Domain\Entity\Contracts\HasRevisionsInterface;
 use App\Domain\Entity\Contracts\RevisionableInterface;
 use App\Domain\Exception\EntityHasFixationsException;
+use App\Domain\Service\RevisionService;
 
 trait RevisionableTrait
 {
@@ -19,6 +20,11 @@ trait RevisionableTrait
      * @return null|RevisionableInterface
      */
     abstract public function findById(int $entityId): ?RevisionableInterface;
+
+    /**
+     * @return RevisionService
+     */
+    abstract protected function getRevisionService(): RevisionService;
 
     /**
      * @param RevisionableInterface $entity
@@ -36,7 +42,7 @@ trait RevisionableTrait
     }
 
     /**
-     * @param FixableInterface|RevisionableInterface|HasRevisionsInterface|Answer $entity
+     * @param FixableInterface|RevisionableInterface|HasRevisionsInterface $entity
      *
      * @return void
      * @throws EntityHasFixationsException
@@ -48,7 +54,6 @@ trait RevisionableTrait
             throw new EntityHasFixationsException($entity);
         }
 
-        $this->revisionService->removeByOwner($entity);
-        $this->answerRepository->removeAnswer($entity);
+        $this->getRevisionService()->removeByOwner($entity);
     }
 }

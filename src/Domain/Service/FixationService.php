@@ -16,13 +16,13 @@ use App\Infrastructure\Repository\FixationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 
-readonly class FixationService
+class FixationService
 {
     /**
      * @param FixationRepository $fixationRepository
      */
     public function __construct(
-        private FixationRepository $fixationRepository
+        private readonly FixationRepository $fixationRepository
     ) {
     }
 

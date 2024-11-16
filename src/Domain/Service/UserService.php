@@ -17,7 +17,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class UserService
+class UserService
 {
     use PaginationTrait;
 
@@ -27,9 +27,9 @@ readonly class UserService
      * @param UserRepository $userRepository
      */
     public function __construct(
-        private ValidatorInterface $validator,
-        private UserPasswordHasherInterface $userPasswordHasher,
-        private UserRepository $userRepository
+        private readonly ValidatorInterface $validator,
+        private readonly UserPasswordHasherInterface $userPasswordHasher,
+        private readonly UserRepository $userRepository
     ) {
     }
 
