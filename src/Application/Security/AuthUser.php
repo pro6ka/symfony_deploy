@@ -4,12 +4,12 @@ namespace App\Application\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-readonly class AuthUser implements UserInterface
+class AuthUser implements UserInterface
 {
-    private string $username;
+    private readonly string $username;
 
     /** @var array|string[] */
-    private array $roles;
+    private readonly array $roles;
 
     /**
      * @param array $credentials

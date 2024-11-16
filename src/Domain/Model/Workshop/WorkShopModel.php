@@ -9,7 +9,7 @@ use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\User\WorkShopAuthorModel;
 use DateTime;
 
-readonly class WorkShopModel implements FixableModelInterface
+class WorkShopModel implements FixableModelInterface
 {
     /**
      * @param int $id
