@@ -8,15 +8,15 @@ use App\Domain\Entity\Group;
 use App\Domain\Model\Group\GroupModel;
 use App\Infrastructure\Repository\FixationGroupRepository;
 
-readonly class FixationGroupService
+class FixationGroupService
 {
     /**
      * @param GroupService $groupService
      * @param FixationGroupRepository $fixationGroupRepository
      */
     public function __construct(
-        private GroupService $groupService,
-        private FixationGroupRepository $fixationGroupRepository
+        readonly private GroupService $groupService,
+        readonly private FixationGroupRepository $fixationGroupRepository
     ) {
     }
 

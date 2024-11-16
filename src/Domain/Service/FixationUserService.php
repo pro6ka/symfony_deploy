@@ -7,13 +7,13 @@ use App\Domain\Entity\FixationUser;
 use App\Domain\Entity\User;
 use App\Infrastructure\Repository\FixationUserRepository;
 
-readonly class FixationUserService
+class FixationUserService
 {
     /**
      * @param FixationUserRepository $fixationUserRepository
      */
     public function __construct(
-        private FixationUserRepository $fixationUserRepository
+        readonly private FixationUserRepository $fixationUserRepository
     ) {
     }
 

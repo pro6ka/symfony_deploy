@@ -9,15 +9,15 @@ use App\Domain\Entity\Group;
 use App\Domain\Entity\Revision;
 use App\Domain\Model\Group\GroupModel;
 
-readonly class RevisionBuildService
+class RevisionBuildService
 {
     /**
      * @param FixationService $fixationService
      * @param RevisionService $revisionService
      */
     public function __construct(
-        private FixationService $fixationService,
-        private RevisionService $revisionService,
+        readonly private FixationService $fixationService,
+        readonly private RevisionService $revisionService,
     ) {
     }
 

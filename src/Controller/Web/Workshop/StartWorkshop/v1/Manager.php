@@ -3,6 +3,7 @@
 namespace App\Controller\Web\Workshop\StartWorkshop\v1;
 
 use App\Controller\Web\Workshop\StartWorkshop\v1\Input\StartWorkshopDTO;
+use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
 use App\Domain\Service\GroupService;
 use App\Domain\Service\UserService;
 use App\Domain\Service\WorkshopBuildService;
@@ -46,19 +47,17 @@ readonly class Manager
             throw new BadRequestHttpException(sprintf('Group id: %d not found', $startWorkshopDTO->groupId));
         }
 
-        if (! $workshop = $this->workShopService->findWorkshopById($startWorkshopDTO->workshopId)) {
+        if (! $workShop = $this->workShopService->findWorkshopById($startWorkshopDTO->workshopId)) {
             throw new BadRequestHttpException(sprintf('Workshop id: %d not found', $startWorkshopDTO->workshopId));
         }
 
-        /*
-        if (! $this->workshopBuildService->isWorkShopReadyToStart($workshop)) {
+        if (! $this->workshopBuildService->isWorkShopReadyToStart($workShop)) {
             throw new BadRequestHttpException(sprintf('Workshop id: %d is not ready', $startWorkshopDTO->workshopId));
         }
-        */
 
         $user = $this->userService->findUserByLogin($authUser->getUserIdentifier());
 
-        $this->workshopBuildService->startAsync($workshop, $user, $group);
+        $this->workshopBuildService->startAsync($workShop, $user, $group);
 
         return true;
     }

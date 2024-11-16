@@ -40,4 +40,21 @@ readonly class WorkShopModel implements FixableModelInterface
     {
         return $this->id;
     }
+
+    /**
+     * @param GroupModel $group
+     *
+     * @return bool
+     */
+    public function isGroupParticipant(GroupModel $group): bool
+    {
+        /** @var GroupModel $participant */
+        foreach ($this->groupParticipants as $participant) {
+            if ($participant->id === $group->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

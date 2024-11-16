@@ -10,14 +10,11 @@ use App\Domain\Service\FixationService;
 use App\Domain\Service\RevisionService;
 use App\Domain\Service\UserService;
 use App\Domain\Service\WorkShopService;
-use App\Infrastructure\Repository\FixationRepository;
 use App\Tests\Support\UnitTester;
 use Codeception\Test\Unit;
 use Generator;
 use Mockery;
 use Mockery\Exception\RuntimeException;
-use Mockery\LegacyMockInterface;
-use Mockery\MockInterface;
 use ReflectionException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -84,7 +81,9 @@ class WorkShopServiceTest extends Unit
         $revisionService = Mockery::mock(RevisionService::class);
 
         if ($withoutFixation) {
-            $revisionService->shouldReceive('removeByOwner')->getMock()->expects($this->exactly(1))
+            $revisionService->shouldReceive('removeByOwner')
+                ->getMock()
+                ->expects($this->exactly(1))
             ;
         }
 

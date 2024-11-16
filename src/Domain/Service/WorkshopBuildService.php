@@ -7,7 +7,6 @@ use App\Domain\DTO\WorkShop\FlushWorkShopCacheDTO;
 use App\Domain\DTO\WorkShop\StartWorkShopDTO;
 use App\Domain\Entity\Answer;
 use App\Domain\Entity\Exercise;
-use App\Domain\Entity\Group;
 use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
@@ -73,14 +72,15 @@ readonly class WorkshopBuildService
      * @param GroupModel $group
      *
      * @return WorkShop
-     * @throws ORMException|GroupIsNotWorkshopParticipantException
+     * @throws ORMException
+     * @throws GroupIsNotWorkshopParticipantException
      */
     public function start(
         WorkShopModel $workShop,
         User $user,
         GroupModel $group
     ): WorkShop {
-        if (! in_array($group, $workShop->groupParticipants)) {
+        if (! $workShop->isGroupParticipant($group)) {
             throw new GroupIsNotWorkshopParticipantException($group->id, $workShop->getId());
         }
 
