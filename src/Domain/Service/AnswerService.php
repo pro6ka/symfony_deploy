@@ -87,4 +87,12 @@ readonly class AnswerService extends AbstractFixableService
     {
         return $this->fixationService;
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getRevisionService(): RevisionService
+    {
+        return $this->revisionService;
+    }
 }

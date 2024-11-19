@@ -144,4 +144,12 @@ readonly class QuestionService extends AbstractFixableService
     {
         $this->questionRepository->removeQuestion($question);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getRevisionService(): RevisionService
+    {
+        return $this->revisionService;
+    }
 }

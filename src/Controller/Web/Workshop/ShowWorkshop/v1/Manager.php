@@ -75,6 +75,7 @@ readonly class Manager
                     students: $studentsCollection->toArray()
                 );
             }
+
             return new ShowWorkshopDTO(
                 id: $workshop->id,
                 title: $workshop->title,

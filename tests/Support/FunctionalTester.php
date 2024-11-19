@@ -17,6 +17,7 @@ namespace App\Tests\Support;
  * @method void lookForwardTo($achieveValue)
  * @method void comment($description)
  * @method void pause($vars = [])
+ * @method have(string $class, string[] $array)
  *
  * @SuppressWarnings(PHPMD)
 */

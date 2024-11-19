@@ -164,4 +164,12 @@ readonly class ExerciseService extends AbstractFixableService
     {
         $this->exerciseRepository->removeExercise($exercise);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getRevisionService(): RevisionService
+    {
+        return $this->revisionService;
+    }
 }

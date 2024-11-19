@@ -34,6 +34,21 @@ services:
       - ./docker/data/dump:/app/dump
       - ./docker/data/postgresql:/var/lib/postgresql/data
 
+  postgres_test:
+    image: postgres:15
+    ports:
+      - 25432:5432
+    container_name: ${PROJECT_NAME:-otus}_postgresql_test
+    working_dir: /app
+    restart: always
+    environment:
+      POSTGRES_DB: 'lessons_content_test'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/data/dump:/app/dump
+      - ./docker/data/postgresql-test:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:4-management
     working_dir: /app

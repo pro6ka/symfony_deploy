@@ -37,6 +37,7 @@ class WorkShopService
      * @param Security $security
      * @param WorkShopRepositoryCacheInterface $workShopRepository
      * @param DeleteRevisionableBusInterface $deleteRevisionableBus
+     * @param RevisionService $revisionService
      */
     public function __construct(
         private readonly ValidatorInterface $validator,

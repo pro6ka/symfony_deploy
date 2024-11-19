@@ -43,7 +43,9 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\Unit\\": "tests/Unit"
+      "Tests\\Unit\\": "tests/Unit",
+      "Tests\\Functional\\": "tests/Functional",
+      "Support\\": "tests/Support"
     }
   },
   "replace": {
