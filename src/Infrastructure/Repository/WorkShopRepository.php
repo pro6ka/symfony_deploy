@@ -63,18 +63,23 @@ class WorkShopRepository extends AbstractRepository
             fn (Group $group) => $group->getId(),
             $user->getGroups()->toArray()
         );
+
+        if (! $userGroupsList) {
+            return null;
+        }
+
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder->select(['w', 'g'])
             ->from(WorkShop::class, 'w')
-            ->join(
+            ->leftJoin(
                 'w.groupsParticipants',
                 'g',
                 Expr\Join::WITH,
                 $queryBuilder->expr()->in('g.id', ':groupList')
             )
-            ->andWhere($queryBuilder->expr()->eq('w.id', ':groupId'))
-            ->setParameter('groupList', $userGroupsList)
-            ->setParameter('groupId', $id)
+            ->andWhere($queryBuilder->expr()->eq('w.id', ':workShopId'))
+            ->setParameter('groupList', $userGroupsList ?: null)
+            ->setParameter('workShopId', $id)
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);

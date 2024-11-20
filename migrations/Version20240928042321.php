@@ -22,8 +22,8 @@ final class Version20240928042321 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE fixation_group DROP CONSTRAINT IF EXISTS fixation_group__group_id__group__id_fk');
         $this->addSql('ALTER TABLE fixation_group DROP CONSTRAINT IF EXISTS fixation_group__fixation_id__group__id_fk');
-        $this->addSql('ALTER TABLE user_fixation DROP CONSTRAINT IF EXISTS user_fixation__user_id__user__id_fk');
-        $this->addSql('ALTER TABLE user_fixation DROP CONSTRAINT IF EXISTS user_fixation__fixation_id__fixation__id_fk');
+        $this->addSql('ALTER TABLE IF EXISTS user_fixation DROP CONSTRAINT IF EXISTS user_fixation__user_id__user__id_fk');
+        $this->addSql('ALTER TABLE IF EXISTS user_fixation DROP CONSTRAINT IF EXISTS user_fixation__fixation_id__fixation__id_fk');
         $this->addSql('ALTER TABLE fixation_user DROP CONSTRAINT IF EXISTS fixation_user__user_id__fixation__id_fk');
         $this->addSql('ALTER TABLE fixation_user DROP CONSTRAINT IF EXISTS fixation_user__fixation_id__fixation__id_fk');
         $this->addSql('DROP TABLE IF EXISTS fixation_group');
