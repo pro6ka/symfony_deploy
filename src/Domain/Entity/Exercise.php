@@ -58,7 +58,7 @@ class Exercise implements EntityInterface, HasMetaTimeStampInterface, Revisionab
      *
      * @return void
      */
-    private function setId(int $id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }

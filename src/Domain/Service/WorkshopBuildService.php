@@ -11,6 +11,8 @@ use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
+use App\Domain\Exception\WorkShopIsNotReadToStartException;
+use App\Domain\Model\Exercise\ExerciseModel;
 use App\Domain\Model\Group\GroupModel;
 use App\Domain\Model\Workshop\WorkShopModel;
 use App\Infrastructure\Repository\WorkShopRepository;
@@ -74,6 +76,7 @@ readonly class WorkshopBuildService
      * @return WorkShop
      * @throws ORMException
      * @throws GroupIsNotWorkshopParticipantException
+     * @throws WorkShopIsNotReadToStartException
      */
     public function start(
         WorkShopModel $workShop,
@@ -82,6 +85,10 @@ readonly class WorkshopBuildService
     ): WorkShop {
         if (! $workShop->isGroupParticipant($group)) {
             throw new GroupIsNotWorkshopParticipantException($group->id, $workShop->getId());
+        }
+
+        if (! $this->isWorkShopReadyToStart($workShop)) {
+            throw new WorkShopIsNotReadToStartException($workShop->id);
         }
 
         $questions = [];
@@ -154,15 +161,16 @@ readonly class WorkshopBuildService
      *
      * @return bool
      */
-    public function isWorkShopReadyToStart(WorkShopModel $workshop): bool
+    public function isWorkShopReadyToStart(WorkShopModel $workShop): bool
     {
         return count(array_map(
-            function (Exercise $exercise) {
-                return $exercise->getQuestions()->map(function (Question $question) {
-                    return $question->getAnswers()->count();
-                });
+            function (ExerciseModel $exercise) {
+                return array_map(
+                    fn (Question $question) => count($question->answers),
+                    $exercise->questions
+                );
             },
-            $workshop->exercises
+            $workShop->exercises
         )) > 0;
     }
 }

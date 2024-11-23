@@ -4,22 +4,21 @@ namespace Support\Helper;
 
 // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
+use App\Domain\Entity\Answer;
+use App\Domain\Entity\Exercise;
 use App\Domain\Entity\Group;
+use App\Domain\Entity\Question;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
 use Codeception\Exception\ModuleException;
 use Codeception\Module;
-use Codeception\Module\DataFactory;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use League\FactoryMuffin\Faker\Facade;
 
 class Factories extends Module
 {
     public const string ROLE_USER_LOGIN = 'role_user_login';
-    public const string WORKSHOP_AUTHOR_LOGIN = 'worksShopAuthorLogin';
-
 
     /**
      * @param $settings
@@ -32,21 +31,25 @@ class Factories extends Module
     {
         /** @var Module\DataFactory $factory */
         $factory = $this->getModule('DataFactory');
-        /** @var EntityManagerInterface $em */
-        $em = $this->getModule('Doctrine')->_getEntityManager();
 
         $factory->_define(User::class, $this->getUserRoleUserData());
         $factory->_define(Group::class, $this->getGroupData());
         $factory->_define(
             WorkShop::class,
             $this->getWorkShopData(),
-            /*
-            array_merge(
-                $this->getWorkShopData(),
-//                ['author_id' => $factory->make(User::class, ['id' => 11])->getId()]
-            )
-            */
         );
+        $factory->_define(Answer::class, ['id' => 3001]);
+        $factory->_define(Question::class, ['id' => 2001]);
+        $factory->_define(Exercise::class, $this->getExerciseData());
+    }
+
+    public function getExerciseData(): array
+    {
+        return [
+            'id' => 1001,
+            'title' => Facade::text(10),
+            'content' => Facade::text(20),
+        ];
     }
 
     /**

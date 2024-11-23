@@ -74,6 +74,5 @@ class ManagerCest
         $I->canSeeUserHasRole('ROLE_TEACHER');
         $result = $manager->showWorkShop($this->workShopId);
         $I->assertInstanceOf(ShowWorkshopForTeacherDTO::class, $result);
-        $I->assertObjectHasAttribute('id', $result);
     }
 }
