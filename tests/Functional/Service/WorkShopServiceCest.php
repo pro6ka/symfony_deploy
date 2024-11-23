@@ -57,7 +57,7 @@ class WorkShopServiceCest
      * @return void
      * @throws InjectionException
      */
-    public function testWorkShopShowForRoleUserInstanceOfWorkShop(FunctionalTester $I): void
+    public function testWorkShopShowForRoleUserInstanceOfWorkShopModel(FunctionalTester $I): void
     {
         /** @var WorkShopService $workShopService */
         $workShopService = $I->grabService(WorkShopService::class);

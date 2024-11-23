@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Tests\Functional\Controller\ShowWorkShop\v1;
+
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Manager;
 use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopDTO;
+use App\Controller\Web\Workshop\ShowWorkshop\v1\Output\ShowWorkshopForTeacherDTO;
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
@@ -22,7 +24,6 @@ class ManagerCest
     private ?User $userRoleUser;
     private int $workShopId;
 
-    // phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
 
     /**
      * @param FunctionalTester $I
@@ -59,5 +60,20 @@ class ManagerCest
         $manager = $I->grabService(Manager::class);
         $result = $manager->showWorkshop($this->workShopId);
         $I->assertInstanceOf(ShowWOrkShopDTO::class, $result);
+    }
+
+    /**
+     * @throws InjectionException
+     */
+    public function testWorkShopForRoleTeacherInstanceOfShowWorkshopForTeacherDTO(FunctionalTester $I): void
+    {
+        $manager = $I->grabService(Manager::class);
+        /** @var User $userRoleTeacher */
+        $this->userRoleUser->setAppRoles([...$this->userRoleUser->getRoles(), 'ROLE_TEACHER']);
+        $I->amLoggedInAs($this->userRoleUser);
+        $I->canSeeUserHasRole('ROLE_TEACHER');
+        $result = $manager->showWorkShop($this->workShopId);
+        $I->assertInstanceOf(ShowWorkshopForTeacherDTO::class, $result);
+        $I->assertObjectHasAttribute('id', $result);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Support\Helper;
 
+// phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
+
 use App\Domain\Entity\Group;
 use App\Domain\Entity\User;
 use App\Domain\Entity\WorkShop;
@@ -10,6 +12,7 @@ use Codeception\Module;
 use Codeception\Module\DataFactory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use League\FactoryMuffin\Faker\Facade;
 
 class Factories extends Module
@@ -17,14 +20,15 @@ class Factories extends Module
     public const string ROLE_USER_LOGIN = 'role_user_login';
     public const string WORKSHOP_AUTHOR_LOGIN = 'worksShopAuthorLogin';
 
+
     /**
      * @param $settings
      *
      * @return void
      * @throws ModuleException
-     * @throws \Exception
+     * @throws Exception
      */
-    public function _beforeSuite($settings = [])
+    public function _beforeSuite($settings = []): void
     {
         /** @var Module\DataFactory $factory */
         $factory = $this->getModule('DataFactory');
@@ -35,10 +39,13 @@ class Factories extends Module
         $factory->_define(Group::class, $this->getGroupData());
         $factory->_define(
             WorkShop::class,
+            $this->getWorkShopData(),
+            /*
             array_merge(
                 $this->getWorkShopData(),
-                ['author_id' => $factory->make(User::class, ['id' => 11])->getId()]
+//                ['author_id' => $factory->make(User::class, ['id' => 11])->getId()]
             )
+            */
         );
     }
 
