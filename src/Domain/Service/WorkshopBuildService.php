@@ -14,6 +14,7 @@ use App\Domain\Exception\GroupIsNotWorkshopParticipantException;
 use App\Domain\Exception\WorkShopIsNotReadToStartException;
 use App\Domain\Model\Exercise\ExerciseModel;
 use App\Domain\Model\Group\GroupModel;
+use App\Domain\Model\Question\QuestionModel;
 use App\Domain\Model\Workshop\WorkShopModel;
 use App\Infrastructure\Repository\WorkShopRepository;
 use Doctrine\ORM\Exception\ORMException;
@@ -166,7 +167,7 @@ readonly class WorkshopBuildService
         return count(array_map(
             function (ExerciseModel $exercise) {
                 return array_map(
-                    fn (Question $question) => count($question->answers),
+                    fn (QuestionModel $question) => count($question->answers),
                     $exercise->questions
                 );
             },

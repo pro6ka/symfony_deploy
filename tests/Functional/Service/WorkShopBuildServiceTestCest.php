@@ -38,7 +38,7 @@ class WorkShopBuildServiceTestCest
      * @throws ORMException
      * @throws WorkShopIsNotReadToStartException
      */
-    public function startWorkShopTest(FunctionalTester $I): void
+    public function testStartWorkShop(FunctionalTester $I): void
     {
         $user = $I->have(User::class, ['login' => Factories::ROLE_USER_LOGIN]);
         /** @var Group $group */
@@ -79,7 +79,7 @@ class WorkShopBuildServiceTestCest
      * @throws Exception
      * @throws ORMException
      */
-    public function startWorkShopWithoutExercisesTest(FunctionalTester $I): void
+    public function testStartWorkShopWithoutExercises(FunctionalTester $I): void
     {
         $user = $I->have(User::class, ['login' => Factories::ROLE_USER_LOGIN]);
         /** @var Group $group */
@@ -110,7 +110,7 @@ class WorkShopBuildServiceTestCest
      * @throws InjectionException
      * @throws Exception
      */
-    public function startWorkShopNotAuthorizedTest(FunctionalTester $I): void
+    public function testStartWorkShopNotAuthorized(FunctionalTester $I): void
     {
         /** @var WorkshopBuildService $workShopBuildService */
         $workShopBuildService = $I->grabService(WorkshopBuildService::class);
@@ -164,7 +164,6 @@ class WorkShopBuildServiceTestCest
             createdAt: $workShop->getCreatedAt(),
             updatedAt: $workShop->getUpdatedAt(),
             author: $this->workShopAuthorModel($workShop->getAuthor()),
-//            exercises: $workShop->getExercises()->toArray(),
             exercises: array_map(
                 fn (Exercise $exercise) => $this->exerciseModel($exercise),
                 $workShop->getExercises()->toArray()
