@@ -1,0 +1,63 @@
+old_sound_rabbit_mq:
+  connections:
+    default:
+      url: '%env(RABBITMQ_URL)%'
+  producers:
+    workshop:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.workshop', type: direct }
+    delete_revisionable:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.delete_revisionable', type: direct }
+  multiple_consumers:
+    workshop:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.workshop', type: direct }
+      idle_timeout: 300
+      idle_timeout_exit_code: 0
+      graceful_max_execution:
+        timeout: 1800
+        exit_code: 0
+      qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }
+      queues:
+        start:
+          name: workshop.start
+          callback: App\Controller\Amqp\WorkShop\StartWorkShop\Consumer
+          routing_keys:
+            - start
+        flush_cache:
+          name: workshop.flush_cache
+          callback: App\Controller\Amqp\WorkShop\FlushCacheWorkShop\Consumer
+          routing_keys:
+            - flush_cache
+
+    delete_revisionable:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.delete_revisionable', type: direct }
+      idle_timeout: 300
+      idle_timeout_exit_code: 0
+      graceful_max_execution:
+        timeout: 1800
+        exit_code: 0
+      qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }
+      queues:
+        delete_answer:
+          name: revisionable.delete_answer
+          callback: App\Controller\Amqp\DeleteAnswer\Consumer
+          routing_keys:
+            - answer
+        delete_question:
+          name: revisionable.delete_question
+          callback: App\Controller\Amqp\DeleteQuestion\Consumer
+          routing_keys:
+            - question
+        delete_exercise:
+          name: delete_exercise
+          callback: App\Controller\Amqp\DeleteExercise\Consumer
+          routing_keys:
+            - exercise
+        delete_workshop:
+          name: revisionable.delete_workshop
+          callback: App\Controller\Amqp\DeleteWorkShop\Consumer
+          routing_keys:
+            - workshop

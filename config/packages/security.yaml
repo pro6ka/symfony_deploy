@@ -1,0 +1,106 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    providers:
+      app_user_provider:
+        entity:
+          class: App\Domain\Entity\User
+          property: login
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        refreshToken:
+          pattern: ^/api/v1/refresh-token
+          stateless: true
+          custom_authenticator: App\Application\Security\ApiTokenAuthenticator
+        token:
+          pattern: ^/api/v1/get-token
+          security: false
+        main:
+            lazy: true
+            stateless: true
+            custom_authenticator: App\Application\Security\JWTAuthenticator
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#the-firewall
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
+      # route user
+      - { route: user_leave_group, roles: ROLE_LEAVE_GROUP }
+      - { route: user_update_name, roles: ROLE_UPDATE_NAME }
+      - { route: user_show, roles: ROLE_VIEW_PROFILE }
+      - { route: user_list, roles: ROLE_USER_LIST_VIEW }
+      - { path: ^/api/v[\d]+/user, roles: ROLE_ADMIN }
+      # route group
+      - { route: group_list, roles: ROLE_WORKSHOP_VIEW }
+      - { route: group_show, roles: ROLE_WORKSHOP_VIEW }
+      - { route: group_add_participant, roles: ROLE_GROUP_ADD_PARTICIPANT }
+      - { path: ^/api/v[\d]+/group, roles: ROLE_GROUP_EDITOR }
+      # route workshop
+      - { route: workshop_list, roles: ROLE_WORKSHOP_VIEW }
+      - { route: workshop_show, roles: ROLE_WORKSHOP_VIEW }
+      - { route: workshop_start, roles: ROLE_WORKSHOP_START }
+      - { path: ^/api/v[\d]+/workshop, roles: ROLE_WORKSHOP_EDITOR }
+      # route exercise
+      - { route: exercise_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: exercise_show, roles: ROLE_EXERCISE_VIEW }
+      - { path: ^/api/v[\d]+/exercise, roles: ROLE_WORKSHOP_EDITOR }
+      # route question
+      - { route: question_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: question_show, roles: ROLE_EXERCISE_VIEW }
+      - { route: question_send_answer, roles: ROLE_EXERCISE_VIEW }
+      - { path: ^/api/v[\d]+/question, roles: ROLE_WORKSHOP_EDITOR }
+      # route answer
+      - { route: answer_list, roles: ROLE_EXERCISE_VIEW }
+      - { route: answer_show, roles: ROLE_STUDENT_VIEW }
+      - { path: ^/api/v[\d]+/question, roles: ROLE_WORKSHOP_EDITOR }
+    role_hierarchy:
+      ROLE_USER:
+        - ROLE_WORKSHOP_VIEW
+        - ROLE_UPDATE_NAME
+        - ROLE_VIEW_PROFILE
+      ROLE_STUDENT:
+        - ROLE_USER
+        - ROLE_VIEW_GROUP
+        - ROLE_LEAVE_GROUP
+        - ROLE_WORKSHOP_START
+        - ROLE_EXERCISE_VIEW
+        - ROLE_QUESTION_VIEW
+      ROLE_TEACHER:
+        - ROLE_USER
+        - ROLE_USER_LIST_VIEW
+        - ROLE_WORKSHOP_EDITOR
+        - ROLE_WORKSHOP_START
+        - ROLE_GROUP_ADD_PARTICIPANT
+        - ROLE_EXERCISE_VIEW
+      ROLE_METHODOLOGIST:
+        - ROLE_USER
+        - ROLE_TEACHER
+        - ROLE_GROUP_EDITOR
+      ROLE_ADMIN:
+        - ROLE_STUDENT
+        - ROLE_TEACHER
+        - ROLE_METHODOLOGIST
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon
