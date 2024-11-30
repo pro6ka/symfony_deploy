@@ -16,9 +16,9 @@ deploy_server:
       cd /var/www &&
       sudo mkdir /var/www/demo &&
       sudo git clone  https://github.com/pro6ka/symfony_deploy.git demo &&
-      sudo chown www-data:www-data ./demo -R &&
       cd demo &&
       cp ~/demo/.env ./ &&
+      sudo chown www-data:www-data ../demo -R &&
       sh ./deploy.sh"
     # sh ./deploy.sh $DATABASE_HOST $DATABASE_USER $DATABASE_PASSWORD $DATABASE_NAME $RABBITMQ_HOST $RABBITMQ_USER $RABBITMQ_PASSWORD"
   only:
