@@ -1,4 +1,3 @@
-  sudo rm -rf /etc/nginx/conf.d/demo.conf
   sudo cp deploy/nginx.conf /etc/nginx/conf.d/demo.conf -f
   sudo cp deploy/supervisor.conf /etc/supervisor/conf.d/demo.conf -f
   sudo service nginx restart
