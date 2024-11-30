@@ -1,5 +1,6 @@
 before_script:
   - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | base64 -d
   - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
   - ls -al ~
   - mkdir -p ~/.ssh
