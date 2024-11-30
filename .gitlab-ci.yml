@@ -14,8 +14,9 @@ deploy_server:
     - echo "$SSH_USER"
     - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
       cd /var/www &&
-      git clone https://github.com/otusteamedu/symfony-deploy-2024-11.git demo &&
-      sudo chown www-data:www-data demo -R &&
+      sudo mkdir /var/www/demo &&
+      sudo chown www-data:www-data ./demo -R &&
+      git clone  https://github.com/pro6ka/symfony_deploy.git demo &&
       cd demo &&
       sh ./deploy.sh $SERVER1 $DATABASE_HOST $DATABASE_USER $DATABASE_PASSWORD $DATABASE_NAME $RABBITMQ_HOST $RABBITMQ_USER $RABBITMQ_PASSWORD"
   only:
