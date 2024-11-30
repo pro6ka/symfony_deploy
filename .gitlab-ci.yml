@@ -1,9 +1,7 @@
 before_script:
   - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY"
   - ssh-add <(echo "$SSH_PRIVATE_KEY")
   - mkdir -p ~/.ssh
-  - ls -al ~
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
 deploy_server:
@@ -12,6 +10,8 @@ deploy_server:
     name: server
     url: $SERVER
   script:
+    - echo "$SERVER"
+    - echo "$SSH_USER"
     - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
       cd /var/www &&
       git clone https://github.com/otusteamedu/symfony-deploy-2024-11.git demo &&
