@@ -10,8 +10,6 @@ deploy_server:
     name: server
     url: $SERVER
   script:
-    - echo "$SERVER"
-    - echo "$SSH_USER"
     - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
       sudo rm -rf /etc/nginx/conf.d/demo.conf &&
       cd /var/www &&
@@ -21,6 +19,5 @@ deploy_server:
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../demo -R &&
       sh ./deploy.sh"
-    # sh ./deploy.sh $DATABASE_HOST $DATABASE_USER $DATABASE_PASSWORD $DATABASE_NAME $RABBITMQ_HOST $RABBITMQ_USER $RABBITMQ_PASSWORD"
   only:
     - main
