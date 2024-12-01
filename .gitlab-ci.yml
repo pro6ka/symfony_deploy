@@ -19,7 +19,7 @@ deploy_server:
       sh ./deploy.sh &&
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
-      sudo -u www-data ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
+      sudo ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
       ( [ ! -d /var/www/demo/current ] || mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
       sudo -u www-data ln -s /var/www/demo/$DIR /var/www/demo/current"
   only:
