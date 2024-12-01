@@ -12,12 +12,10 @@ deploy_server:
     url: $SERVER
   script:
     - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
-      pwd &&
       sudo git clone https://github.com/pro6ka/symfony_deploy.git $DIR &&
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../demo -R &&
-      whereis composer &&
       sh ./deploy.sh"
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
