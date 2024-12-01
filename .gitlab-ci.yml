@@ -3,6 +3,7 @@ before_script:
   - ssh-add <(echo "$SSH_PRIVATE_KEY")
   - mkdir -p ~/.ssh
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  - export DIR=$(date +%Y%m%d_%H%M%S)
 
 deploy_server:
   stage: deploy
@@ -11,13 +12,15 @@ deploy_server:
     url: $SERVER
   script:
     - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
-      sudo rm -rf /etc/nginx/conf.d/demo.conf &&
-      cd /var/www &&
-      sudo mkdir /var/www/demo &&
-      sudo git clone  https://github.com/pro6ka/symfony_deploy.git demo &&
-      cd demo &&
+      sudo git clone  https://github.com/pro6ka/symfony_deploy.git $DIR &&
+      cd $DIR &&
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../demo -R &&
       sh ./deploy.sh"
+      cd ../ &&
+      rm -rf /var/www/demo/$DIR/var/log &&
+      ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
+      ( [ ! -d /var/www/demo/current ] || mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
+      ln -s /var/www/demo/$DIR /var/www/demo/current
   only:
     - main
