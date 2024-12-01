@@ -11,16 +11,16 @@ deploy_server:
     name: server
     url: $SERVER
   script:
-    - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
-      sudo git clone  https://github.com/pro6ka/symfony_deploy.git $DIR &&
+    - ssh $SSH_USER@$SERVER "cd /var/www/demo &&
+      sudo git clone https://github.com/pro6ka/symfony_deploy.git $DIR &&
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
-      sudo chown www-data:www-data ../demo -R &&
-      sh ./deploy.sh"
+      sudo chown www-data:www-data ../../demo -R &&
+      sh ./deploy.sh &&
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
-      ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
-      ( [ ! -d /var/www/demo/current ] || mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
-      ln -s /var/www/demo/$DIR /var/www/demo/current
+      sudo ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
+      ( [ ! -d /var/www/demo/current ] || sudo -u www-data mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
+      sudo -u www-data ln -s /var/www/demo/$DIR /var/www/demo/current"
   only:
     - main
