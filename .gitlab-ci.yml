@@ -17,7 +17,9 @@ deploy_server:
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../../demo -R &&
       sh ./deploy.sh"
+      pwd &&
       cd ../ &&
+      ls -al &&
       rm -rf /var/www/demo/$DIR/var/log &&
       ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
       ( [ ! -d /var/www/demo/current ] || mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
