@@ -15,7 +15,7 @@ deploy_server:
       sudo git clone https://github.com/pro6ka/symfony_deploy.git $DIR &&
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
-      sudo chown www-data:www-data ../demo -R &&
+      sudo chown www-data:www-data ../../demo -R &&
       sh ./deploy.sh"
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
