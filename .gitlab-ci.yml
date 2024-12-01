@@ -11,7 +11,7 @@ deploy_server:
     name: server
     url: $SERVER
   script:
-    - ssh $SSH_USER@$SERVER "sudo rm -rf /var/www/demo &&
+    - ssh $SSH_USER@$SERVER "cd /var/www/demo &&
       sudo git clone https://github.com/pro6ka/symfony_deploy.git $DIR &&
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
