@@ -24,3 +24,12 @@ deploy_server:
       sudo -u www-data ln -s /var/www/demo/$DIR /var/www/demo/current"
   only:
     - main
+
+rollback:
+  staage: rollback
+  script:
+    - ssh $SSH_USER@$SERVER "unlink /var/www/demo/current &&
+              mv -Tf /var/www/demo/previous /var/www/demo/current &&
+              cd /var/www/demo/current &&
+              sh ./rollback.sh $SERVER1"
+      when: manual
