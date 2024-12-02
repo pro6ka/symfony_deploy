@@ -1,9 +1,38 @@
+stages:
+  - deploy
+  - rollback
+  - test
+
 before_script:
   - eval $(ssh-agent -s)
   - ssh-add <(echo "$SSH_PRIVATE_KEY")
   - mkdir -p ~/.ssh
   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   - export DIR=$(date +%Y%m%d_%H%M%S)
+
+
+test_server:
+  stage: test
+  environment:
+    name: server
+    url: $SERVER
+  script:
+    - ssh $SSH_USER@$SERVER "cd /var/www/demo &&
+      sudo git clone https://github.com/pro6ka/symfony_deploy.git $DIR &&
+      cd $DIR &&
+      sudo cp ~/demo/.env ./ &&
+      sudo chown www-data:www-data ../../demo -R &&
+      sh ./deploy/bin/test.sh &&
+      cd ../ &&
+      rm -rf /var/www/demo/$DIR/var/log &&
+      sudo ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
+      ( [ ! -d /var/www/demo/current ] || sudo -u www-data mv -Tf /var/www/demo/current /var/www/demo/previous ) &&
+      sudo -u www-data ln -s /var/www/demo/$DIR /var/www/demo/current &&
+      cd /var/www/demo/current &&
+      vendor/bin/codecept run Unit
+      vendor/bin/codecept run Functional"
+  only:
+    - test
 
 deploy_server:
   stage: deploy
@@ -16,7 +45,7 @@ deploy_server:
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../../demo -R &&
-      sh ./deploy.sh &&
+      sh ./deploy/bin/deploy.sh &&
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
       sudo ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
@@ -26,10 +55,10 @@ deploy_server:
     - main
 
 rollback:
-  staage: rollback
+  stage: rollback
   script:
-    - ssh $SSH_USER@$SERVER "unlink /var/www/demo/current &&
-              mv -Tf /var/www/demo/previous /var/www/demo/current &&
-              cd /var/www/demo/current &&
-              sh ./rollback.sh $SERVER1"
-      when: manual
+    - ssh $SSH_USER@$SERVER "sudo unlink /var/www/demo/current &&
+      sudo -u www-data mv -Tf /var/www/demo/previous /var/www/demo/current &&
+      cd /var/www/demo/current &&
+      sh ./deploy/bin/rollback.sh $SERVER"
+  when: manual
