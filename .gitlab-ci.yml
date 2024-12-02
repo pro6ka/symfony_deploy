@@ -33,7 +33,7 @@ rollback:
   stage: rollback
   script:
     - ssh $SSH_USER@$SERVER "sudo unlink /var/www/demo/current &&
-              mv -Tf /var/www/demo/previous /var/www/demo/current &&
+              sudo -u www-data mv -Tf /var/www/demo/previous /var/www/demo/current &&
               cd /var/www/demo/current &&
-              sh ./rollback.sh $SERVER1"
+              sh ./rollback.sh $SERVER"
   when: manual
