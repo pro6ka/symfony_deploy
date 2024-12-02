@@ -32,7 +32,7 @@ deploy_server:
 rollback:
   stage: rollback
   script:
-    - ssh $SSH_USER@$SERVER "unlink /var/www/demo/current &&
+    - ssh $SSH_USER@$SERVER "sudo unlink /var/www/demo/current &&
               mv -Tf /var/www/demo/previous /var/www/demo/current &&
               cd /var/www/demo/current &&
               sh ./rollback.sh $SERVER1"
