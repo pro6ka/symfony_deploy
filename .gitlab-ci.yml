@@ -32,4 +32,4 @@ rollback:
               mv -Tf /var/www/demo/previous /var/www/demo/current &&
               cd /var/www/demo/current &&
               sh ./rollback.sh $SERVER1"
-      when: manual
+  when: manual
