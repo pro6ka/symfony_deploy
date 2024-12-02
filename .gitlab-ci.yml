@@ -45,7 +45,7 @@ deploy_server:
       cd $DIR &&
       sudo cp ~/demo/.env ./ &&
       sudo chown www-data:www-data ../../demo -R &&
-      sh .deploy/bin/deploy.sh &&
+      sh ./deploy/bin/deploy.sh &&
       cd ../ &&
       rm -rf /var/www/demo/$DIR/var/log &&
       sudo ln -s /var/www/demo/shared/log /var/www/demo/$DIR/var/log &&
