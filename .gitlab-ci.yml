@@ -26,7 +26,7 @@ deploy_server:
     - main
 
 rollback:
-  staage: rollback
+  stage: rollback
   script:
     - ssh $SSH_USER@$SERVER "unlink /var/www/demo/current &&
               mv -Tf /var/www/demo/previous /var/www/demo/current &&
