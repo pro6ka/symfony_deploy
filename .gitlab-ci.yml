@@ -1,7 +1,7 @@
 stages:
   - deploy
   - rollback
-  - test_server
+  - test
 
 before_script:
   - eval $(ssh-agent -s)
